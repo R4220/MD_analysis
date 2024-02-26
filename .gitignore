@@ -1,0 +1,6 @@
+*.pwo
+key_git*
+__pycache__
+*.png
+*.xyz
+Setup*
