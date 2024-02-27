@@ -3,9 +3,9 @@ import numpy as np
 import shutil
 import os
 
-from class_MDstep import MDstep
-from class_group import group
-from class_graph import graph
+from Codes.class_MDstep import MDstep
+from Codes.class_group import group
+from Codes.class_graph import graph
 
 
 def setup():
