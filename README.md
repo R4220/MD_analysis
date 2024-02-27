@@ -19,15 +19,18 @@ Before running the code, follow these steps:
         ```
         Filename: _filename
         ```
+
     ii. **Output directory:** Specify the directory for output files ('_dirname'). If the folder already exists, it adds the output files there; if it doesn't exist, it creates a new one with that name. In the 'Setup.txt' file, write the name of the directory as follows:
         ```
         Outdir: _dirname
         ```
+
     iii. **Atomic groups:** Specify the atomic element for each group ('_at1', '_at2') and the group number ('N_group'). The atomic species can be repeated and can be composed by letter and number (e.g., 'Fe3') to be consistent with the typical Quantum Espresso notation. In the 'Setup.txt' file, write the atomic groups as follows:
         ```
         Group _Ngroup
         _at1 _at2
         ```
+
     iv. **Radial distribution function:** Specify the pairs of atoms for which the radial distribution function will be calculated and plotted ('_at1', '_at2'). In this case, we can specifically select a single type of atom group (e.g., 'Fe3') or all the atoms of the same species (e.g., 'Fe1' and 'Fe2' are both taken into account by setting 'Fe'). Additionally, we need to select the maximum distance at which we calculate the RDF ('_Rmax') and the number of bins in the plot histogram ('_Nbin'). Multiple RDFs can be calculated in the same run. In the 'Setup.txt' file, write the pairs as follows:
         ```
         Particles: _at1 _at2 _Rmax _Nbin
@@ -35,7 +38,7 @@ Before running the code, follow these steps:
 
 **Setup_graph.txt:** Place the 'Setup_graph.txt' file in the same directory as 'pwo_into_xyz.py'. Inside the 'Setup_graph.txt' file specify the following entries if you want, otherwise default values are taken (the order of the entries doesn't matter):
 
-    i. **Graph values:** Specify the size of the labels of the axis ('_axsize'), ticks ('_xticksize', '_yticksize'), and legends ('_legendsize'). In the 'Setup_graph.txt' file, write the values as follows:
+i. **Graph values:** Specify the size of the labels of the axis ('_axsize'), ticks ('_xticksize', '_yticksize'), and legends ('_legendsize'). In the 'Setup_graph.txt' file, write the values as follows:
         ```
         axes.labelsize = _axsize
         xtick.labelsize = _xticksize
@@ -49,7 +52,8 @@ Before running the code, follow these steps:
         _yticksize = 14
         _legendsize = 14
         ```
-    ii. **Colors:** Specify the colors of the graphs. In particular, we can define the color of RDF plots ('_RDFcolor'), Kinetic energy ('_kineticcolor'), potential energy ('_potentialcolor'), and the color of the groups ('_gr1color', '_gr2color' ...). In the 'Setup_graph.txt' file, write the values as follows:
+
+ii. **Colors:** Specify the colors of the graphs. In particular, we can define the color of RDF plots ('_RDFcolor'), Kinetic energy ('_kineticcolor'), potential energy ('_potentialcolor'), and the color of the groups ('_gr1color', '_gr2color' ...). In the 'Setup_graph.txt' file, write the values as follows:
         ```
         RDF_color = _RDFcolor
         K_energy_color = _kineticcolor
@@ -69,7 +73,7 @@ Before running the code, follow these steps:
         _gr6color == 'purple'
         ```
     If the default value is used, the maximum number of groups is six.
-    iii. **Total energy:** Specify if the total energy of the system is plotted in the energy graph ('_totbool') and the color of the plot ('_totcolor'). In the 'Setup_graph.txt' file, write the values as follows:
+iii. **Total energy:** Specify if the total energy of the system is plotted in the energy graph ('_totbool') and the color of the plot ('_totcolor'). In the 'Setup_graph.txt' file, write the values as follows:
         ```
         Energy_sum = _totbool
         Tot_energy_color = _totcolor
@@ -82,7 +86,7 @@ Before running the code, follow these steps:
 
 **Returns:** The outputs of the run are placed inside the output directory ('_dirname') and are:
 
-    i. **Output file:** This file is the new file converted into the 'xyz' format. The file stroe each timestep the the molecular dynamics simulation and in particular each timestep is represented by a number of line equal to the total numeber of atoms plus two: in the first line is printed the total number of atoms in the MD simulation, the second one is usually not red from the probrams which read xyz files, and here the information are sotred, than each line represents an atom.
+ i. **Output file:** This file is the new file converted into the 'xyz' format. The file stroe each timestep the the molecular dynamics simulation and in particular each timestep is represented by a number of line equal to the total numeber of atoms plus two: in the first line is printed the total number of atoms in the MD simulation, the second one is usually not red from the probrams which read xyz files, and here the information are sotred, than each line represents an atom.
     The first two lines are in this form:
         ```
         _Natoms
@@ -127,7 +131,7 @@ Before running the code, follow these steps:
             ```
         - '_ngr' represents the number of the group at which the atom belongs
 
-    ii. **Graphs:** Several graphs are then generated, each of them is named with a preamble that identifies the topic of the graph followed by the filename of the 'pwo' file ('_filename'). The graphs are:
+ ii. **Graphs:** Several graphs are then generated, each of them is named with a preamble that identifies the topic of the graph followed by the filename of the 'pwo' file ('_filename'). The graphs are:
 
         - Energy plot: named as 'E_filename.png'. It represents the plot of the energy on time during the simulation. Here are plotted the total kinetic energy of the system and the potential energy. Each of them has its own scale (left for the kinetic energy and right for potential energy). In addition, in the 'Setup_graph.txt' file is possible to switch on the plot of the total energy.
 
@@ -154,15 +158,15 @@ pip install numpy os matplotlib shutil
 
 The Program is divided in multipole files:
 
-    - **'pwo_into_xyz.py':** This serves as the main file for extracting setup parameters and general information about the system. It defines the program's core to extract information from the system at each timestep.
+ a. **'pwo_into_xyz.py':** This serves as the main file for extracting setup parameters and general information about the system. It defines the program's core to extract information from the system at each timestep.
 
-    - **'class_iteration.py':** In this file the class 'iteraton' is defined,  where an object of this class encapsulates all information about the system at a single timestep in molecular dynamics simulation.
+ b. **'class_iteration.py':** In this file the class 'iteraton' is defined,  where an object of this class encapsulates all information about the system at a single timestep in molecular dynamics simulation.
 
-    - **'class_group.py':** In this file the class 'group' is defined, representing a group of atoms used to categorize the entire atoms in a molecular dynamics simulation.
+ c. **'class_group.py':** In this file the class 'group' is defined, representing a group of atoms used to categorize the entire atoms in a molecular dynamics simulation.
 
-    - **'class_atom.py':** In this file the class 'atom' is defined, where an object of this class represents an atomic species utilized in molecular dynamics simulations. It sets up the object with specified attributes, including the atom's name, mass, and the identification number of its group.
+ d. **'class_atom.py':** In this file the class 'atom' is defined, where an object of this class represents an atomic species utilized in molecular dynamics simulations. It sets up the object with specified attributes, including the atom's name, mass, and the identification number of its group.
 
-    - **'class_graph.py':** In this file the class 'graph' is defined.An object of this class stores information about the molecular dynamics simulation to plot the graphs explained earlier.
+ e. **'class_graph.py':** In this file the class 'graph' is defined.An object of this class stores information about the molecular dynamics simulation to plot the graphs explained earlier.
 
-    - **'class_RDF.py':** In this file the class 'RDF' is defined.An object of this class represents the radial distribution function of a single pair of atoms and performs the calculation to build the radial distribution function.
+ f. **'class_RDF.py':** In this file the class 'RDF' is defined.An object of this class represents the radial distribution function of a single pair of atoms and performs the calculation to build the radial distribution function.
 # sample-code
