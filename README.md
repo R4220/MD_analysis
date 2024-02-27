@@ -54,7 +54,7 @@ ytick.labelsize = _yticksize
 legend.fontsize = _legendsize
 ```
 
-    Default values are:
+Default values are:
 
 ```python
 _axsize = 16
@@ -72,7 +72,7 @@ U_energy_color = _potentialcolor
 Group_color = _gr1color _gr2color _gr3color _gr4color _gr5color _gr6color
 ```
 
-    If nothing is specified, default values are considered:
+If nothing is specified, default values are considered:
 
 ```python
 _RDFcolor == 'black'
@@ -86,7 +86,7 @@ _gr5color == 'black'
 _gr6color == 'purple'
 ```
 
-    If the default value is used, the maximum number of groups is six.
+If the default value is used, the maximum number of groups is six.
 
 iii. **Total energy:** Specify if the total energy of the system is plotted in the energy graph ('_totbool') and the color of the plot ('_totcolor'). In the 'Setup_graph.txt' file, write the values as follows:
 
@@ -95,7 +95,7 @@ Energy_sum = _totbool
 Tot_energy_color = _totcolor
 ```
 
-    The default values are:
+The default values are:
 
 ```python
 _totbool == False
@@ -105,9 +105,9 @@ _totcolor == 'black'
 ## Returns
 The outputs of the run are placed inside the output directory ('_dirname') and are:
 
- i. **Output file:** This file is the new file converted into the 'xyz' format. The file stroe each timestep the the molecular dynamics simulation and in particular each timestep is represented by a number of line equal to the total numeber of atoms plus two: in the first line is printed the total number of atoms in the MD simulation, the second one is usually not red from the probrams which read xyz files, and here the information are sotred, than each line represents an atom.
+i. **Output file:** This file is the new file converted into the 'xyz' format. The file stroe each timestep the the molecular dynamics simulation and in particular each timestep is represented by a number of line equal to the total numeber of atoms plus two: in the first line is printed the total number of atoms in the MD simulation, the second one is usually not red from the probrams which read xyz files, and here the information are sotred, than each line represents an atom.
 
-    The first two lines are in this form:
+The first two lines are in this form:
 
 ```
 _Natoms
