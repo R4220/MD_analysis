@@ -25,13 +25,13 @@ Filename: _filename
 
 ii. **Output directory:** Specify the directory for output files ('_dirname'). If the folder already exists, it adds the output files there; if it doesn't exist, it creates a new one with that name. In the 'Setup.txt' file, write the name of the directory as follows:
 
-        ```
+        ```python
         Outdir: _dirname
         ```
 
 iii. **Atomic groups:** Specify the atomic element for each group ('_at1', '_at2') and the group number ('N_group'). The atomic species can be repeated and can be composed by letter and number (e.g. 'Fe3') to be consistent with the typical Quantum Espresso notation. In the 'Setup.txt' file, write the atomic groups as follows:
 
-        ```
+        ```python
         Group _Ngroup
         _at1 _at2
         ```
