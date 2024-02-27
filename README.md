@@ -116,80 +116,78 @@ Lattice(Ang)="_ax, _ay, _az, _bx, _by, _bz, _cx, _cy, _cz" dt(ps)=_dt N=_Niterat
 
 In these two lines, there are some general parameters:
 
-    - '_Natoms': the number of atoms inside the system
+a. '_Natoms': the number of atoms inside the system
 
-    - lattice vectors:
-    ```
-    a = (ax, ay, az)
-    b = (bx, by, bz)
-    c = (cx, cy, cz)
-    ```
+b. lattice vectors:
+```
+a = (ax, ay, az)
+b = (bx, by, bz)
+c = (cx, cy, cz)
+```
 
-        - '_dt': the time interval between two consecutive timesteps
+c. '_dt': the time interval between two consecutive timesteps
 
-        - '_Niteration': the number of the current iteration, starting from 1
+d. '_Niteration': the number of the current iteration, starting from 1
         
-        - '_U': the potential energy of the system in the current timestep
+e. '_U': the potential energy of the system in the current timestep
 
-    Additionally, there are parameters for each group. The number of the group involved is given by '_ngr', and the parameters are:
+Additionally, there are parameters for each group. The number of the group involved is given by '_ngr', and the parameters are:
 
-        - '_Kn': the kinetic energy of the group
+f. '_Kn': the kinetic energy of the group
 
-        - '_DOFn': the degree of freedom of the group
+g. '_DOFn': the degree of freedom of the group
 
-        - '_Tn': the thermal temperature of the group, removing the velocity of the center of mass
+h. '_Tn': the thermal temperature of the group, removing the velocity of the center of mass
 
-        - the total forces acting on the atoms of the group:
-            ```
-            Ftot_n = (_Fxn, _Fyn, _Fzn)
-            ```
+i. the total forces acting on the atoms of the group:
+```
+Ftot_n = (_Fxn, _Fyn, _Fzn)
+```
 
-    Following these lines, the atom's information are in the following pattern:
+Following these lines, the atom's information are in the following pattern:
 
-    ```
-    _at _x _y _z _vx _vy _vz _fx _fy _fz _ngr
-    ```
+```
+_at _x _y _z _vx _vy _vz _fx _fy _fz _ngr
+```
+where:
 
-    where:
+a. '_at' represents the atomic species of the considered atom
 
-        - '_at' represents the atomic species of the considered atom
+b. the position in the cell is:
+```
+R = (_x, _y, _z)
+```
 
-        - the position in the cell is:
-            ```
-            R = (_x, _y, _z)
-            ```
+c. the velocity is:
+```
+V = (_vx, _vy, _vz)
+```
 
-        - the velocity is:
-            ```
-            V = (_vx, _vy, _vz)
-            ```
+d. the force acting on the atom is:
+```
+F = (_fx, _fy, _fz)
+```
 
-        - the force acting on the atom is:
-            ```
-            F = (_fx, _fy, _fz)
-            ```
-
-        - '_ngr' represents the number of the group at which the atom belongs
+e. '_ngr' represents the number of the group at which the atom belongs
 
 ii. **Graphs:** Several graphs are then generated, each of them is named with a preamble that identifies the topic of the graph followed by the filename of the 'pwo' file ('_filename'). The graphs are:
 
-    - Energy plot: named as 'E_filename.png'. It represents the plot of the energy on time during the simulation. Here are plotted the total kinetic energy of the system and the potential energy. Each of them has its own scale (left for the kinetic energy and right for potential energy). In addition, in the 'Setup_graph.txt' file is possible to switch on the plot of the total energy.
+a. Energy plot: named as 'E_filename.png'. It represents the plot of the energy on time during the simulation. Here are plotted the total kinetic energy of the system and the potential energy. Each of them has its own scale (left for the kinetic energy and right for potential energy). In addition, in the 'Setup_graph.txt' file is possible to switch on the plot of the total energy.
 
-    - Temperature plot: named as 'T_filename.png'. It represents the plot of temperature of the whole system and of each group on time during the simulation.
+b. Temperature plot: named as 'T_filename.png'. It represents the plot of temperature of the whole system and of each group on time during the simulation.
 
-    - Force plot: named as 'F_filename.png'. It represents the plot of the total force acting on the system and on each group depending on time during the simulation. In particular, we have three graphs, one for each coordinate of the force (Fx, Fy, Fz).
+c. Force plot: named as 'F_filename.png'. It represents the plot of the total force acting on the system and on each group depending on time during the simulation. In particular, we have three graphs, one for each coordinate of the force (Fx, Fy, Fz).
 
-    - Velocity plot: named as 'V_filename.png'. It represents the plot of the total velocity of the system and of each group depending on time during the simulation. In particular, we have three graphs, one for each coordinate of the velocity (vx, vy, vz).
+d. Velocity plot: named as 'V_filename.png'. It represents the plot of the total velocity of the system and of each group depending on time during the simulation. In particular, we have three graphs, one for each coordinate of the velocity (vx, vy, vz).
 
-    - Radial distribution function plot: named as '_at1_at2_filename.png'. It represents the radial distribution function of the atoms '_at1' and '_at2'.
+e. Radial distribution function plot: named as '_at1_at2_filename.png'. It represents the radial distribution function of the atoms '_at1' and '_at2'.
  
 
 ## Dependencies
 
 Install the required Python packages using the following command:
 
-```
-bash
+```bash
 pip install numpy os matplotlib shutil
 ```
 
@@ -198,15 +196,15 @@ pip install numpy os matplotlib shutil
 
 The Program is divided in multipole files:
 
- a. **'pwo_into_xyz.py':** This serves as the main file for extracting setup parameters and general information about the system. It defines the program's core to extract information from the system at each timestep.
+i. **'pwo_into_xyz.py':** This serves as the main file for extracting setup parameters and general information about the system. It defines the program's core to extract information from the system at each timestep.
 
- b. **'class_iteration.py':** In this file the class 'iteraton' is defined,  where an object of this class encapsulates all information about the system at a single timestep in molecular dynamics simulation.
+ii. **'class_iteration.py':** In this file the class 'iteraton' is defined,  where an object of this class encapsulates all information about the system at a single timestep in molecular dynamics simulation.
 
- c. **'class_group.py':** In this file the class 'group' is defined, representing a group of atoms used to categorize the entire atoms in a molecular dynamics simulation.
+iii. **'class_group.py':** In this file the class 'group' is defined, representing a group of atoms used to categorize the entire atoms in a molecular dynamics simulation.
 
- d. **'class_atom.py':** In this file the class 'atom' is defined, where an object of this class represents an atomic species utilized in molecular dynamics simulations. It sets up the object with specified attributes, including the atom's name, mass, and the identification number of its group.
+iv. **'class_atom.py':** In this file the class 'atom' is defined, where an object of this class represents an atomic species utilized in molecular dynamics simulations. It sets up the object with specified attributes, including the atom's name, mass, and the identification number of its group.
 
- e. **'class_graph.py':** In this file the class 'graph' is defined.An object of this class stores information about the molecular dynamics simulation to plot the graphs explained earlier.
+v. **'class_graph.py':** In this file the class 'graph' is defined.An object of this class stores information about the molecular dynamics simulation to plot the graphs explained earlier.
 
- f. **'class_RDF.py':** In this file the class 'RDF' is defined.An object of this class represents the radial distribution function of a single pair of atoms and performs the calculation to build the radial distribution function.
+vi. **'class_RDF.py':** In this file the class 'RDF' is defined.An object of this class represents the radial distribution function of a single pair of atoms and performs the calculation to build the radial distribution function.
 
