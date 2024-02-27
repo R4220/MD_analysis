@@ -1,0 +1,18 @@
+number of atoms/cell      =           6
+number of atomic types    =            3
+celldm(1)=   1.000000  celldm(2)=   0.000000  celldm(3)=   0.000000
+a(1) = (   2.000000   1.000000   0.000000 )  
+a(2) = (   2.000000  -1.000000   0.000000 )
+a(3) = (   0.000000   0.000000   6.000000 )
+atomic species   valence    mass     pseudopotential
+H              1.00     1.01000     H ( 1.00)
+C              4.00    12.00000     C ( 1.00)
+Fe             8.00     55.84700     Fe( 1.00)
+ site n.     atom                  positions (alat units)
+count_group
+count_group
+count_group
+count_group
+count_group
+count_group
+
