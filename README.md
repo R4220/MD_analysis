@@ -8,19 +8,20 @@ This code is used to obtain an initial approximate analysis of a molecular dynam
 
 To run the code print the following lines in the terminal:
 
-    ```
-    $ python3.10 pwo_into_xyz.py
-    ```
+```bash
+python3.10 pwo_into_xyz.py
+```
 
 Before running the code, follow these steps:
 
-1 **Setup.txt:** Place the 'Setup.txt' and the 'pwo' files in the same directory as 'pwo_into_xyz.py'. Inside the 'Setup.txt' file, specify the following entries (the order of the entries doesn't matter):
+### Setup.txt: 
+Place the 'Setup.txt' and the 'pwo' files in the same directory as 'pwo_into_xyz.py'. Inside the 'Setup.txt' file, specify the following entries (the order of the entries doesn't matter):
 
 i. **Filename:** Specify the name of the 'pwo' file for analysis without the file extension ('_filename'). In the 'Setup.txt' file, write the name of the 'pwo' file without the extension, as follows:
 
-        ```
-        Filename: _filename
-        ```
+```python
+Filename: _filename
+```
 
 ii. **Output directory:** Specify the directory for output files ('_dirname'). If the folder already exists, it adds the output files there; if it doesn't exist, it creates a new one with that name. In the 'Setup.txt' file, write the name of the directory as follows:
 
@@ -41,7 +42,8 @@ iv. **Radial distribution function:** Specify the pairs of atoms for which the r
         Particles: _at1 _at2 _Rmax _Nbin
         ```
 
-**Setup_graph.txt:** Place the 'Setup_graph.txt' file in the same directory as 'pwo_into_xyz.py'. Inside the 'Setup_graph.txt' file specify the following entries if you want, otherwise default values are taken (the order of the entries doesn't matter):
+### Setup_graph.txt:
+Place the 'Setup_graph.txt' file in the same directory as 'pwo_into_xyz.py'. Inside the 'Setup_graph.txt' file specify the following entries if you want, otherwise default values are taken (the order of the entries doesn't matter):
 
 i. **Graph values:** Specify the size of the labels of the axis ('_axsize'), ticks ('_xticksize', '_yticksize'), and legends ('_legendsize'). In the 'Setup_graph.txt' file, write the values as follows:
 
@@ -100,7 +102,8 @@ iii. **Total energy:** Specify if the total energy of the system is plotted in t
         _totcolor == 'black'
         ```
 
-**Returns:** The outputs of the run are placed inside the output directory ('_dirname') and are:
+## Returns
+The outputs of the run are placed inside the output directory ('_dirname') and are:
 
  i. **Output file:** This file is the new file converted into the 'xyz' format. The file stroe each timestep the the molecular dynamics simulation and in particular each timestep is represented by a number of line equal to the total numeber of atoms plus two: in the first line is printed the total number of atoms in the MD simulation, the second one is usually not red from the probrams which read xyz files, and here the information are sotred, than each line represents an atom.
 
@@ -181,7 +184,7 @@ ii. **Graphs:** Several graphs are then generated, each of them is named with a 
     - Radial distribution function plot: named as '_at1_at2_filename.png'. It represents the radial distribution function of the atoms '_at1' and '_at2'.
  
 
-### Dependencies
+## Dependencies
 
 Install the required Python packages using the following command:
 
@@ -191,7 +194,7 @@ pip install numpy os matplotlib shutil
 ```
 
 
-#### Files
+## Files
 
 The Program is divided in multipole files:
 
