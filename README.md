@@ -19,88 +19,88 @@ Place the 'Setup.txt' and the 'pwo' files in the same directory as 'pwo_into_xyz
 
 i. **Filename:** Specify the name of the 'pwo' file for analysis without the file extension ('_filename'). In the 'Setup.txt' file, write the name of the 'pwo' file without the extension, as follows:
 
-```python
+```
 Filename: _filename
 ```
 
 ii. **Output directory:** Specify the directory for output files ('_dirname'). If the folder already exists, it adds the output files there; if it doesn't exist, it creates a new one with that name. In the 'Setup.txt' file, write the name of the directory as follows:
 
-        ```python
-        Outdir: _dirname
-        ```
+```
+Outdir: _dirname
+```
 
 iii. **Atomic groups:** Specify the atomic element for each group ('_at1', '_at2') and the group number ('N_group'). The atomic species can be repeated and can be composed by letter and number (e.g. 'Fe3') to be consistent with the typical Quantum Espresso notation. In the 'Setup.txt' file, write the atomic groups as follows:
 
-        ```python
-        Group _Ngroup
-        _at1 _at2
-        ```
+```
+Group _Ngroup
+_at1 _at2
+```
 
 iv. **Radial distribution function:** Specify the pairs of atoms for which the radial distribution function will be calculated and plotted ('_at1', '_at2'). In this case, we can specifically select a single type of atom group (e.g., 'Fe3') or all the atoms of the same species (e.g., 'Fe1' and 'Fe2' are both taken into account by setting 'Fe'). Additionally, we need to select the maximum distance at which we calculate the RDF ('_Rmax') and the number of bins in the plot histogram ('_Nbin'). Multiple RDFs can be calculated in the same run. In the 'Setup.txt' file, write the pairs as follows:
 
-        ```
-        Particles: _at1 _at2 _Rmax _Nbin
-        ```
+```
+Particles: _at1 _at2 _Rmax _Nbin
+```
 
 ### Setup_graph.txt:
 Place the 'Setup_graph.txt' file in the same directory as 'pwo_into_xyz.py'. Inside the 'Setup_graph.txt' file specify the following entries if you want, otherwise default values are taken (the order of the entries doesn't matter):
 
 i. **Graph values:** Specify the size of the labels of the axis ('_axsize'), ticks ('_xticksize', '_yticksize'), and legends ('_legendsize'). In the 'Setup_graph.txt' file, write the values as follows:
 
-        ```
-        axes.labelsize = _axsize
-        xtick.labelsize = _xticksize
-        ytick.labelsize = _yticksize
-        legend.fontsize = _legendsize
-        ```
+```python
+axes.labelsize = _axsize
+xtick.labelsize = _xticksize
+ytick.labelsize = _yticksize
+legend.fontsize = _legendsize
+```
 
     Default values are:
 
-        ```
-        _axsize = 16
-        _xticksize = 14
-        _yticksize = 14
-        _legendsize = 14
-        ```
+```python
+_axsize = 16
+_xticksize = 14
+_yticksize = 14
+_legendsize = 14
+```
 
 ii. **Colors:** Specify the colors of the graphs. In particular, we can define the color of RDF plots ('_RDFcolor'), Kinetic energy ('_kineticcolor'), potential energy ('_potentialcolor'), and the color of the groups ('_gr1color', '_gr2color' ...). In the 'Setup_graph.txt' file, write the values as follows:
 
-        ```
-        RDF_color = _RDFcolor
-        K_energy_color = _kineticcolor
-        U_energy_color = _potentialcolor
-        Group_color = _gr1color _gr2color _gr3color _gr4color _gr5color _gr6color
-        ```
+```python
+RDF_color = _RDFcolor
+K_energy_color = _kineticcolor
+U_energy_color = _potentialcolor
+Group_color = _gr1color _gr2color _gr3color _gr4color _gr5color _gr6color
+```
 
     If nothing is specified, default values are considered:
 
-        ```
-        _RDFcolor == 'black'
-        _kineticcolor == 'red'
-        _potentialcolor == 'blue'
-        _gr1color == 'red'
-        _gr2color == 'blue'
-        _gr3color == 'green'
-        _gr4color == 'yellow'
-        _gr5color == 'black'
-        _gr6color == 'purple'
-        ```
+```python
+_RDFcolor == 'black'
+_kineticcolor == 'red'
+_potentialcolor == 'blue'
+_gr1color == 'red'
+_gr2color == 'blue'
+_gr3color == 'green'
+_gr4color == 'yellow'
+_gr5color == 'black'
+_gr6color == 'purple'
+```
 
     If the default value is used, the maximum number of groups is six.
 
 iii. **Total energy:** Specify if the total energy of the system is plotted in the energy graph ('_totbool') and the color of the plot ('_totcolor'). In the 'Setup_graph.txt' file, write the values as follows:
 
-        ```
-        Energy_sum = _totbool
-        Tot_energy_color = _totcolor
-        ```
+```python
+Energy_sum = _totbool
+Tot_energy_color = _totcolor
+```
 
     The default values are:
 
-        ```
-        _totbool == False
-        _totcolor == 'black'
-        ```
+```python
+_totbool == False
+_totcolor == 'black'
+```
 
 ## Returns
 The outputs of the run are placed inside the output directory ('_dirname') and are:
@@ -109,21 +109,21 @@ The outputs of the run are placed inside the output directory ('_dirname') and a
 
     The first two lines are in this form:
 
-        ```
-        _Natoms
-        Lattice(Ang)="_ax, _ay, _az, _bx, _by, _bz, _cx, _cy, _cz" dt(ps)=_dt N=_Niteration Epot(eV)=_U Ek_ngr(eV)=_Kn DOF_ngr=_DOFn T_ngr(K)=_Tn Ftot_ngr(pN)="_Fxn, _Fyn, _Fzn"
-        ```
+```
+_Natoms
+Lattice(Ang)="_ax, _ay, _az, _bx, _by, _bz, _cx, _cy, _cz" dt(ps)=_dt N=_Niteration Epot(eV)=_U Ek_ngr(eV)=_Kn DOF_ngr=_DOFn T_ngr(K)=_Tn Ftot_ngr(pN)="_Fxn, _Fyn, _Fzn"
+```
 
-    In these two lines, there are some general parameters:
+In these two lines, there are some general parameters:
 
-        - '_Natoms': the number of atoms inside the system
+    - '_Natoms': the number of atoms inside the system
 
-        - lattice vectors:
-            ```
-            a = (ax, ay, az)
-            b = (bx, by, bz)
-            c = (cx, cy, cz)
-            ```
+    - lattice vectors:
+    ```
+    a = (ax, ay, az)
+    b = (bx, by, bz)
+    c = (cx, cy, cz)
+    ```
 
         - '_dt': the time interval between two consecutive timesteps
 
