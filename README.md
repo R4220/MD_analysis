@@ -7,8 +7,8 @@ Molecular Dynamics Analysis is a Python tool designed to assist in the analysis 
 This code is used to obtain an initial approximate analysis of a molecular dynamics run performed with Quantum Espresso. In addition to providing various system information, it generates an 'xyz' file to visualize the atomic arrangement at each timestep and graphs.
 
 To run the code print the following lines in the terminal:
-    ```bash
-    python3.10 pwo_into_xyz.py
+    ```
+    $ python3.10 pwo_into_xyz.py
     ```
 
 Before running the code, follow these steps:
@@ -34,6 +34,7 @@ Before running the code, follow these steps:
         ```
 
 **Setup_graph.txt:** Place the 'Setup_graph.txt' file in the same directory as 'pwo_into_xyz.py'. Inside the 'Setup_graph.txt' file specify the following entries if you want, otherwise default values are taken (the order of the entries doesn't matter):
+
     i. **Graph values:** Specify the size of the labels of the axis ('_axsize'), ticks ('_xticksize', '_yticksize'), and legends ('_legendsize'). In the 'Setup_graph.txt' file, write the values as follows:
         ```
         axes.labelsize = _axsize
