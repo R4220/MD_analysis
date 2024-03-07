@@ -251,7 +251,7 @@ class graph: # da modificare con i nuovi grafici
         axU.yaxis.set_major_formatter(ticker.FormatStrFormatter('%.4f'))
 
         filepath = os.path.join(self.outdir, f'E_{self.filename}.png')
-        plt.savefig(filepath)
+        plt.savefig(filepath, bbox_inches='tight', dpi=150)
 
 
     def plot_forces(self, step_obj) -> None:
@@ -342,7 +342,7 @@ class graph: # da modificare con i nuovi grafici
         axZ.yaxis.set_major_formatter(ticker.FormatStrFormatter('%.2f'))
         
         filepath = os.path.join(self.outdir, f'F_{self.filename}.png')
-        plt.savefig(filepath)
+        plt.savefig(filepath, bbox_inches='tight', dpi=150)
 
 
     def plot_velocity(self, step_obj) -> None:
@@ -418,7 +418,7 @@ class graph: # da modificare con i nuovi grafici
         axZ.yaxis.set_major_formatter(ticker.FormatStrFormatter('%.2f'))
         
         filepath = os.path.join(self.outdir, f'V_{self.filename}.png')
-        plt.savefig(filepath)
+        plt.savefig(filepath, bbox_inches='tight', dpi=150)
 
 
     def plot_temperature(self, step_obj) -> None:
@@ -457,4 +457,4 @@ class graph: # da modificare con i nuovi grafici
         ax.yaxis.set_major_formatter(ticker.FormatStrFormatter('%.2f'))
         
         filepath = os.path.join(self.outdir, f'T_{self.filename}.png')
-        plt.savefig(filepath)
+        plt.savefig(filepath, bbox_inches='tight', dpi=150)
