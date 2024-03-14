@@ -5,7 +5,7 @@ import matplotlib.ticker as ticker
 
 from Codes.class_RDF import RDF
 
-class graph: # da modificare con i nuovi grafici
+class graph: 
     """
     This class extracts the values to plot graphs and plot them.
 
@@ -50,6 +50,8 @@ class graph: # da modificare con i nuovi grafici
         Plot the velocity in function of time.
     plot_temperature():
         Plot the temperature in function of time.
+    plot_distance():
+        Plot the distance between two groups in function of time.
     """
 
 
@@ -86,6 +88,8 @@ class graph: # da modificare con i nuovi grafici
             List to store temperature values.
         F : numpy.ndarray
             Bidimensional array to store force values.
+        distances : list
+            List of distances between the selected groups.
         time : list
             List to store time values.
         all_energy : bool
@@ -114,6 +118,7 @@ class graph: # da modificare con i nuovi grafici
         self.Up = []
         self.T = []
         self.F = np.array([], dtype=float).reshape(0, 3)
+        self.distances = []
 
         self.time = []
 
@@ -199,7 +204,7 @@ class graph: # da modificare con i nuovi grafici
         Notes
         -----
         This method extracts and stores forces (`Ftot`), kinetic energy (`Ek`), potential energy (`Up`),
-        total force (`F`), and simulation time (`time`) from the provided `step_obj` for each group in the system.
+        total force (`F`), distances between the groups defined in the setup (`distances`) and simulation time (`time`) from the provided `step_obj` for each group in the system.
         """
         F = np.array([], dtype=float).reshape(0, 3)
         self.Ek = np.append(self.Ek, 0)
@@ -208,9 +213,10 @@ class graph: # da modificare con i nuovi grafici
             self.Ek[-1] += gr.Ek
                         
         self.Up = np.append(self.Up, step_obj.U_pot)
+        self.distances = np.append(self.distances, step_obj.dist)
         self.F = np.append(self.F, np.sum(F, axis=0).reshape(1, 3), axis=0)
         self.time = np.append(self.time, step_obj.dt * step_obj.N_iteration)
-
+        
 
     def plot_energy(self) -> None:
         """
@@ -230,7 +236,7 @@ class graph: # da modificare con i nuovi grafici
         axE.plot(self.time[1:], self.Ek[1:], color = self.energy_color[0],  label='Kinetic energy')
         if self.all_energy:
             axU.plot(self.time[1:], (self.Up[1:] + self.Ek[1:]) * 0.001, color = self.energy_color[2], label='Total energy')
-        axE.set_xlabel('T (ps)')
+        axE.set_xlabel('t (ps)')
         axE.set_ylabel('E$_k$ (eV)')
         axE.legend(loc = 'upper left')
         xticks = axE.get_xticks()
@@ -299,7 +305,7 @@ class graph: # da modificare con i nuovi grafici
             axY.plot(self.time, Fy * 0.001, color = self.group_color[i+1], alpha = 0.5, label=f'{gr.id_group}$_y$')
             axZ.plot(self.time, Fz * 0.001, color = self.group_color[i+1], alpha = 0.5, label=f'{gr.id_group}$_z$')
 
-        axX.set_xlabel('T (ps)')
+        axX.set_xlabel('t (ps)')
         axX.set_ylabel('F$_x$ (nN)')
         axX.grid()
         axX.legend()
@@ -313,7 +319,7 @@ class graph: # da modificare con i nuovi grafici
         axX.set_yticklabels([str(int(tick)) for tick in yticks])
         axX.yaxis.set_major_formatter(ticker.FormatStrFormatter('%.2f'))
 
-        axY.set_xlabel('T (ps)')
+        axY.set_xlabel('t (ps)')
         axY.set_ylabel('F$_y$ (nN)')
         axY.grid()
         axY.legend()
@@ -327,7 +333,7 @@ class graph: # da modificare con i nuovi grafici
         axY.set_yticklabels([str(int(tick)) for tick in yticks])
         axY.yaxis.set_major_formatter(ticker.FormatStrFormatter('%.2f'))
 
-        axZ.set_xlabel('T (ps)')
+        axZ.set_xlabel('t (ps)')
         axZ.set_ylabel('F$_z$ (nN)')
         axZ.grid()
         axZ.legend()
@@ -375,7 +381,7 @@ class graph: # da modificare con i nuovi grafici
             axY.plot(self.time[1:], Vy, color = self.group_color[i+1], alpha = 0.5, label=f'{gr.id_group}$_y$')
             axZ.plot(self.time[1:], Vz, color = self.group_color[i+1], alpha = 0.5, label=f'{gr.id_group}$_z$')
 
-        axX.set_xlabel('T (ps)')
+        axX.set_xlabel('t (ps)')
         axX.set_ylabel('V$_x$ ($\AA$/ps)')
         axX.grid()
         axX.legend()
@@ -389,7 +395,7 @@ class graph: # da modificare con i nuovi grafici
         axX.set_yticklabels([str(int(tick)) for tick in yticks])
         axX.yaxis.set_major_formatter(ticker.FormatStrFormatter('%.2f'))
 
-        axY.set_xlabel('T (ps)')
+        axY.set_xlabel('t (ps)')
         axY.set_ylabel('V$_y$ ($\AA$/ps)')
         axY.grid()
         axY.legend()
@@ -403,7 +409,7 @@ class graph: # da modificare con i nuovi grafici
         axY.set_yticklabels([str(int(tick)) for tick in yticks])
         axY.yaxis.set_major_formatter(ticker.FormatStrFormatter('%.2f'))
 
-        axZ.set_xlabel('T (ps)')
+        axZ.set_xlabel('t (ps)')
         axZ.set_ylabel('V$_z$ ($\AA$/ps)')
         axZ.grid()
         axZ.legend()
@@ -442,7 +448,7 @@ class graph: # da modificare con i nuovi grafici
         for i, gr in enumerate(step_obj.groups):
             ax.plot(self.time[1:], gr.T[1:], color = self.group_color[i+1], alpha = 0.5, label=f'G. {gr.id_group}')
 
-        ax.set_xlabel('T (ps)')
+        ax.set_xlabel('t (ps)')
         ax.set_ylabel('T (K)')
         ax.grid()
         ax.legend(loc = 'upper left')
@@ -457,4 +463,39 @@ class graph: # da modificare con i nuovi grafici
         ax.yaxis.set_major_formatter(ticker.FormatStrFormatter('%.2f'))
         
         filepath = os.path.join(self.outdir, f'T_{self.filename}.png')
+        plt.savefig(filepath, bbox_inches='tight', dpi=150)
+
+    def plot_distance(self) -> None:
+        """
+        Plot the distance between the two defined groups in function of time.
+
+        Parameters
+        ----------
+        step_obj : MDstep
+            An instance of the `MDstep` class containing simulation data.
+
+        Notes
+        -----
+        This method generates a plot of the distance between the two defined groups over time
+        and saves it as an image file named 'Dist_{filename}.png'.
+        """
+        fig = plt.figure(figsize=(10, 6.18033988769))
+        
+        ax = fig.add_subplot(1, 1, 1)
+        ax.plot(self.time, self.distances, color = self.RDF_color)
+
+        ax.set_xlabel('t (ps)')
+        ax.set_ylabel('d ($\AA$)')
+        ax.grid()
+        xticks = ax.get_xticks()
+        ax.set_xticks(xticks)
+        ax.set_xticklabels([str(int(tick)) for tick in xticks])
+        ax.xaxis.set_major_formatter(ticker.FormatStrFormatter('%.2f'))
+        ax.set_xlim(min(self.time)-0.04, max(self.time)+0.04)
+        yticks = ax.get_yticks()
+        ax.set_yticks(yticks)
+        ax.set_yticklabels([str(int(tick)) for tick in yticks])
+        ax.yaxis.set_major_formatter(ticker.FormatStrFormatter('%.2f'))
+        
+        filepath = os.path.join(self.outdir, f'Dist_{self.filename}.png')
         plt.savefig(filepath, bbox_inches='tight', dpi=150)
