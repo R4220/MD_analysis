@@ -2,6 +2,15 @@
 
 Molecular Dynamics Analysis is a Python tool designed to assist in the analysis of output files from a molecular dynamics run in Quantum ESPRESSO. It calculates various properties of the entire system and the groups into which it is divided, including temperature, degree of freedom, kinetic energy, potential energy, forces acting on the atoms, and velocities.
 
+## Dependencies
+
+Install the required Python packages using the following command:
+
+```bash
+pip install numpy os matplotlib shutil
+```
+
+
 ## Usage
 
 This code is used to obtain an initial approximate analysis of a molecular dynamics run performed with Quantum Espresso. In addition to providing various system information, it generates an 'xyz' file to visualize the atomic arrangement at each timestep and graphs.
@@ -9,18 +18,18 @@ This code is used to obtain an initial approximate analysis of a molecular dynam
 To run the code print the following lines in the terminal:
 
 ```bash
-python3.10 pwo_into_xyz.py
+python pwo_into_xyz.py
 ```
 
 Before running the code, follow these steps:
 
 ### Setup.txt: 
-Place the 'Setup.txt' and the 'pwo' files in the same directory as 'pwo_into_xyz.py'. Inside the 'Setup.txt' file, specify the following entries (the order of the entries doesn't matter):
+Place the 'Setup.txt' in the same directory as 'pwo_into_xyz.py'. Inside the 'Setup.txt' file, specify the following entries (the order of the entries doesn't matter):
 
-i. **Filename:** Specify the name of the 'pwo' file for analysis without the file extension ('_filename'). In the 'Setup.txt' file, write the name of the 'pwo' file without the extension, as follows:
+i. **Filename:** Specify the name of the 'pwo' file for analysis without the file extension and the path ('_filename'). In the 'Setup.txt' file, write the name of the 'pwo' file without the extension, as follows:
 
 ```
-Filename: _filename
+Filename: path\_filename
 ```
 
 ii. **Output directory:** Specify the directory for output files ('_dirname'). If the folder already exists, it adds the output files there; if it doesn't exist, it creates a new one with that name. In the 'Setup.txt' file, write the name of the directory as follows:
@@ -36,7 +45,13 @@ Group _Ngroup
 _at1 _at2
 ```
 
-iv. **Radial distribution function:** Specify the pairs of atoms for which the radial distribution function will be calculated and plotted ('_at1', '_at2'). In this case, we can specifically select a single type of atom group (e.g., 'Fe3') or all the atoms of the same species (e.g., 'Fe1' and 'Fe2' are both taken into account by setting 'Fe'). Additionally, we need to select the maximum distance at which we calculate the RDF ('_Rmax') and the number of bins in the plot histogram ('_Nbin'). Multiple RDFs can be calculated in the same run. In the 'Setup.txt' file, write the pairs as follows:
+iv. **Distances:** Specify the pair of groups for which the distances along the z-coordinate are calculated and plotted ('_gr1', '_gr2'). In this case, we have to specify the ID numbers of the groups. In the 'Setup.txt' file, write the pairs as follows:
+
+```
+Distance: _gr1 _gr2
+```
+
+v. **Radial distribution function:** Specify the pairs of atoms for which the radial distribution function will be calculated and plotted ('_at1', '_at2'). In this case, we can specifically select a single type of atom group (e.g., 'Fe3') or all the atoms of the same species (e.g., 'Fe1' and 'Fe2' are both taken into account by setting 'Fe'). Additionally, we need to select the maximum distance at which we calculate the RDF ('_Rmax') and the number of bins in the plot histogram ('_Nbin'). Multiple RDFs can be calculated in the same run. In the 'Setup.txt' file, write the pairs as follows:
 
 ```
 Particles: _at1 _at2 _Rmax _Nbin
@@ -181,15 +196,8 @@ c. Force plot: named as 'F_filename.png'. It represents the plot of the total fo
 d. Velocity plot: named as 'V_filename.png'. It represents the plot of the total velocity of the system and of each group depending on time during the simulation. In particular, we have three graphs, one for each coordinate of the velocity (vx, vy, vz).
 
 e. Radial distribution function plot: named as '_at1_at2_filename.png'. It represents the radial distribution function of the atoms '_at1' and '_at2'.
- 
 
-## Dependencies
-
-Install the required Python packages using the following command:
-
-```bash
-pip install numpy os matplotlib shutil
-```
+f. Distances plot: named as 'Dist_filename.png'. It represents the distance between the mean z-coordinates of the two defined groups depending on time.
 
 
 ## Files
@@ -208,3 +216,7 @@ v. **'class_graph.py':** In this file the class 'graph' is defined.An object of 
 
 vi. **'class_RDF.py':** In this file the class 'RDF' is defined.An object of this class represents the radial distribution function of a single pair of atoms and performs the calculation to build the radial distribution function.
 
+
+
+## Comments
+If there are any problems, please write to me at lorenzo.razzolini@studio.unibo.it. The code is still in development.
