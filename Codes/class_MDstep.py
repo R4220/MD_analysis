@@ -110,15 +110,15 @@ class MDstep:
         self.matrix = []
 
 
-    def set_mass(self, _type : str, _mass : float) -> None:
+    def set_mass(self, type : str, mass : float) -> None:
         '''
         Set the mass of atoms in the specified group.
 
         Parameters
         ----------
-        _type : str
+        type : str
             Name of the atom.
-        _mass : float
+        mass : float
             Mass of the atom.
 
         Notes
@@ -126,8 +126,8 @@ class MDstep:
         This method iterates over the groups in the system and adds atoms with the specified name and mass.
         '''
         for gr in self.groups:
-            if _type in gr.type:
-                gr.atoms = np.append(gr.atoms, atom(_type, _mass, gr.id_group))
+            if type in gr.type:
+                gr.atoms = np.append(gr.atoms, atom(type, mass, gr.id_group))
 
 
     def count_group(self, line : list) -> None:
@@ -175,7 +175,7 @@ class MDstep:
 
     def forces(self, line : list) -> None:
         '''
-        Extract the force acting on atoms at a specific time.
+        Read and store the force acting on atoms at a specific time.
 
         Parameters
         ----------
@@ -202,7 +202,7 @@ class MDstep:
 
     def positions(self, line : list, graphs, conversion : float) -> None:
         '''
-        Extract and store the positions of atoms at a determined time.
+        Read and store the positions of atoms at a determined time.
 
         Parameters
         ----------
