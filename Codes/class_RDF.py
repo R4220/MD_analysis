@@ -125,57 +125,6 @@ class RDF:
         self.N2 = 0
 
         self.RDF_color = 'black'
-        self.graph_aesthetic()
-        
-
-    def graph_aesthetic(self) -> None:
-        '''
-        Set aesthetic parameters for Matplotlib plots based on a configuration file.
-
-        This method reads parameters from a configuration file named 'Setup_graph.txt' and updates Matplotlib's default parameters accordingly.
-        The configuration file should include specifications for graph parameters such as label sizes, tick sizes, legend font size, and colors.
-
-        Parameters:
-        -----------
-        self : graph
-            An instance of the 'graph' class.
-
-        Notes:
-        ------
-        This method reads the 'Setup_graph.txt' file and extracts information regarding graph aesthetics, including label sizes, tick sizes, legend font size, and colors.
-        It then updates Matplotlib's default parameters to reflect the specified aesthetics.
-
-        The 'Setup_graph.txt' file should contain lines specifying the following:
-        - axes.labelsize: Label size for axes.
-        - xtick.labelsize: Label size for x-axis ticks.
-        - ytick.labelsize: Label size for y-axis ticks.
-        - legend.fontsize: Font size for legend.
-        - RDF_color: Color for RDF plot.
-        '''
-        # Default values for label sizes and legend font size
-        param = [16, 14, 14, 14] 
-
-        # Read graph parameters from the configuration file
-        with open('Setup_graph.txt', 'r') as fgraph:
-            for line in fgraph:
-
-                # Graph parameters
-                if 'axes.labelsize' in line:
-                    param[0] = line.split()[2]
-                elif 'xtick.labelsize' in line:
-                    param[1] = line.split()[2]
-                elif 'ytick.labelsize' in line:
-                    param[2] = line.split()[2]
-                elif 'legend.fontsize' in line:
-                    param[3] = line.split()[2]
-                
-                # Colors
-                elif 'RDF_color' in line:
-                    self.RDF_color = line.split()[2]
-        
-        # Update Matplotlib's default parameters
-        parameters = {'axes.labelsize': param[0], 'xtick.labelsize': param[1], 'ytick.labelsize': param[2], 'legend.fontsize': param[3]}
-        plt.rcParams.update(parameters)
 
 
     def RDF(self, MDstep_obj) -> None:

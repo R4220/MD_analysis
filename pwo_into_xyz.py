@@ -35,25 +35,32 @@ def setup():
     atoms = []
     N = np.array([], dtype=int)
     groups = []
+    distance = []
 
     with open('Setup.txt', 'r') as fset:
         id = 0
         for line in fset:
-            _line = line.split()
 
             if 'Filename:' in line:
-                filepath = _line[1]
+                filepath = line.split()[1]
                 filename = filepath.split('/')[-1]
             if 'Outdir:' in line:
-                outdir = _line[1]
+                outdir = line.split()[1]
             if 'Particles:' in line:
+                _line = line.split()
                 atoms = np.append(atoms, [_line[1], _line[2]])
                 Rmax = np.append(Rmax, float(_line[3]))
                 N = np.append(N, int(_line[4]))
             if 'Group' in line:
+                _line = line.split()
                 id = _line[1]
                 _line = fset.readline().split()
                 groups = np.append(groups, group(_line, int(id)))
+            if 'Distance' in line:
+                _line = line.split()
+                for gr in groups:
+                    if int(_line[1])==gr.id_group or int(_line[2])==gr.id_group:
+                        gr.distance_switch = True
 
     atoms = atoms.reshape(int(len(atoms)/2), 2)
     if not os.path.exists(outdir):
@@ -275,6 +282,8 @@ def xyz_gen(fout, fin, RDF_ : list, groups : list, outdir : str) -> None:
         List containing information needed for RDF calculation.
     groups : list
         List of group instances in the system.
+    distance : list
+        List of group istances for wich the mean distance is calculated.
     outdir : str
         The output directory for saving files.
 
@@ -291,6 +300,7 @@ def xyz_gen(fout, fin, RDF_ : list, groups : list, outdir : str) -> None:
     
     # Setting of the RDF object
     graphs = graph(RDF_[0], RDF_[1], RDF_[2], RDF_[3], outdir)
+    graphs.graph_aesthetic()
     
     
     # Generation of the configuration at each time
@@ -303,6 +313,7 @@ def xyz_gen(fout, fin, RDF_ : list, groups : list, outdir : str) -> None:
     graphs.plot_forces(MDstep_obj)
     graphs.plot_temperature(MDstep_obj)
     graphs.plot_velocity(MDstep_obj)
+    graphs.plot_distance()
 
 
 if __name__ == "__main__":
@@ -315,4 +326,7 @@ if __name__ == "__main__":
         with open(filepath + '.pwo', 'r') as fin:
             # Generate XYZ file from PWO file
             xyz_gen(fout, fin, RDF_, groups, outdir)
+             
+
+
             

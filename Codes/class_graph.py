@@ -123,11 +123,10 @@ class graph:
         self.time = []
 
         self.all_energy = False
-        self.RDF_color = 'black'
+        #self.RDF_color = 'black'
         self.energy_color = ['red', 'blue', 'black']
         self.group_color = ['red', 'blue', 'green', 'yellow', 'black', 'purple']
 
-        self.graph_aesthetic()
         
 
     def graph_aesthetic(self) -> None:
@@ -172,7 +171,9 @@ class graph:
                 
                 # Colors
                 elif 'RDF_color' in line:
-                    self.RDF_color = line.split()[2]
+                    color = line.split()[2]
+                    for rdf in self.type:
+                        rdf.RDF_color = color
 
                 elif 'Energy_sum' in line:
                     self.all_energy = bool(line.split()[2])
