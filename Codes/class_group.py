@@ -41,6 +41,8 @@ class group:
         Bidimensional array representing the velocity of the atoms in the group.
     velocity_switch : boolean
         Switch to avoid the velocity generation for the first iteration.
+    distance_switch : boolean
+        Switch to select the group for which the distance is calculated.
 
     Methods
     -------
@@ -48,6 +50,8 @@ class group:
         Initialize a Group instance.
     Kinetic_energy(dt)
         Calculate the kinetic energy of the group.
+    Extract_z()
+        Extract the mean z-coordinate of the group.
     Generate(dt, matrix)
         Generate output data for the group.
 
@@ -97,6 +101,8 @@ class group:
             Bidimensional array representing the velocity of the atoms in the group.
         velocity_switch : boolean
             Switch to avoid the velocity generation for the first iteration.
+        distance_switch : boolean
+            Switch to select the group for which the distance is calculated.
 
         Notes
         -----
@@ -119,6 +125,7 @@ class group:
         self.Vtot = np.array([], dtype=float).reshape(0, 3)
         self.velocity = np.array([], dtype=float).reshape(0, 3)
         self.velocity_switch = False
+        self.distance_switch = False
 
 
     def Kinetic_energy(self, dt: float) -> None:
@@ -161,6 +168,26 @@ class group:
         for at in self.atoms:
             self.Ek += 0.5 * float(at.mass) * np.sum(np.linalg.norm(at.velocity - self.Vtot, axis=1) ** 2) * 0.000103642694841594
         
+    def Extract_z(self) -> float:
+        '''
+        Extract the mean z-coordinate of the group.
+
+        Returns
+        -------
+        float
+            the mean z-coordinate.
+
+        Notes
+        -----
+        This method calculates the mean z-coordinate by extracting all the z-coordinates from the atoms inside the group and then averaging the values.
+        '''
+
+        z = []
+
+        for at in self.atoms:
+            z = np.append(z, at.position[:, 2])
+            
+        return np.mean(z)
         
     def Generate(self, dt: float, matrix: np.ndarray) -> np.ndarray:
         '''
@@ -181,6 +208,7 @@ class group:
         Notes
         -----
         This method calculates the kinetic energy, temperature, and total force of the group. It generates an output line for each atom in the group, including information such as the atom's name, position, velocity, force, and group identification number.
+        It also calculates the difference between two previously defined groups.
         To calculate the temperature the method uses the formula:
 
         .. math::
@@ -208,7 +236,8 @@ class group:
         self.Ftot_store = np.append(self.Ftot_store, self.Ftot.reshape(1,3), axis=0)
 
         # Generate output line
-        body = []#np.array([], dtype=str)
+        body = []
+        z = 0
         for at in self.atoms:
             rpos = np.dot(np.linalg.inv(matrix), at.position.T).T
             rpos[:, :2] = rpos[:, :2] - np.rint(rpos[:, :2])
@@ -216,10 +245,14 @@ class group:
             for i in range(at.N):
                     body = np.append(body, f'{at.name}\t  {pos[i][0]}\t  {pos[i][1]}\t  {pos[i][2]}\t  {at.velocity[i][0]}\t  {at.velocity[i][1]}\t  {at.velocity[i][2]}\t  {at.force[i][0]}\t  {at.force[i][1]}\t  {at.force[i][2]}\t  {at.id_group}')
 
-            # Reset the arrays for the next time step
+            if self.distance_switch:
+                z = self.Extract_z()
+
+        # Reset the arrays for the next time step
             at.position_past_past = at.position_past
             at.position_past = at.position
             at.position = np.array([], dtype=float).reshape(0, 3)
             at.force = np.array([], dtype=float).reshape(0, 3)
         self.force = np.array([], dtype=float).reshape(0, 3)
-        return body
+        return body, z
+    
