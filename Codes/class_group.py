@@ -210,13 +210,13 @@ class group:
         # Generate output line
         body = []#np.array([], dtype=str)
         for at in self.atoms:
+            rpos = np.dot(np.linalg.inv(matrix), at.position.T).T
+            rpos[:, :2] = rpos[:, :2] - np.rint(rpos[:, :2])
+            pos = np.dot(matrix, rpos.T).T
             for i in range(at.N):
-                    rpos = np.dot(np.linalg.inv(matrix), at.position[i])
-                    rpos[:2] = rpos[:2] - np.rint(rpos[:2])
-                    pos = np.dot(matrix, rpos)
-                    body = np.append(body, f'{at.name}\t  {pos[0]}\t  {pos[1]}\t  {pos[2]}\t  {at.velocity[i][0]}\t  {at.velocity[i][1]}\t  {at.velocity[i][2]}\t  {at.force[i][0]}\t  {at.force[i][1]}\t  {at.force[i][2]}\t  {at.id_group}')
+                    body = np.append(body, f'{at.name}\t  {pos[i][0]}\t  {pos[i][1]}\t  {pos[i][2]}\t  {at.velocity[i][0]}\t  {at.velocity[i][1]}\t  {at.velocity[i][2]}\t  {at.force[i][0]}\t  {at.force[i][1]}\t  {at.force[i][2]}\t  {at.id_group}')
 
-        # Reset the arrays for the next time step
+            # Reset the arrays for the next time step
             at.position_past_past = at.position_past
             at.position_past = at.position
             at.position = np.array([], dtype=float).reshape(0, 3)
