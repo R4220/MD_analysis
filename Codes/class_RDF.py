@@ -2,8 +2,7 @@ import numpy as np
 import os
 import matplotlib.pyplot as plt
 
-
-class RDF: # da modificare con i nuovi grafici
+class RDF:
     """
     Radial Distribution Function (RDF) calculator.
 
@@ -40,7 +39,7 @@ class RDF: # da modificare con i nuovi grafici
         Bin size for histogram.
     norm : ndarray
         Normalization array for RDF calculation.
-    condition : bool
+    equal : bool
         True if RDF is calculated for the same type of atoms, False otherwise.
     at1 : ndarray
         Array to store positions of atoms of type 1.
@@ -99,7 +98,7 @@ class RDF: # da modificare con i nuovi grafici
             Value of the second element in R.
         norm : numpy.ndarray
             Normalized array based on R values.
-        condition : bool
+        equal : bool
             Condition based on the equality of the two elements in atoms.
         at1 : numpy.ndarray
             Bidimensional array for atoms type 1.
@@ -119,7 +118,7 @@ class RDF: # da modificare con i nuovi grafici
         self.R = np.linspace(0, Rmax, N_bin)
         self.dR = self.R[1]
         self.norm = np.multiply([((i + self.dR)**3 - i**3) for i in self.R[:N_bin]], np.pi * 4 /3)
-        self.condition = (atoms[0] == atoms[1])
+        self.equal = (atoms[0] == atoms[1])
         self.at1 = np.array([], dtype=float).reshape(0, 3)
         self.N1 = 0
         self.at2 = np.array([], dtype=float).reshape(0, 3)
@@ -197,7 +196,7 @@ class RDF: # da modificare con i nuovi grafici
         dist = []
 
         # Equal atomic species
-        if self.condition:
+        if self.equal:
             n = len(self.at1)
             rpos = self.at1
             
@@ -261,7 +260,7 @@ class RDF: # da modificare con i nuovi grafici
         """
         V = 8 * self.Rmax **3
 
-        if self.condition:
+        if self.equal :
             rho_1 = V / (self.N1 * (self.N1 - 1) * MDstep_obj.N_iteration)
         else:
             rho_1 = V / (self.N1 * self.N2 * MDstep_obj.N_iteration)
@@ -289,3 +288,4 @@ class RDF: # da modificare con i nuovi grafici
         ax.legend()
         filepath = os.path.join(self.outdir, f'{self.type[0]}{self.type[1]}_{self.filename}.png')
         plt.savefig(filepath)
+
