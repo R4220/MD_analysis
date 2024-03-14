@@ -14,6 +14,8 @@ class MDstep:
     ----------
     groups : list
         List of group instances in the system.
+    dist : float
+        Distance between two previously defined groups.
     n_atoms : int
         Number of atoms in the system.
     n_type : int
@@ -63,6 +65,8 @@ class MDstep:
         ----------
         groups : list
             List of group instances in the system.
+        dist : float
+            Distance between two previously defined groups.
         n_atoms : int
             Number of atoms in the system.
         n_type : int
@@ -92,6 +96,7 @@ class MDstep:
         The elements of the list 'group' will be updated at each cycle, together with the potential energy and the number of iterations.
         '''
         self.groups = groups
+        self.dist = 0
         self.n_atoms = 0
         self.n_type = 0
         self.ax = np.zeros(3)
@@ -238,7 +243,7 @@ class MDstep:
 
     def single_frame(self) -> list:
         '''
-        Generate a list where each element is a line in the output file, representing the current time step.
+        Generate a list where each element represents a line in the output file, indicating the current time step and the calculated distance between two previously defined groups.
 
         Returns
         -------
@@ -250,15 +255,24 @@ class MDstep:
         This method prints information about the lattice, time step, number of iterations, and potential energy in the second line of the xyz file.
         It iterates over the groups in the system, adding information about kinetic energy, degrees of freedom, temperature, and total force.
         At the end, it adds the coordinates, velocity, and forces of each atom using the 'generate' method of the group.
+        It also calculates the distance along the z-direction of the two previously defined groups.
         '''    
         # Generate the general information of the time step
         text = [f'{self.n_atoms}', f'Lattice(Ang)=\"{self.ax[0]:.3f}, {self.ax[1]:.3f}, {self.ax[2]:.3f}, {self.ay[0]:.3f}, {self.ay[1]:.3f}, {self.ay[2]:.3f}, {self.az[0]:.3f}, {self.az[1]:.3f}, {self.az[2]:.3f}\" dt(ps)={self.dt:.6f} N={self.N_iteration} Epot(eV)={(self.U_pot / 13.60570398):.3f}']
 
+
         # Generate the information for each group  of the time step
+        z_list = []
         for gr in self.groups:            
-            body = gr.Generate(self.dt, self.matrix)
+            body, z = gr.Generate(self.dt, self.matrix)
             text[1] = text[1] + f' Ek{gr.id_group}(eV)={gr.Ek:.3f} DOF{gr.id_group}={gr.DOF} T{gr.id_group}(K)={gr.T[-1]:.3f} Ftot{gr.id_group}(pN)=\"{gr.Ftot[0]:.3f}, {gr.Ftot[1]:.3f}, {gr.Ftot[2]:.3f}\"'
             text.extend(body)
+
+            if gr.distance_switch:
+                z_list = np.append(z_list, z)
+
+        # Calculating distance between the specified groups
+        self.dist = abs(z_list[0] - z_list[1])
 
         return text
     
