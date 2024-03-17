@@ -255,7 +255,7 @@ def xyz_gen(fout, fin, RDF_ : list, groups : list, outdir : str) -> None:
     graphs.plot_distance()
 
 
-def configuration(input_file):
+def configuration():#input_file):
     '''
     Read configuration parameters from 'Setup.txt' and initialize simulation setup.
 
@@ -277,6 +277,12 @@ def configuration(input_file):
     It extracts information such as the filename, output directory, maximum distance for RDFs, particle types for RDF calculations, number of bins for RDFs, and group instances.
     '''
     config = ConfigParser()
+    input_file = input("Write the input file name:\n")
+
+    if not os.path.exists(input_file):
+        print("File not found")
+        exit(0)
+
     config.read(input_file)
 
     filepath = config['SETUP']['filename']
@@ -317,7 +323,7 @@ def configuration(input_file):
 if __name__ == "__main__":
     # Extract setup information
     inputfile = 'Setup.txt'
-    filename, outdir, Rmax, atoms, N, groups, filepath = configuration(inputfile)
+    filename, outdir, Rmax, atoms, N, groups, filepath = configuration()
     RDF_ = [filename, Rmax, atoms, N]
 
     # Open output and input files
