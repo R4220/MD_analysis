@@ -239,8 +239,7 @@ def xyz_gen(fout, fin, RDF_ : list, groups : list, outdir : str) -> None:
     
     # Setting of the RDF object
     graphs = graph(RDF_[0], RDF_[1], RDF_[2], RDF_[3], outdir)
-    graphs.graph_aesthetic()
-    
+    graphs.graph_aesthetic()    
     
     # Generation of the configuration at each time
     body(fout, fin, MDstep_obj, graphs)

@@ -2,6 +2,7 @@ import numpy as np
 import os
 import matplotlib.pyplot as plt
 import matplotlib.ticker as ticker
+from configparser import ConfigParser
 
 from Codes.class_RDF import RDF
 
@@ -127,7 +128,6 @@ class graph:
         self.energy_color = ['red', 'blue', 'black']
         self.group_color = ['red', 'blue', 'green', 'yellow', 'black', 'purple']
 
-        
 
     def graph_aesthetic(self) -> None:
         '''
@@ -155,39 +155,72 @@ class graph:
         '''
         param = [16, 14, 14, 14] # Default values for label sizes and legend font size
 
-        # Read graph parameters from the configuration file
-        with open('Setup_graph.txt', 'r') as fgraph:
-            for line in fgraph:
+        config = ConfigParser()
+        choice = input('Do you want to use a specific file for aesthetic? Y/N\n')
+        if choice == "Y" or choice == "y":
+            aesthetic_file = input("Write the file name:\n")
 
-                # Graph parameters
-                if 'axes.labelsize' in line:
-                    param[0] = line.split()[2]
-                elif 'xtick.labelsize' in line:
-                    param[1] = line.split()[2]
-                elif 'ytick.labelsize' in line:
-                    param[2] = line.split()[2]
-                elif 'legend.fontsize' in line:
-                    param[3] = line.split()[2]
-                
-                # Colors
-                elif 'RDF_color' in line:
-                    color = line.split()[2]
-                
-                    for rdf in self.type:
-                        rdf.RDF_color = color
+            if os.path.exists(aesthetic_file):
+                config.read(aesthetic_file)
+            else:
+                print("File not found")
+                exit(0)
 
-                elif 'Energy_sum' in line:
-                    self.all_energy = bool(line.split()[2])
-                elif 'K_energy_color' in line:
-                    self.energy_color[0] = line.split()[2]
-                elif 'U_energy_color' in line:
-                    self.energy_color[1] = line.split()[2]
-                elif 'Tot_energy_color' in line:
-                    self.energy_color[2] = line.split()[2]
+        else:
+            config.read('Codes/Setup_graph.ini')
 
-                elif 'Group_color' in line:
-                    _line = line.split()[2:]
-                    self.group_color = _line
+        #Setup graph values
+        try:
+             param[0] = config['GRAPH VALUES']['axes.labelsize']
+        except:
+             pass
+        
+        try:
+             param[0] = config['GRAPH VALUES']['xtick.labelsize']
+        except:
+             pass
+        
+        try:
+             param[0] = config['GRAPH VALUES']['ytick.labelsize']
+        except:
+             pass
+        
+        try:
+             param[0] = config['GRAPH VALUES']['legend.fontsize']
+        except:
+             pass
+        
+        # Define colors
+        
+        try:
+            for rdf in self.type:
+                rdf.RDF_color = config['COLORS']['RDF_color']
+        except:
+            pass
+
+        try:
+            self.all_energy = bool(config['COLORS']['Energy_sum'])
+            try:
+                self.energy_color[2] = config['COLORS']['Tot_energy_color']
+            except:
+                pass
+        except:
+            pass
+
+        try:
+            self.energy_color[0] = config['COLORS']['K_energy_color']
+        except:
+            pass
+
+        try:
+            self.energy_color[1] = config['COLORS']['U_energy_color']
+        except:
+            pass
+
+        try:
+            self.group_color = config['COLORS']['Group_color'].split()
+        except:
+            pass
         
         # Update Matplotlib's default parameters
         parameters = {'axes.labelsize': param[0], 'xtick.labelsize': param[1], 'ytick.labelsize': param[2], 'legend.fontsize': param[3]}
@@ -466,6 +499,7 @@ class graph:
         
         filepath = os.path.join(self.outdir, f'T_{self.filename}.png')
         plt.savefig(filepath, bbox_inches='tight', dpi=150)
+
 
     def plot_distance(self) -> None:
         """
