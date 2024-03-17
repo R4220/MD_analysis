@@ -3,3 +3,4 @@ key_git*
 __pycache__
 *.png
 *.xyz
+*.txt
