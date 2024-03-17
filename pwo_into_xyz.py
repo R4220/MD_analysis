@@ -313,12 +313,6 @@ def configuration():#input_file):
     return filename, outdir, Rmax, atoms, N, groups, filepath
     
 
-
-
-
-
-
-
 if __name__ == "__main__":
     # Extract setup information
     inputfile = 'Setup.txt'

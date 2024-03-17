@@ -21,46 +21,64 @@ To run the code print the following lines in the terminal:
 python pwo_into_xyz.py
 ```
 
+Poi ti verrà chiesto di inserire il nome del file di input di setup:
+```
+Write the input file name:
+```
+
+In un secondo momento verrà richiesto se si vuole usare o meno i valori di default per la grafica dei grafici:
+```
+Do you want to use a specific file for aesthetic? Y/N
+```
+Nel caso 'Y' verrà chiesto di inserire il nome del file da cui leggerli:
+```
+Write the file name:
+```
+
 Before running the code, follow these steps:
 
-### Setup.txt: 
-Place the 'Setup.txt' in the same directory as 'pwo_into_xyz.py'. Inside the 'Setup.txt' file, specify the following entries (the order of the entries doesn't matter):
+### Setup file: 
+Place the setup file in the same directory as 'pwo_into_xyz.py'. Inside the 'Setup.txt' file, specify the following entries (the order of the entries doesn't matter):
 
-i. **Filename:** Specify the name of the 'pwo' file for analysis without the file extension and the path ('_filename'). In the 'Setup.txt' file, write the name of the 'pwo' file without the extension, as follows:
+i. **[SETUP]:** inside this section you have to define the file to analyze and the directory in which the output are saved:
 
-```
-Filename: path\_filename
-```
-
-ii. **Output directory:** Specify the directory for output files ('_dirname'). If the folder already exists, it adds the output files there; if it doesn't exist, it creates a new one with that name. In the 'Setup.txt' file, write the name of the directory as follows:
+a. **Filename:** Specify the name of the 'pwo' file for analysis without the file extension and the path ('_filename'). In the 'Setup.txt' file, write the name of the 'pwo' file without the extension, as follows:
 
 ```
-Outdir: _dirname
+Filename = path\_filename
 ```
 
-iii. **Atomic groups:** Specify the atomic element for each group ('_at1', '_at2') and the group number ('N_group'). The atomic species can be repeated and can be composed by letter and number (e.g. 'Fe3') to be consistent with the typical Quantum Espresso notation. In the 'Setup.txt' file, write the atomic groups as follows:
+b. **Output directory:** Specify the directory for output files ('_dirname'). If the folder already exists, it adds the output files there; if it doesn't exist, it creates a new one with that name. In the 'Setup.txt' file, write the name of the directory as follows:
 
 ```
-Group _Ngroup
-_at1 _at2
+Outdir = _dirname
 ```
 
-iv. **Distances:** Specify the pair of groups for which the distances along the z-coordinate are calculated and plotted ('_gr1', '_gr2'). In this case, we have to specify the ID numbers of the groups. In the 'Setup.txt' file, write the pairs as follows:
+ii. **[GROUPS]:** here the groups of atoms are defined. To define a group write the line in the following way:
+```
+_id = _at1 _at2 _at3
+```
+where '_id' represent the number of the group and '_atN' are the atomic species. The atomic species composed by letter and number (e.g. 'Fe3') to be consistent with the typical Quantum Espresso notation.
+
+iii. **[INTERFACE SEPARATION]:** Specify the pair of groups for which the distances along the z-coordinate are calculated and plotted ('_gr1', '_gr2'). In this case, we have to specify the ID numbers of the groups. In the setup file, write the pairs as follows:
 
 ```
-Distance: _gr1 _gr2
+Groups = _gr1 _gr2
 ```
 
-v. **Radial distribution function:** Specify the pairs of atoms for which the radial distribution function will be calculated and plotted ('_at1', '_at2'). In this case, we can specifically select a single type of atom group (e.g., 'Fe3') or all the atoms of the same species (e.g., 'Fe1' and 'Fe2' are both taken into account by setting 'Fe'). Additionally, we need to select the maximum distance at which we calculate the RDF ('_Rmax') and the number of bins in the plot histogram ('_Nbin'). Multiple RDFs can be calculated in the same run. In the 'Setup.txt' file, write the pairs as follows:
+iv. **Radial distribution function:** Specify the pairs of atoms for which the radial distribution function will be calculated and plotted ('_at1', '_at2'). In this case, we can specifically select a single type of atom group (e.g., 'Fe3') or all the atoms of the same species (e.g., 'Fe1' and 'Fe2' are both taken into account by setting 'Fe'). Additionally, we need to select the maximum distance at which we calculate the RDF ('_Rmax') and the number of bins in the plot histogram ('_Nbin'). Multiple RDFs can be calculated in the same run. In the 'Setup.txt' file, write the pairs as follows:
 
 ```
-Particles: _at1 _at2 _Rmax _Nbin
+Particles1: 1_at1 1_at2 1_Rmax 1_Nbin
+Particles2: 2_at1 2_at2 2_Rmax 2_Nbin
+...
+ParticlesN: N_at1 N_at2 N_Rmax N_Nbin
 ```
 
-### Setup_graph.txt:
-Place the 'Setup_graph.txt' file in the same directory as 'pwo_into_xyz.py'. Inside the 'Setup_graph.txt' file specify the following entries if you want, otherwise default values are taken (the order of the entries doesn't matter):
+### Setup graph file:
+If you want to change some graphic setting instead of using the default values you have to use a file placed in the same directory as 'pwo_into_xyz.py'. Inside the setup graph file specify the following entries if you want, otherwise default values are taken (the order of the entries doesn't matter):
 
-i. **Graph values:** Specify the size of the labels of the axis ('_axsize'), ticks ('_xticksize', '_yticksize'), and legends ('_legendsize'). In the 'Setup_graph.txt' file, write the values as follows:
+i. **[GRAPH VALUES]:** inside this section specify the size of the labels of the axis ('_axsize'), ticks ('_xticksize', '_yticksize'), and legends ('_legendsize'). In the 'Setup_graph.txt' file, write the values as follows:
 
 ```python
 axes.labelsize = _axsize
@@ -78,7 +96,7 @@ _yticksize = 14
 _legendsize = 14
 ```
 
-ii. **Colors:** Specify the colors of the graphs. In particular, we can define the color of RDF plots ('_RDFcolor'), Kinetic energy ('_kineticcolor'), potential energy ('_potentialcolor'), and the color of the groups ('_gr1color', '_gr2color' ...). In the 'Setup_graph.txt' file, write the values as follows:
+ii. **[COLORS]:** in this section specify the colors of the graphs. In particular, we can define the color of RDF plots ('_RDFcolor'), Kinetic energy ('_kineticcolor'), potential energy ('_potentialcolor'), and the color of the groups ('_gr1color', '_gr2color' ...). In the 'Setup_graph.txt' file, write the values as follows:
 
 ```python
 RDF_color = _RDFcolor
@@ -103,7 +121,7 @@ _gr6color == 'purple'
 
 If the default value is used, the maximum number of groups is six.
 
-iii. **Total energy:** Specify if the total energy of the system is plotted in the energy graph ('_totbool') and the color of the plot ('_totcolor'). In the 'Setup_graph.txt' file, write the values as follows:
+Inside this section you cal also specify if the total energy of the system is plotted in the energy graph ('_totbool') and the color of the plot ('_totcolor'). In the 'Setup_graph.txt' file, write the values as follows:
 
 ```python
 Energy_sum = _totbool
@@ -202,20 +220,21 @@ f. Distances plot: named as 'Dist_filename.png'. It represents the distance betw
 
 ## Files
 
-The Program is divided in multipole files:
+The Program is divided in multiple files:
 
-i. **'pwo_into_xyz.py':** This serves as the main file for extracting setup parameters and general information about the system. It defines the program's core to extract information from the system at each timestep.
+i. **pwo_into_xyz.py:** This serves as the main file for extracting setup parameters and general information about the system. It defines the program's core to extract information from the system at each timestep.
 
-ii. **'class_iteration.py':** In this file the class 'iteraton' is defined,  where an object of this class encapsulates all information about the system at a single timestep in molecular dynamics simulation.
+ii. **class_iteration.py:** In this file the class 'iteraton' is defined,  where an object of this class encapsulates all information about the system at a single timestep in molecular dynamics simulation.
 
-iii. **'class_group.py':** In this file the class 'group' is defined, representing a group of atoms used to categorize the entire atoms in a molecular dynamics simulation.
+iii. **class_group.py:** In this file the class 'group' is defined, representing a group of atoms used to categorize the entire atoms in a molecular dynamics simulation.
 
-iv. **'class_atom.py':** In this file the class 'atom' is defined, where an object of this class represents an atomic species utilized in molecular dynamics simulations. It sets up the object with specified attributes, including the atom's name, mass, and the identification number of its group.
+iv. **class_atom.py:** In this file the class 'atom' is defined, where an object of this class represents an atomic species utilized in molecular dynamics simulations. It sets up the object with specified attributes, including the atom's name, mass, and the identification number of its group.
 
-v. **'class_graph.py':** In this file the class 'graph' is defined.An object of this class stores information about the molecular dynamics simulation to plot the graphs explained earlier.
+v. **class_graph.py:** In this file the class 'graph' is defined.An object of this class stores information about the molecular dynamics simulation to plot the graphs explained earlier.
 
-vi. **'class_RDF.py':** In this file the class 'RDF' is defined.An object of this class represents the radial distribution function of a single pair of atoms and performs the calculation to build the radial distribution function.
+vi. **class_RDF.py:** In this file the class 'RDF' is defined.An object of this class represents the radial distribution function of a single pair of atoms and performs the calculation to build the radial distribution function.
 
+vii. **Setup_graph.ini** In this file the delfault values for graphs are setted
 
 
 ## Comments
