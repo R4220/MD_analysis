@@ -21,16 +21,15 @@ To run the code print the following lines in the terminal:
 python pwo_into_xyz.py
 ```
 
-Poi ti verrà chiesto di inserire il nome del file di input di setup:
+You will be prompted to enter the name of the setup input file:
 ```
 Write the input file name:
 ```
-
-In un secondo momento verrà richiesto se si vuole usare o meno i valori di default per la grafica dei grafici:
+Subsequently, you will be asked whether you want to use specific values for graph aesthetics:
 ```
 Do you want to use a specific file for aesthetic? Y/N
 ```
-Nel caso 'Y' verrà chiesto di inserire il nome del file da cui leggerli:
+If you choose 'Y', you will be prompted to enter the name of the file from which to read the values:
 ```
 Write the file name:
 ```
@@ -58,7 +57,7 @@ ii. **[GROUPS]:** here the groups of atoms are defined. To define a group write 
 ```
 _id = _at1 _at2 _at3
 ```
-where '_id' represent the number of the group and '_atN' are the atomic species. The atomic species composed by letter and number (e.g. 'Fe3') to be consistent with the typical Quantum Espresso notation.
+where '_id' represents the number of the group and '_atN' are the atomic species. The atomic species are composed of letters and numbers (e.g. 'Fe3') to be consistent with the typical Quantum Espresso notation.
 
 iii. **[INTERFACE SEPARATION]:** Specify the pair of groups for which the distances along the z-coordinate are calculated and plotted ('_gr1', '_gr2'). In this case, we have to specify the ID numbers of the groups. In the setup file, write the pairs as follows:
 
@@ -76,7 +75,7 @@ ParticlesN: N_at1 N_at2 N_Rmax N_Nbin
 ```
 
 ### Setup graph file:
-If you want to change some graphic setting instead of using the default values you have to use a file placed in the same directory as 'pwo_into_xyz.py'. Inside the setup graph file specify the following entries if you want, otherwise default values are taken (the order of the entries doesn't matter):
+If you want to change some graphic settings instead of using the default values, you have to use a file placed in the same directory as 'pwo_into_xyz.py'. Inside the setup graph file specify the following entries if you want, otherwise default values are taken (the order of the entries doesn't matter):
 
 i. **[GRAPH VALUES]:** inside this section specify the size of the labels of the axis ('_axsize'), ticks ('_xticksize', '_yticksize'), and legends ('_legendsize'). In the 'Setup_graph.txt' file, write the values as follows:
 
@@ -121,7 +120,7 @@ _gr6color == 'purple'
 
 If the default value is used, the maximum number of groups is six.
 
-Inside this section you cal also specify if the total energy of the system is plotted in the energy graph ('_totbool') and the color of the plot ('_totcolor'). In the 'Setup_graph.txt' file, write the values as follows:
+Inside this section, you can also specify if the total energy of the system is plotted in the energy graph ('_totbool') and the color of the plot ('_totcolor'). In the 'Setup_graph.txt' file, write the values as follows:
 
 ```python
 Energy_sum = _totbool
