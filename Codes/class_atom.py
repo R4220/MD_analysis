@@ -1,7 +1,6 @@
 import numpy as np
 
 class atom:
-   
     """
     This class represents an atomic species used in molecular dynamics simulations.
     This class sets up an 'Atom' object with the specified attributes, including the atom's name, mass, and the identification number of its group.
