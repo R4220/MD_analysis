@@ -994,17 +994,17 @@ def test_single_frame(sample_MDstep2, monkeypatch):
     sample_MDstep2 : MDstep
         An instance of the 'MDstep' class with predefined attributes and groups.
 
-    Notes
-    -----
-    This test sets up a sample MDstep object with predefined attributes for testing. Two groups within the MDstep object
-    are also preconfigured with kinetic energy, degrees of freedom, temperature, and total force values.
-    The test then calls the 'single_frame' method of the MDstep object to generate a single output frame and verifies
-    the correctness of the generated frame.
-
     Raises
     ------
     AssertionError
         If the generated output frame does not match the expected output format or values.
+
+    Notes
+    -----
+    This test sets up a sample MDstep object with predefined attributes for testing. Two groups within the MDstep 
+    object are also preconfigured with kinetic energy, degrees of freedom, temperature, and total force values.
+    The test then calls the 'single_frame' method of the MDstep object to generate a single output frame and 
+    verifies the correctness of the generated frame.
     """
     # Set up attributes and groups for testing
     sample_MDstep2.n_atoms = 4
