@@ -16,7 +16,7 @@ def sample_MDstep2():
     group1 = group(type=['H', 'C'], id_group=0)
     group2 = group(type=['Fe'], id_group=1)
     return MDstep([group1, group2])
-
+# -----------------------------------------------------------------------------------------------------------------
 
 # Inizialization_test
 

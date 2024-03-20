@@ -24,6 +24,7 @@ def sample_MDstep2():
     group2 = group(type=['Fe'], id_group=1)
     return MDstep([group1, group2])
 
+# -----------------------------------------------------------------------------------------------------------------
 # graph_esthetic test
 
 def test_graph_aesthetic(monkeypatch):

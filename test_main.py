@@ -14,8 +14,10 @@ from pwo_into_xyz import setup, preamble, extract_forces, extract_positions, bod
 def sample_MDstep():
     return MDstep(groups=[])
 
-
+# -----------------------------------------------------------------------------------------------------------------
 # setup test
+
+#### test config
     
 def test_setup(monkeypatch):
     """

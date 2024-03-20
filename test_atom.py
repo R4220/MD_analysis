@@ -55,7 +55,8 @@ def test_generate_velocity1(sample_atom):
     """
     Test case for the 'generate_velocity' method of the 'atom' class.
 
-    This test checks if the 'generate_velocity' method correctly calculates the velocity based on the provided positions and time step.
+    This test checks if the 'generate_velocity' method correctly calculates the velocity based on the provided 
+    positions and time step.
 
     Parameters
     ----------
@@ -79,7 +80,8 @@ def test_generate_velocity2(sample_atom):
     """
     Test case for the 'generate_velocity' method of the 'atom' class.
 
-    This test checks if the 'generate_velocity' method correctly calculates the velocity based on the provided positions and time step, even when the atom is frozen.
+    This test checks if the 'generate_velocity' method correctly calculates the velocity based on the provided 
+    positions and time step, even when the atom is frozen.
 
     Parameters
     ----------
@@ -107,7 +109,8 @@ def test_generate_velocity3(sample_atom):
     """
     Test case for the 'generate_velocity' method of the 'atom' class.
 
-    This test checks if the 'generate_velocity' method correctly calculates the velocity based on the provided positions and time step, with a the time step parameter 'dt' different from 1.
+    This test checks if the 'generate_velocity' method correctly calculates the velocity based on the provided 
+    positions and time step, with a the time step parameter 'dt' different from 1.
 
     Parameters
     ----------

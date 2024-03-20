@@ -20,7 +20,7 @@ def sample_RDF_equal_b():
 @pytest.fixture
 def sample_RDF_different_b():
     return RDF(Rmax=10.0, atoms=['H', 'O'], N_bin=100, filename='test', outdir='output')
-
+# -----------------------------------------------------------------------------------------------------------------
 @pytest.fixture
 def sample_RDF_equal_lowRmax():
     return RDF(Rmax=2.0, atoms=['H', 'H'], N_bin=100, filename='test', outdir='output')
