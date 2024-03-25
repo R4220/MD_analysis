@@ -1,0 +1,25 @@
+     Time step             =    1.00 a.u.,  1.9351 femto-seconds
+
+Entering Dynamics:    iteration =    2
+
+!    total energy              =   -1.00000000 Ry
+
+convergence has been achieved in  79 iterations
+Forces acting on atoms (Ry/au):
+
+
+     negative rho (up, down):  0.212E-02 0.135E-02
+     atom    1 type  1   force =    -1             0             1
+     atom    2 type  1   force =     0             0             0
+     atom    3 type  1   force =     0             0             0
+     atom    4 type  1   force =     0             0             0
+     atom    5 type  1   force =     0             0             0
+
+ATOMIC_POSITIONS (angstrom)
+Fe 0  0  0
+Fe 0  0  0
+Fe 0  0  0
+H 0  0  0
+H 0  0  0
+
+     temperature           =   300.00000000 K 

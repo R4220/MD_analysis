@@ -9,6 +9,65 @@ from Codes.class_group import group
 from Codes.class_graph import graph
 
 
+def configuration():#input_file):
+    '''
+    Read configuration parameters from 'Setup.txt' and initialize simulation setup.
+
+    Returns
+    -------
+    tuple
+        A tuple containing the following information:
+        - filename (str): The name of the file.
+        - outdir (str): The output directory.
+        - Rmax (list): The maximum distances for radial distribution function calculation.
+        - atoms (list): The list of couplesof atoms for RDFs.
+        - N (list): The number of bins for the RDFs.
+        - groups (list): A list of group instances initialized based on configuration.
+        - filepath (str): The filepath for input file.
+
+    Notes
+    -----
+    This function reads configuration parameters from 'Setup.txt' and initializes the simulation setup.
+    It extracts information such as the filename, output directory, maximum distance for RDFs, particle types for RDF calculations, number of bins for RDFs, and group instances.
+    '''
+    config = ConfigParser()
+    input_file = input("Write the input file name:\n")
+
+    if not os.path.exists(input_file):
+        print("File not found")
+        exit(0)
+
+    config.read(input_file)
+
+    filepath = config['SETUP']['filename']
+    filename = filepath.split('/')[-1]
+    outdir = config['SETUP']['Outdir']
+
+    groups = []
+    ids = config["INTERFACE SEPARATION"]["Groups"]
+    for gr in config['GROUPS']:
+        group_ = group(config['GROUPS'][gr].split(), gr)
+        if gr in ids:
+            group_.distance_switch = True
+        groups = np.append(groups, group_)
+    
+    atoms = []
+    Rmax = []
+    N = np.array([], int)
+    for rdf in config["RDF"]:
+        couple = config["RDF"][rdf].split()
+        atoms = np.append(atoms, [couple[0], couple[1]])
+        Rmax = np.append(Rmax, float(couple[2]))
+        N = np.append(N, int(couple[3]))
+    atoms = atoms.reshape(int(len(atoms)/2), 2)
+
+    if not os.path.exists(outdir):
+            os.makedirs(outdir)
+    shutil.copy2('Setup.txt', f'{outdir}')
+
+    return filename, outdir, Rmax, atoms, N, groups, filepath
+    
+
 def preamble(fin, step_obj : MDstep) -> None:
     '''
     Process the preamble of the input file and set up the MDstep object.
@@ -253,65 +312,6 @@ def xyz_gen(fout, fin, RDF_ : list, groups : list, outdir : str) -> None:
     graphs.plot_velocity(MDstep_obj)
     graphs.plot_distance()
 
-
-def configuration():#input_file):
-    '''
-    Read configuration parameters from 'Setup.txt' and initialize simulation setup.
-
-    Returns
-    -------
-    tuple
-        A tuple containing the following information:
-        - filename (str): The name of the file.
-        - outdir (str): The output directory.
-        - Rmax (list): The maximum distances for radial distribution function calculation.
-        - atoms (list): The list of couplesof atoms for RDFs.
-        - N (list): The number of bins for the RDFs.
-        - groups (list): A list of group instances initialized based on configuration.
-        - filepath (str): The filepath for input file.
-
-    Notes
-    -----
-    This function reads configuration parameters from 'Setup.txt' and initializes the simulation setup.
-    It extracts information such as the filename, output directory, maximum distance for RDFs, particle types for RDF calculations, number of bins for RDFs, and group instances.
-    '''
-    config = ConfigParser()
-    input_file = input("Write the input file name:\n")
-
-    if not os.path.exists(input_file):
-        print("File not found")
-        exit(0)
-
-    config.read(input_file)
-
-    filepath = config['SETUP']['filename']
-    filename = filepath.split('/')[-1]
-    outdir = config['SETUP']['Outdir']
-
-    groups = []
-    ids = config["INTERFACE SEPARATION"]["Groups"]
-    for gr in config['GROUPS']:
-        group_ = group(config['GROUPS'][gr].split(), gr)
-        if gr in ids:
-            group_.distance_switch = True
-        groups = np.append(groups, group_)
-    
-    atoms = []
-    Rmax = []
-    N = np.array([], int)
-    for rdf in config["RDF"]:
-        couple = config["RDF"][rdf].split()
-        atoms = np.append(atoms, [couple[0], couple[1]])
-        Rmax = np.append(Rmax, float(couple[2]))
-        N = np.append(N, int(couple[3]))
-    atoms = atoms.reshape(int(len(atoms)/2), 2)
-
-    if not os.path.exists(outdir):
-            os.makedirs(outdir)
-    shutil.copy2('Setup.txt', f'{outdir}')
-
-    return filename, outdir, Rmax, atoms, N, groups, filepath
-    
 
 if __name__ == "__main__":
     # Extract setup information

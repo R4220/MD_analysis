@@ -60,7 +60,7 @@ class group:
     This class provides functionality to simulate molecular dynamics at the group level, including methods to add atoms, calculate kinetic energy, and generate output data.
     '''
 
-    def __init__(self, type: str, id_group: int):
+    def __init__(self, type: str, id_group: str):
         '''
         Initialize a Group instance.
 
