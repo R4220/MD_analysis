@@ -549,6 +549,8 @@ def test_extracting_values_Upot():
     # Define values to simulate
     iter = MDstep([group1, group2])
     iter.U_pot = 30.0
+    group1.Ftot = np.array([1.0, 2.0, 3.0])
+    group2.Ftot = np.array([4.0, 5.0, 6.0])
 
     # Create an instance of 'graph'
     graph_instance = graph("test_file", [5.0, 6.0], [['H', 'H'], ['C', 'Fe']], [100, 120], "output")
@@ -584,6 +586,8 @@ def test_extracting_values_time():
     iter = MDstep([group1, group2])
     iter.dt = 10.0
     iter.N_iteration = 50
+    group1.Ftot = np.array([1.0, 2.0, 3.0])
+    group2.Ftot = np.array([4.0, 5.0, 6.0])
 
     # Create an instance of 'graph'
     graph_instance = graph("test_file", [5.0, 6.0], [['H', 'H'], ['C', 'Fe']], [100, 120], "output")
