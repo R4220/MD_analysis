@@ -129,19 +129,54 @@ class graph:
         self.group_color = ['red', 'blue', 'green', 'yellow', 'black', 'purple']
 
 
+    def reading(self):
+        """
+        This method handles the reading of configurations from a file using the `ConfigParser` library.
+
+        If the user chooses to use a specific file for aesthetic settings, it prompts for the file name and attempts to read it.
+        If the specified file exists, it returns the path of the file.
+        Otherwise, it prints an error message and exits the program.
+
+        If the user chooses not to use a specific file, the method returns the path of the default file ('Codes/Setup_graph.ini').
+
+        Returns
+        -------
+        str
+            The path of the configuration file.
+        """
+        # Ask the user if they want to use a specific file for aesthetic settings
+        choice = input('Do you want to use a specific file for aesthetic? Y/N\n')
+    
+        if choice == "Y" or choice == "y":
+            # If yes, prompt for the file name
+            aesthetic_file = input("Write the file name:\n")
+
+            # Check if the specified file exists
+            if os.path.exists(aesthetic_file):
+                # Return the path of the specified file
+                return aesthetic_file
+            else:
+                # Print an error message and exit if the file doesn't exist
+                print("File not found")
+                exit(0)
+        else:
+            # If the user doesn't want to use a specific file, return the path of the default file
+            return 'Codes/Setup_graph.ini'
+
+
     def graph_aesthetic(self) -> None:
         '''
         Set aesthetic parameters for Matplotlib plots based on a configuration file.
 
-        This method reads parameters from a configuration file named 'Setup_graph.txt' and updates Matplotlib's default parameters accordingly.
+        This method reads parameters from a configuration file using the method 'reading' and updates Matplotlib's default parameters accordingly.
         The configuration file should include specifications for graph parameters such as label sizes, tick sizes, legend font size, and colors.
 
         Notes:
         ------
-        This method reads the 'Setup_graph.txt' file and extracts information regarding graph aesthetics, including label sizes, tick sizes, legend font size, and colors.
+        This method reads the configuration file and extracts information regarding graph aesthetics, including label sizes, tick sizes, legend font size, and colors.
         It then updates Matplotlib's default parameters to reflect the specified aesthetics.
 
-        The 'Setup_graph.txt' file should contain lines specifying the following:
+        The configuration file should contain lines specifying the following:
         - axes.labelsize: Label size for axes.
         - xtick.labelsize: Label size for x-axis ticks.
         - ytick.labelsize: Label size for y-axis ticks.
@@ -154,21 +189,9 @@ class graph:
         - Group_color: Colors for different groups in force and temperature plots
         '''
         param = [16, 14, 14, 14] # Default values for label sizes and legend font size
-
         config = ConfigParser()
-        choice = input('Do you want to use a specific file for aesthetic? Y/N\n')
-        if choice == "Y" or choice == "y":
-            aesthetic_file = input("Write the file name:\n")
-
-            if os.path.exists(aesthetic_file):
-                config.read(aesthetic_file)
-            else:
-                print("File not found")
-                exit(0)
-
-        else:
-            config.read('Codes/Setup_graph.ini')
-
+        config.read(self.reading())
+        
         #Setup graph values
         try:
              param[0] = config['GRAPH VALUES']['axes.labelsize']
@@ -176,22 +199,21 @@ class graph:
              pass
         
         try:
-             param[0] = config['GRAPH VALUES']['xtick.labelsize']
+             param[1] = config['GRAPH VALUES']['xtick.labelsize']
         except:
              pass
         
         try:
-             param[0] = config['GRAPH VALUES']['ytick.labelsize']
+             param[2] = config['GRAPH VALUES']['ytick.labelsize']
         except:
              pass
         
         try:
-             param[0] = config['GRAPH VALUES']['legend.fontsize']
+             param[3] = config['GRAPH VALUES']['legend.fontsize']
         except:
              pass
         
         # Define colors
-        
         try:
             for rdf in self.type:
                 rdf.RDF_color = config['COLORS']['RDF_color']
@@ -199,7 +221,8 @@ class graph:
             pass
 
         try:
-            self.all_energy = bool(config['COLORS']['Energy_sum'])
+            self.all_energy = config.getboolean('COLORS', 'Energy_sum')
+
             try:
                 self.energy_color[2] = config['COLORS']['Tot_energy_color']
             except:
@@ -417,7 +440,7 @@ class graph:
             axZ.plot(self.time[1:], Vz, color = self.group_color[i+1], alpha = 0.5, label=f'{gr.id_group}$_z$')
 
         axX.set_xlabel('t (ps)')
-        axX.set_ylabel('V$_x$ ($\AA$/ps)')
+        axX.set_ylabel(r'V$_x$ ($\AA$/ps)')
         axX.grid()
         axX.legend()
         xticks = axX.get_xticks()
@@ -431,7 +454,7 @@ class graph:
         axX.yaxis.set_major_formatter(ticker.FormatStrFormatter('%.2f'))
 
         axY.set_xlabel('t (ps)')
-        axY.set_ylabel('V$_y$ ($\AA$/ps)')
+        axY.set_ylabel(r'V$_y$ ($\AA$/ps)')
         axY.grid()
         axY.legend()
         xticks = axY.get_xticks()
@@ -445,7 +468,7 @@ class graph:
         axY.yaxis.set_major_formatter(ticker.FormatStrFormatter('%.2f'))
 
         axZ.set_xlabel('t (ps)')
-        axZ.set_ylabel('V$_z$ ($\AA$/ps)')
+        axZ.set_ylabel(r'V$_z$ ($\AA$/ps)')
         axZ.grid()
         axZ.legend()
         xticks = axZ.get_xticks()
@@ -521,7 +544,8 @@ class graph:
         ax.plot(self.time, self.distances, color = self.RDF_color)
 
         ax.set_xlabel('t (ps)')
-        ax.set_ylabel('d ($\AA$)')
+        ax.set_ylabel(r'd ($\AA$)')
+
         ax.grid()
         xticks = ax.get_xticks()
         ax.set_xticks(xticks)
