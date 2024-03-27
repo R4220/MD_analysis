@@ -280,11 +280,11 @@ class graph:
         """
         Plot the graph of kinetic energy and potential energy in function of time.
 
-        Generates a plot of the kinetic energy and potential energy as a function of time and saves it as an image file named 'E_{filename}.png'.
+        Generates a plot of the kinetic energy and potential energy as a function of time and saves it as an image file named 'E_{filename}.pdf'.
 
         Notes
         -----
-        This method uses Matplotlib to create a plot of the kinetic energy and potential energy over time. The plot is saved as an image file in PNG format.
+        This method uses Matplotlib to create a plot of the kinetic energy and potential energy over time. The plot is saved as an image file in PDF format.
         """
         fig = plt.figure(figsize=(10, 6.18033988769))
         axE = fig.add_subplot(1, 1, 1)
@@ -314,7 +314,7 @@ class graph:
         axU.set_yticklabels([str(int(tick)) for tick in yticks])
         axU.yaxis.set_major_formatter(ticker.FormatStrFormatter('%.4f'))
 
-        filepath = os.path.join(self.outdir, f'E_{self.filename}.png')
+        filepath = os.path.join(self.outdir, f'E_{self.filename}.pdf')
         plt.savefig(filepath, bbox_inches='tight', dpi=150)
 
 
@@ -329,7 +329,7 @@ class graph:
 
         Notes
         -----
-        This method generates a plot of the forces (components along x, y, and z acting on the system over time) and saves it as an image file named 'F_{filename}.png'.
+        This method generates a plot of the forces (components along x, y, and z acting on the system over time) and saves it as an image file named 'F_{filename}.pdf'.
         """
         fig = plt.figure(figsize=(10, 3*6.18033988769 +2))
         
@@ -405,7 +405,7 @@ class graph:
         axZ.set_yticklabels([str(int(tick)) for tick in yticks])
         axZ.yaxis.set_major_formatter(ticker.FormatStrFormatter('%.2f'))
         
-        filepath = os.path.join(self.outdir, f'F_{self.filename}.png')
+        filepath = os.path.join(self.outdir, f'F_{self.filename}.pdf')
         plt.savefig(filepath, bbox_inches='tight', dpi=150)
 
 
@@ -420,7 +420,7 @@ class graph:
 
         Notes
         -----
-        This method generates a plot of the bulk velocity (components along x, y, and z acting on the system over time) and saves it as an image file named 'F_{filename}.png'.
+        This method generates a plot of the bulk velocity (components along x, y, and z acting on the system over time) and saves it as an image file named 'F_{filename}.pdf'.
         """
         fig = plt.figure(figsize=(10, 3*6.18033988769 +2))
         axX = fig.add_subplot(3, 1, 1)
@@ -497,7 +497,7 @@ class graph:
         Notes
         -----
         This method generates a plot of the temperature acting on the system over time
-        and saves it as an image file named 'T_{filename}.png'.
+        and saves it as an image file named 'T_{filename}.pdf'.
         """
         fig = plt.figure(figsize=(10, 6.18033988769))
         
@@ -520,7 +520,7 @@ class graph:
         ax.set_yticklabels([str(int(tick)) for tick in yticks])
         ax.yaxis.set_major_formatter(ticker.FormatStrFormatter('%.2f'))
         
-        filepath = os.path.join(self.outdir, f'T_{self.filename}.png')
+        filepath = os.path.join(self.outdir, f'T_{self.filename}.pdf')
         plt.savefig(filepath, bbox_inches='tight', dpi=150)
 
 
@@ -536,7 +536,7 @@ class graph:
         Notes
         -----
         This method generates a plot of the distance between the two defined groups over time
-        and saves it as an image file named 'Dist_{filename}.png'.
+        and saves it as an image file named 'Dist_{filename}.pdf'.
         """
         fig = plt.figure(figsize=(10, 6.18033988769))
         
@@ -557,5 +557,5 @@ class graph:
         ax.set_yticklabels([str(int(tick)) for tick in yticks])
         ax.yaxis.set_major_formatter(ticker.FormatStrFormatter('%.2f'))
         
-        filepath = os.path.join(self.outdir, f'Dist_{self.filename}.png')
+        filepath = os.path.join(self.outdir, f'Dist_{self.filename}.pdf')
         plt.savefig(filepath, bbox_inches='tight', dpi=150)

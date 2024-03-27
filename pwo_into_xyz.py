@@ -9,7 +9,7 @@ from Codes.class_group import group
 from Codes.class_graph import graph
 
 
-def configuration():#input_file):
+def configuration():
     '''
     Read configuration parameters from 'Setup.txt' and initialize simulation setup.
 

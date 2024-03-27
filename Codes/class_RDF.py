@@ -221,12 +221,12 @@ class RDF:
         """
         Plot the radial distribution function (RDF).
 
-        Generates a plot of the RDF based on calculated radial distances and counts and saves it as 'RDF_{element1}_{element2}_{filename}.png'.
+        Generates a plot of the RDF based on calculated radial distances and counts and saves it as 'RDF_{element1}_{element2}_{filename}.pdf'.
 
         Notes
         -----
         This method uses Matplotlib to create an RDF plot. The radial distribution function is plotted against radial distances ('r') in angstroms.
-        The plot is saved in PNG format. The plot includes information about the elements used in the RDF calculation.
+        The plot is saved in PDF format. The plot includes information about the elements used in the RDF calculation.
         """
         fig = plt.figure(figsize=(10, 6.18033988769))
         ax = fig.add_subplot(1, 1, 1)
@@ -235,6 +235,6 @@ class RDF:
         ax.set_ylabel('g(r)')
         ax.grid()
         ax.legend()
-        filepath = os.path.join(self.outdir, f'{self.type[0]}{self.type[1]}_{self.filename}.png')
+        filepath = os.path.join(self.outdir, f'{self.type[0]}{self.type[1]}_{self.filename}.pdf')
         plt.savefig(filepath)
 
