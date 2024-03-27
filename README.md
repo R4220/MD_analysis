@@ -42,42 +42,46 @@ Place the setup file in the same directory as 'pwo_into_xyz.py'. Inside the 'Set
     Filename = path\_filename
     ```
 
-b. **Output directory:** Specify the directory for output files ('_dirname'). If the folder already exists, it adds the output files there; if it doesn't exist, it creates a new one with that name. In the 'Setup.txt' file, write the name of the directory as follows:
+    -   **Output directory:** Specify the directory for output files ('_dirname'). If the folder already exists, it adds the output files there; if it doesn't exist, it creates a new one with that name. In the 'Setup.txt' file, write the name of the directory as follows:
 
-```
-Outdir = _dirname
-```
+    ```
+    Outdir = _dirname
+    ```
 
-ii. **[GROUPS]** 
-Here the groups of atoms are defined. To define a group write the line in the following way:
-```
-_id = _at1 _at2 _at3
-```
-where '_id' represents the number of the group and '_atN' are the atomic species. The atomic species are composed of letters and numbers (e.g. 'Fe3') to be consistent with the typical Quantum Espresso notation.
+-   **[GROUPS]** 
 
-iii. **[INTERFACE SEPARATION]** 
-Specify the pair of groups for which the distances along the z-coordinate are calculated and plotted ('_id1', '_id2'). In this case, we have to specify the ID numbers of the groups. In the setup file, write the pairs as follows:
+    Here the groups of atoms are defined. To define a group write the line in the following way:
+    ```
+    _id = _at1 _at2 _at3
+    ```
+    where '_id' represents the number of the group and '_atN' are the atomic species. The atomic species are composed of letters and numbers (e.g. 'Fe3') to be consistent with the typical Quantum Espresso notation.
 
-```
-Groups = _id1 _id2
-```
+-   **[INTERFACE SEPARATION]** 
 
-iv. **[RDF]** 
-Specify the pairs of atoms for which the radial distribution function will be calculated and plotted ('_at1', '_at2'). In this case, we can specifically select a single type of atom group (e.g., 'Fe3') or all the atoms of the same species (e.g., 'Fe1' and 'Fe2' are both taken into account by setting 'Fe'). Additionally, we need to select the maximum distance at which we calculate the RDF ('_Rmax') and the number of bins in the plot histogram ('_Nbin'). Multiple RDFs can be calculated in the same run. In the 'Setup.txt' file, write the pairs as follows:
+    Specify the pair of groups for which the distances along the z-coordinate are calculated and plotted ('_id1', '_id2'). In this case, we have to specify the ID numbers of the groups. In the setup file, write the pairs as follows:
 
-```
-Particles1 = 1_at1 1_at2 1_Rmax 1_Nbin
-Particles2 = 2_at1 2_at2 2_Rmax 2_Nbin
-...
-ParticlesN = N_at1 N_at2 N_Rmax N_Nbin
-```
+    ```
+    Groups = _id1 _id2
+    ```
 
-v. **[GRAPHS]**
-Here is specified the input file to decide aesthetic parameters for the graphs. In the 'Setup.txt' file write:
-```
-filename = aesthetic_filename.txt
-```
-If this voice is not written the default value is considered (please read the next section).
+-   **[RDF]** 
+
+    Specify the pairs of atoms for which the radial distribution function will be calculated and plotted ('_at1', '_at2'). In this case, we can specifically select a single type of atom group (e.g., 'Fe3') or all the atoms of the same species (e.g., 'Fe1' and 'Fe2' are both taken into account by setting 'Fe'). Additionally, we need to select the maximum distance at which we calculate the RDF ('_Rmax') and the number of bins in the plot histogram ('_Nbin'). Multiple RDFs can be calculated in the same run. In the 'Setup.txt' file, write the pairs as follows:
+
+    ```
+    Particles1 = 1_at1 1_at2 1_Rmax 1_Nbin
+    Particles2 = 2_at1 2_at2 2_Rmax 2_Nbin
+    ...
+    ParticlesN = N_at1 N_at2 N_Rmax N_Nbin
+    ```
+
+-   **[GRAPHS]**
+
+    Here is specified the input file to decide aesthetic parameters for the graphs. In the 'Setup.txt' file write:
+    ```
+    filename = aesthetic_filename.txt
+    ```
+    If this voice is not written the default value is considered (please read the next section).
 
 
 #### Example
