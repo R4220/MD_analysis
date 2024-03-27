@@ -33,14 +33,14 @@ Where 'Setup.txt' is the setup input file.
 Place the setup file in the same directory as 'pwo_into_xyz.py'. Inside the 'Setup.txt' file, specify the following entries (the order of the entries doesn't matter):
 
 &emsp;
-i. **[SETUP]** 
-Inside this section, you have to define the file to analyze and the directory in which the output are saved:
-&emsp;&emsp;
-a. **Filename:** Specify the name of the 'pwo' file for analysis without the file extension and the path ('_filename'). In the 'Setup.txt' file, write the name of the 'pwo' file without the extension, as follows:
+-   **[SETUP]** 
+    Inside this section, you have to define the file to analyze and the directory in which the output are saved:
 
-```
-Filename = path\_filename
-```
+        - **Filename:** Specify the name of the 'pwo' file for analysis without the file extension and the path ('_filename'). In the 'Setup.txt' file, write the name of the 'pwo' file without the extension, as follows:
+
+        ```
+        Filename = path\_filename
+        ```
 
 b. **Output directory:** Specify the directory for output files ('_dirname'). If the folder already exists, it adds the output files there; if it doesn't exist, it creates a new one with that name. In the 'Setup.txt' file, write the name of the directory as follows:
 
