@@ -35,7 +35,7 @@ Place the setup file in the same directory as 'pwo_into_xyz.py'. Inside the 'Set
 &nbsp;
 i. **[SETUP]** 
 Inside this section, you have to define the file to analyze and the directory in which the output are saved:
-
+&nbsp;&nbsp;
 a. **Filename:** Specify the name of the 'pwo' file for analysis without the file extension and the path ('_filename'). In the 'Setup.txt' file, write the name of the 'pwo' file without the extension, as follows:
 
 ```
