@@ -27,12 +27,6 @@ def test_configuration():
 
     This test checks if the 'setup' function correctly updates values from the setup file.
 
-    Parameters
-    ----------
-    mocked_input : function
-        A function that mocks user input for testing purposes. This fixture provides mock responses
-        to simulate user input for reading the setup file.
-
     Raises
     ------
     AssertionError
@@ -83,12 +77,6 @@ def test_configuration_default():
     Test case for the 'setup' function.
 
     This test checks if the 'setup' function correctly updates values from the setup file.
-
-    Parameters
-    ----------
-    mocked_input : function
-        A function that mocks user input for testing purposes. This fixture provides mock responses
-        to simulate user input for reading the setup file.
 
     Raises
     ------

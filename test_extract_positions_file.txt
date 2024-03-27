@@ -1,7 +1,0 @@
-!    total energy              =   1 Ry
-     Forces acting on atoms (Ry/au):
-     Time step             =    1.00 a.u.,  1.9351 femto-seconds
-     Entering Dynamics:    MDstep =     3
-ATOMIC_POSITIONS (angstrom)
-     temperature           =   50 K 
-stop
