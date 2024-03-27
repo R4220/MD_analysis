@@ -34,134 +34,6 @@ def sample_graph():
     outdir = "output"
     return graph(filename, Rmax, atoms, N_bin, outdir)
 
-@pytest.fixture
-def mocked_input(monkeypatch):
-    """
-    Fixture that mocks user input for testing purposes.
-
-    This fixture simulates user input by overriding the built-in input() function.
-    It provides mock responses to read the input file for graph aesthetic by writing 'Y'.
-
-    Parameters
-    ----------
-    monkeypatch : _pytest.monkeypatch.MonkeyPatch
-        The pytest monkeypatch fixture.
-
-    Returns
-    -------
-    function
-        A function that overrides the built-in input() function to provide mock responses.
-    """
-    # Define logic for simulating user input
-    def mock_input(prompt):
-        if "Do you want to use a specific file for aesthetic? Y/N" in prompt:
-            return "Y"
-        if "Write the file name:\n" in prompt:
-            return 'Test/files/graph_aesthetic.ini'
-    monkeypatch.setattr('builtins.input', mock_input)
-
-@pytest.fixture
-def mocked_input_bis(monkeypatch):
-    """
-    Fixture that mocks user input for testing purposes.
-
-    This fixture simulates user input by overriding the built-in input() function.
-    It provides mock responses to read the input file for graph aesthetic by writing 'y'.
-
-    Parameters
-    ----------
-    monkeypatch : _pytest.monkeypatch.MonkeyPatch
-        The pytest monkeypatch fixture.
-
-    Returns
-    -------
-    function
-        A function that overrides the built-in input() function to provide mock responses.
-    """
-    # Define logic for simulating user input
-    def mock_input(prompt):
-        if "Do you want to use a specific file for aesthetic? Y/N" in prompt:
-            return "y"
-        if "Write the file name:\n" in prompt:
-            return 'Test/files/graph_aesthetic.ini'
-    monkeypatch.setattr('builtins.input', mock_input)
-
-@pytest.fixture
-def mocked_input_default(monkeypatch):
-    """
-    Fixture that mocks user input for testing purposes.
-
-    This fixture simulates user input by overriding the built-in input() function.
-    It provides mock responses to read the default file.
-
-    Parameters
-    ----------
-    monkeypatch : _pytest.monkeypatch.MonkeyPatch
-        The pytest monkeypatch fixture.
-
-    Returns
-    -------
-    function
-        A function that overrides the built-in input() function to provide mock responses.
-    """
-    # Define logic for simulating user input
-    def mock_input(prompt):
-        if "Do you want to use a specific file for aesthetic? Y/N" in prompt:
-            return "N"
-    monkeypatch.setattr('builtins.input', mock_input)
-
-@pytest.fixture
-def mocked_input_not_existing(monkeypatch):
-    """
-    Fixture that mocks user input for testing purposes.
-
-    This fixture simulates user input by overriding the built-in input() function.
-    It provides mock responses to exit from the code if the file is not found.
-
-    Parameters
-    ----------
-    monkeypatch : _pytest.monkeypatch.MonkeyPatch
-        The pytest monkeypatch fixture.
-
-    Returns
-    -------
-    function
-        A function that overrides the built-in input() function to provide mock responses.
-    """
-    # Define logic for simulating user input
-    def mock_input(prompt):
-        if "Do you want to use a specific file for aesthetic? Y/N" in prompt:
-            return "Y"
-        if "Write the file name:\n" in prompt:
-            return 'hello'
-    monkeypatch.setattr('builtins.input', mock_input)
-
-@pytest.fixture
-def mocked_input_not_existing_empty(monkeypatch):
-    """
-    Fixture that mocks user input for testing purposes.
-
-    This fixture simulates user input by overriding the built-in input() function.
-    It provides mock responses to exit from the code if the file is not found.
-
-    Parameters
-    ----------
-    monkeypatch : _pytest.monkeypatch.MonkeyPatch
-        The pytest monkeypatch fixture.
-
-    Returns
-    -------
-    function
-        A function that overrides the built-in input() function to provide mock responses.
-    """
-    # Define logic for simulating user input
-    def mock_input(prompt):
-        if "Do you want to use a specific file for aesthetic? Y/N" in prompt:
-            return "Y"
-        if "Write the file name:\n" in prompt:
-            return ''
-    monkeypatch.setattr('builtins.input', mock_input)
-
 
 # initialization --------------------------------------------------------------------------------------------------
     
@@ -211,140 +83,9 @@ def test_graph_initialization(sample_graph):
     assert couple2.N_bin == 120
 
 
-# reading test ----------------------------------------------------------------------------------------------------
-
-def test_reading_file(sample_graph, mocked_input):
-    """
-    Test function to ensure correct reading of the input file.
-
-    Parameters
-    ----------
-    sample_graph : graph
-        A sample 'graph' object initialized for testing.
-    mocked_input : function
-        A function that mocks user input for testing purposes.
-
-    Raises
-    ------
-    AssertionError
-        If the expected file name does not match the file name returned by the 'reading' function.
-
-    Notes
-    -----
-    This test verifies that the 'reading' function correctly reads the input file.
-    """
-    # Verify that the function correctly reads the input file
-    expected_name = 'Test/files/graph_aesthetic.ini'
-    assert expected_name == sample_graph.reading()
-
-def test_reading_file_bis(sample_graph, mocked_input_bis):
-    """
-    Test function to ensure correct reading of the input file.
-
-    Parameters
-    ----------
-    sample_graph : graph
-        A sample 'graph' object initialized for testing.
-    mocked_input_bis : function
-        A function that mocks user input for testing purposes.
-
-    Raises
-    ------
-    AssertionError
-        If the expected file name does not match the file name returned by the 'reading' function.
-
-    Notes
-    -----
-    This test verifies that the 'reading' function correctly reads the input file.
-    """
-    # Verify that the function correctly reads the input file
-    expected_name = 'Test/files/graph_aesthetic.ini'
-    assert expected_name == sample_graph.reading()
-
-def test_reading_default(sample_graph, mocked_input_default):
-    """
-    Test function to ensure correct reading of the default file.
-
-    Parameters
-    ----------
-    sample_graph : graph
-        A sample 'graph' object initialized for testing.
-    mocked_input_default : function
-        A function that mocks user input for testing purposes.
-
-    Raises
-    ------
-    AssertionError
-        If the expected file name does not match the file name returned by the 'reading' function.
-
-    Notes
-    -----
-    This test verifies that the 'reading' function correctly reads the default file.
-    """
-    # Verify that the function correctly reads the default file
-    expected_name = 'Codes/Setup_graph.ini'
-    assert expected_name == sample_graph.reading()
-    
-def test_reading_non_existent_file(sample_graph, mocked_input_not_existing, capfd):
-    """
-    Test function to ensure correct handling of reading a non-existent file.
-
-    Parameters
-    ----------
-    sample_graph : graph
-        A sample 'graph' object initialized for testing.
-    mocked_input_not_existing : function
-        A function that mocks user input for testing purposes.
-    capfd : pytest fixture
-        Fixture to capture stdout and stderr.
-
-    Raises
-    ------
-    AssertionError
-        If the expected error message is not printed.
-
-    Notes
-    -----
-    This test verifies that the 'reading' function correctly handles the scenario when the specified file does not exist.
-    """
-    # Verify that the function correctly handles reading a non-existent file
-    with pytest.raises(SystemExit):
-        sample_graph.reading()
-    out, _ = capfd.readouterr()
-    assert "File not found" in out
-
-def test_reading_non_existent_file_empty(sample_graph, mocked_input_not_existing_empty, capfd):
-    """
-    Test function to ensure correct handling of reading a non-existent file.
-
-    Parameters
-    ----------
-    sample_graph : graph
-        A sample 'graph' object initialized for testing.
-    mocked_input_not_existing_empty : function
-        A function that mocks user input for testing purposes when the input is empty.
-    capfd : pytest fixture
-        Fixture to capture stdout and stderr.
-
-    Raises
-    ------
-    AssertionError
-        If the expected error message is not printed.
-
-    Notes
-    -----
-    This test verifies that the 'reading' function correctly handles the scenario when the specified file does not exist.
-    """
-    # Verify that the function correctly handles reading a non-existent file
-    with pytest.raises(SystemExit):
-        sample_graph.reading()
-    out, _ = capfd.readouterr()
-    assert "File not found" in out
-
-
 # graph_esthetic test ---------------------------------------------------------------------------------------------
 
-def test_graph_aesthetic(sample_graph, mocked_input):
+def test_graph_aesthetic(sample_graph):
     """
     Test function to verify the 'graph_aesthetic' method of the 'graph' class.
 
@@ -352,8 +93,6 @@ def test_graph_aesthetic(sample_graph, mocked_input):
     ----------
     sample_graph : graph
         A sample 'graph' object initialized for testing.
-    mocked_input : function
-        A function that mocks user input for testing purposes.
 
     Raises
     ------
@@ -364,7 +103,7 @@ def test_graph_aesthetic(sample_graph, mocked_input):
     -----
     This test checks if the 'graph_aesthetic' method correctly reads and updates the default parameters based on the configuration file.
     """
-    sample_graph.graph_aesthetic()
+    sample_graph.graph_aesthetic('Test/files/graph_aesthetic.ini')
 
     assert plt.rcParams['axes.labelsize'] == 20.0
     assert plt.rcParams['xtick.labelsize'] == 14.0
@@ -377,7 +116,7 @@ def test_graph_aesthetic(sample_graph, mocked_input):
     assert np.array_equal(sample_graph.energy_color, ['#b32323', '#191971', '#006400'])
     assert np.array_equal(sample_graph.group_color, ['#000000', '#9ACD32', '#b32323', '#191971', '#006400', '#b0edef', '#470303'])
 
-def test_graph_aesthetic_default(sample_graph, mocked_input_default):
+def test_graph_aesthetic_default(sample_graph):
     """
     Test function to verify the 'graph_aesthetic' method of the 'graph' class.
 
@@ -385,8 +124,6 @@ def test_graph_aesthetic_default(sample_graph, mocked_input_default):
     ----------
     sample_graph : graph
         A sample 'graph' object initialized for testing.
-    mocked_input_default : function
-        A function that mocks user input for testing purposes.
 
     Raises
     ------
@@ -397,7 +134,7 @@ def test_graph_aesthetic_default(sample_graph, mocked_input_default):
     -----
     This test checks if the 'graph_aesthetic' method correctly reads and updates the default parameters based on the default configuration file.
     """
-    sample_graph.graph_aesthetic()
+    sample_graph.graph_aesthetic(False)
 
     assert plt.rcParams['axes.labelsize'] == 16.0
     assert plt.rcParams['xtick.labelsize'] == 14.0
@@ -409,8 +146,33 @@ def test_graph_aesthetic_default(sample_graph, mocked_input_default):
     assert np.array_equal(sample_graph.energy_color, ['red', 'blue', 'black'])
     assert np.array_equal(sample_graph.group_color, ['red', 'blue', 'green', 'yellow', 'black', 'purple'])
 
+def test_graph_aesthetic_not_existing(sample_graph, capfd):
+    """
+    Test function to verify the 'graph_aesthetic' method of the 'graph' class.
 
-# extracting_values test
+    Parameters
+    ----------
+    sample_graph : graph
+        A sample 'graph' object initialized for testing.
+
+    Raises
+    ------
+    AssertionError
+        If any of the expected parameters or configurations are not correctly updated.
+
+    Notes
+    -----
+    This test checks if the 'graph_aesthetic' method correctly handles the case of not existing file.
+    """
+
+    # Verify that the function correctly handles reading a non-existent file
+    with pytest.raises(SystemExit):
+        sample_graph.graph_aesthetic('false.ini')
+    out, _ = capfd.readouterr()
+    assert "File not found" in out
+
+
+# extracting_values test -----------------------------------------------------------------------------------------
     
 def test_extracting_values_Force1():
     """
