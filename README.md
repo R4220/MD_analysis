@@ -32,10 +32,10 @@ Where 'Setup.txt' is the setup input file.
 ### Setup file: 
 Place the setup file in the same directory as 'pwo_into_xyz.py'. Inside the 'Setup.txt' file, specify the following entries (the order of the entries doesn't matter):
 
-&nbsp;
+&emsp;
 i. **[SETUP]** 
 Inside this section, you have to define the file to analyze and the directory in which the output are saved:
-&nbsp;&nbsp;
+&emsp;&emsp;
 a. **Filename:** Specify the name of the 'pwo' file for analysis without the file extension and the path ('_filename'). In the 'Setup.txt' file, write the name of the 'pwo' file without the extension, as follows:
 
 ```
