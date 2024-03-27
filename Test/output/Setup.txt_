@@ -1,0 +1,21 @@
+[SETUP]
+Filename = TMPI/TMPI_intermediate
+Outdir = TMPI
+
+[GROUPS]
+0 =  H C P O
+1 = Fe2
+a = Fe5
+4 = Fe4
+
+
+[INTERFACE SEPARATION]
+Groups = 1 4
+
+
+[RDF]
+couple1 = Fe Fe 7 500
+couple2 = H O 6 400
+
+[GRAPHS]
+filename = Setup_graph.txt
