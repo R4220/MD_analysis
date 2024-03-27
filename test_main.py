@@ -18,47 +18,10 @@ def sample_MDstep():
     """
     return MDstep(groups=[])
 
-@pytest.fixture
-def mocked_input(monkeypatch):
-    """
-    Fixture that mocks user input for testing purposes.
-
-    This fixture simulates user input by overriding the built-in input() function.
-    It provides mock responses to read the input file for the setup.
-
-    Parameters
-    ----------
-    monkeypatch : _pytest.monkeypatch.MonkeyPatch
-        The pytest monkeypatch fixture.
-
-    Returns
-    -------
-    function
-        A function that overrides the built-in input() function to provide mock responses.
-
-    Raises
-    ------
-    AssertionError
-        If the prompt for the input file name is not recognized.
-
-    Notes
-    -----
-    This fixture is particularly useful for testing functions or methods that rely on user input.
-    It mocks the behavior of the built-in input() function by providing a mock response specifically
-    tailored for reading the input file for the setup.
-    """
-    # Define logic for simulating user input
-    def mock_input(prompt):
-        if "Write the input file name:\n" in prompt:
-            return "Test/files/Setup.ini"
-        else:
-            assert 1 == 0  # Raise an AssertionError if the prompt is not recognized
-    monkeypatch.setattr('builtins.input', mock_input)
-
 
 # test config -----------------------------------------------------------------------------------------------------
     
-def test_configuration(mocked_input):
+def test_configuration():
     """
     Test case for the 'setup' function.
 
@@ -84,7 +47,7 @@ def test_configuration(mocked_input):
     """
 
     # Calling the 'configuration' function to read setup values
-    filename, outdir, Rmax, atoms, N, groups, filepath = configuration()
+    filename, outdir, Rmax, atoms, N, groups, filepath, aesthetic_file = configuration('Test/files/Setup.ini')
 
     # Asserting filename, output directory, and file paths
     assert filename == 'test_file'
@@ -111,6 +74,66 @@ def test_configuration(mocked_input):
     assert np.array_equal(atoms, [['Fe', 'Fe'], ['H', 'O']])
     assert np.array_equal(Rmax, [7, 6])
     assert np.array_equal(N, [500, 400])
+
+    #Testing the reading of the aesthetic configuration file
+    assert aesthetic_file == 'Setup_graph.txt'
+
+def test_configuration_default():
+    """
+    Test case for the 'setup' function.
+
+    This test checks if the 'setup' function correctly updates values from the setup file.
+
+    Parameters
+    ----------
+    mocked_input : function
+        A function that mocks user input for testing purposes. This fixture provides mock responses
+        to simulate user input for reading the setup file.
+
+    Raises
+    ------
+    AssertionError
+        If the read values do not match the expected values.
+
+    Notes
+    -----
+    This test case verifies the behavior of the 'setup' function by testing its ability to correctly
+    read values from the setup file. It uses the 'mocked_input' fixture to simulate user input
+    for reading the setup file. The test checks various aspects including filename, output directory,
+    file paths, atom groups, distance switches, and parameters for radial distribution functions (RDF).
+    """
+
+    # Calling the 'configuration' function to read setup values
+    filename, outdir, Rmax, atoms, N, groups, filepath, aesthetic_file = configuration('Test/files/Setup_default.ini')
+
+    # Asserting filename, output directory, and file paths
+    assert filename == 'test_file'
+    assert outdir == 'Test/output'
+    assert filepath == 'Test/file/test_file'
+
+    # Testing the groups
+    assert groups[0].id_group == '0'
+    assert groups[0].type == ['H', 'C', 'P', 'O']
+    assert groups[1].id_group == '1'
+    assert groups[1].type == ['Fe2']
+    assert groups[2].id_group == '3'
+    assert groups[2].type == ['K']
+    assert groups[3].id_group == 'test'
+    assert groups[3].type == ['P']
+
+    # Testing the switching on of the distance boolean of the right groups
+    assert groups[0].distance_switch == False
+    assert groups[1].distance_switch == True
+    assert groups[2].distance_switch == True
+    assert groups[3].distance_switch == False
+
+    # Testing the reading of RDF parameters
+    assert np.array_equal(atoms, [['Fe', 'Fe'], ['H', 'O']])
+    assert np.array_equal(Rmax, [7, 6])
+    assert np.array_equal(N, [500, 400])
+
+    #Testing the reading of the aesthetic configuration file
+    assert aesthetic_file == False
 
 
 # preamble test ---------------------------------------------------------------------------------------------------
