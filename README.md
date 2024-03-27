@@ -7,39 +7,33 @@ Molecular Dynamics Analysis is a Python tool designed to assist in the analysis 
 Install the required Python packages using the following command:
 
 ```bash
-pip install numpy os matplotlib shutil
+pip install numpy matplotlib
 ```
 
+If you have not already installed other packages such as `os`, `shutil`, `sys`, and `ConfigParser`, it's not necessary to install them separately as they are standard Python libraries and should already be available in your Python environment. If they are not present, install them using the following command:
+
+```bash
+pip install os shutil sys ConfigParser
+```
 
 ## Usage
 
 This code is used to obtain an initial approximate analysis of a molecular dynamics run performed with Quantum Espresso. In addition to providing various system information, it generates an 'xyz' file to visualize the atomic arrangement at each timestep and graphs.
 
-To run the code print the following lines in the terminal:
+To run the code, execute the following command in the terminal:
 
 ```bash
-python pwo_into_xyz.py
+python pwo_into_xyz.py Setup.txt
 ```
 
-You will be prompted to enter the name of the setup input file:
-```
-Write the input file name:
-```
-Subsequently, you will be asked whether you want to use specific values for graph aesthetics:
-```
-Do you want to use a specific file for aesthetic? Y/N
-```
-If you choose 'Y', you will be prompted to enter the name of the file from which to read the values:
-```
-Write the file name:
-```
+Where 'Setup.txt' is the setup input file.
 
-Before running the code, follow these steps:
 
 ### Setup file: 
 Place the setup file in the same directory as 'pwo_into_xyz.py'. Inside the 'Setup.txt' file, specify the following entries (the order of the entries doesn't matter):
 
-i. **[SETUP]:** inside this section you have to define the file to analyze and the directory in which the output are saved:
+i. **[SETUP]** 
+Inside this section, you have to define the file to analyze and the directory in which the output are saved:
 
 a. **Filename:** Specify the name of the 'pwo' file for analysis without the file extension and the path ('_filename'). In the 'Setup.txt' file, write the name of the 'pwo' file without the extension, as follows:
 
@@ -53,26 +47,37 @@ b. **Output directory:** Specify the directory for output files ('_dirname'). If
 Outdir = _dirname
 ```
 
-ii. **[GROUPS]:** here the groups of atoms are defined. To define a group write the line in the following way:
+ii. **[GROUPS]** 
+Here the groups of atoms are defined. To define a group write the line in the following way:
 ```
 _id = _at1 _at2 _at3
 ```
 where '_id' represents the number of the group and '_atN' are the atomic species. The atomic species are composed of letters and numbers (e.g. 'Fe3') to be consistent with the typical Quantum Espresso notation.
 
-iii. **[INTERFACE SEPARATION]:** Specify the pair of groups for which the distances along the z-coordinate are calculated and plotted ('_id1', '_id2'). In this case, we have to specify the ID numbers of the groups. In the setup file, write the pairs as follows:
+iii. **[INTERFACE SEPARATION]** 
+Specify the pair of groups for which the distances along the z-coordinate are calculated and plotted ('_id1', '_id2'). In this case, we have to specify the ID numbers of the groups. In the setup file, write the pairs as follows:
 
 ```
 Groups = _id1 _id2
 ```
 
-iv. **Radial distribution function:** Specify the pairs of atoms for which the radial distribution function will be calculated and plotted ('_at1', '_at2'). In this case, we can specifically select a single type of atom group (e.g., 'Fe3') or all the atoms of the same species (e.g., 'Fe1' and 'Fe2' are both taken into account by setting 'Fe'). Additionally, we need to select the maximum distance at which we calculate the RDF ('_Rmax') and the number of bins in the plot histogram ('_Nbin'). Multiple RDFs can be calculated in the same run. In the 'Setup.txt' file, write the pairs as follows:
+iv. **[RDF]** 
+Specify the pairs of atoms for which the radial distribution function will be calculated and plotted ('_at1', '_at2'). In this case, we can specifically select a single type of atom group (e.g., 'Fe3') or all the atoms of the same species (e.g., 'Fe1' and 'Fe2' are both taken into account by setting 'Fe'). Additionally, we need to select the maximum distance at which we calculate the RDF ('_Rmax') and the number of bins in the plot histogram ('_Nbin'). Multiple RDFs can be calculated in the same run. In the 'Setup.txt' file, write the pairs as follows:
 
 ```
-Particles1: 1_at1 1_at2 1_Rmax 1_Nbin
-Particles2: 2_at1 2_at2 2_Rmax 2_Nbin
+Particles1 = 1_at1 1_at2 1_Rmax 1_Nbin
+Particles2 = 2_at1 2_at2 2_Rmax 2_Nbin
 ...
-ParticlesN: N_at1 N_at2 N_Rmax N_Nbin
+ParticlesN = N_at1 N_at2 N_Rmax N_Nbin
 ```
+
+v. **[GRAPHS]**
+Here is specified the input file to decide aesthetic parameters for the graphs. In the 'Setup.txt' file write:
+```
+filename = aesthetic_filename.txt
+```
+If this voice is not written the default value is considered (please read the next section).
+
 
 #### Example
 ```
@@ -89,6 +94,9 @@ Groups = _id1 _id2
 
 [RDF]
 couple1 = _at1 _at2  _Rmax _Nbin
+
+[GRAPHS]
+filename = aesthetic_filename.txt
 ```
 
 ### Setup graph file:
@@ -238,17 +246,17 @@ e. '_ngr' represents the number of the group at which the atom belongs
 
 ii. **Graphs:** Several graphs are then generated, each of them is named with a preamble that identifies the topic of the graph followed by the filename of the 'pwo' file ('_filename'). The graphs are:
 
-a. Energy plot: named as 'E_filename.png'. It represents the plot of the energy on time during the simulation. Here are plotted the total kinetic energy of the system and the potential energy. Each of them has its own scale (left for the kinetic energy and right for potential energy). In addition, in the 'Setup_graph.txt' file is possible to switch on the plot of the total energy.
+a. Energy plot: named as 'E_filename.pdf'. It represents the plot of the energy on time during the simulation. Here are plotted the total kinetic energy of the system and the potential energy. Each of them has its own scale (left for the kinetic energy and right for potential energy). In addition, in the 'Setup_graph.txt' file is possible to switch on the plot of the total energy.
 
-b. Temperature plot: named as 'T_filename.png'. It represents the plot of temperature of the whole system and of each group on time during the simulation.
+b. Temperature plot: named as 'T_filename.pdf'. It represents the plot of temperature of the whole system and of each group on time during the simulation.
 
-c. Force plot: named as 'F_filename.png'. It represents the plot of the total force acting on the system and on each group depending on time during the simulation. In particular, we have three graphs, one for each coordinate of the force (Fx, Fy, Fz).
+c. Force plot: named as 'F_filename.pdf'. It represents the plot of the total force acting on the system and on each group depending on time during the simulation. In particular, we have three graphs, one for each coordinate of the force (Fx, Fy, Fz).
 
-d. Velocity plot: named as 'V_filename.png'. It represents the plot of the total velocity of the system and of each group depending on time during the simulation. In particular, we have three graphs, one for each coordinate of the velocity (vx, vy, vz).
+d. Velocity plot: named as 'V_filename.pdf'. It represents the plot of the total velocity of the system and of each group depending on time during the simulation. In particular, we have three graphs, one for each coordinate of the velocity (vx, vy, vz).
 
-e. Radial distribution function plot: named as '_at1_at2_filename.png'. It represents the radial distribution function of the atoms '_at1' and '_at2'.
+e. Radial distribution function plot: named as '_at1_at2_filename.pdf'. It represents the radial distribution function of the atoms '_at1' and '_at2'.
 
-f. Distances plot: named as 'Dist_filename.png'. It represents the distance between the mean z-coordinates of the two defined groups depending on time.
+f. Distances plot: named as 'Dist_filename.pdf'. It represents the distance between the mean z-coordinates of the two defined groups depending on time.
 
 
 ## Files
