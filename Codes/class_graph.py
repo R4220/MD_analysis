@@ -39,8 +39,8 @@ class graph:
 
     Methods:
     --------
-    graph_aesthetic():
-        Set aesthetic parameters for Matplotlib plots based on a configuration file.
+    graph_aesthetic(filname):
+        Set aesthetic parameters for Matplotlib plots based on a configuration file ('filename').
     extracting_values(iteration_obj):
         Extract and store relevant values from the iteration object.
     plot_energy():
@@ -129,46 +129,11 @@ class graph:
         self.group_color = ['red', 'blue', 'green', 'yellow', 'black', 'purple']
 
 
-    def reading(self):
-        """
-        This method handles the reading of configurations from a file using the `ConfigParser` library.
-
-        If the user chooses to use a specific file for aesthetic settings, it prompts for the file name and attempts to read it.
-        If the specified file exists, it returns the path of the file.
-        Otherwise, it prints an error message and exits the program.
-
-        If the user chooses not to use a specific file, the method returns the path of the default file ('Codes/Setup_graph.ini').
-
-        Returns
-        -------
-        str
-            The path of the configuration file.
-        """
-        # Ask the user if they want to use a specific file for aesthetic settings
-        choice = input('Do you want to use a specific file for aesthetic? Y/N\n')
-    
-        if choice == "Y" or choice == "y":
-            # If yes, prompt for the file name
-            aesthetic_file = input("Write the file name:\n")
-
-            # Check if the specified file exists
-            if os.path.exists(aesthetic_file):
-                # Return the path of the specified file
-                return aesthetic_file
-            else:
-                # Print an error message and exit if the file doesn't exist
-                print("File not found")
-                exit(0)
-        else:
-            # If the user doesn't want to use a specific file, return the path of the default file
-            return 'Codes/Setup_graph.ini'
-
-
-    def graph_aesthetic(self) -> None:
+    def graph_aesthetic(self, filename) -> None:
         '''
         Set aesthetic parameters for Matplotlib plots based on a configuration file.
 
-        This method reads parameters from a configuration file using the method 'reading' and updates Matplotlib's default parameters accordingly.
+        This method reads parameters from a configuration file using the fileme in input and updates Matplotlib's default parameters accordingly.
         The configuration file should include specifications for graph parameters such as label sizes, tick sizes, legend font size, and colors.
 
         Notes:
@@ -190,7 +155,16 @@ class graph:
         '''
         param = [16, 14, 14, 14] # Default values for label sizes and legend font size
         config = ConfigParser()
-        config.read(self.reading())
+        if filename == False:
+            config.read('Codes/Setup_graph.ini')
+        else:
+            if os.path.exists(filename):
+                # Return the path of the specified file
+                config.read(filename)
+            else:
+                # Print an error message and exit if the file doesn't exist
+                print("File not found")
+                exit(0)
         
         #Setup graph values
         try:

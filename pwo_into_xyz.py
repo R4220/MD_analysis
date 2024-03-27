@@ -2,6 +2,7 @@
 import numpy as np
 import shutil
 import os
+import sys
 from configparser import ConfigParser
 
 from Codes.class_MDstep import MDstep
@@ -9,7 +10,7 @@ from Codes.class_group import group
 from Codes.class_graph import graph
 
 
-def configuration():
+def configuration(input_file):
     '''
     Read configuration parameters from 'Setup.txt' and initialize simulation setup.
 
@@ -31,11 +32,6 @@ def configuration():
     It extracts information such as the filename, output directory, maximum distance for RDFs, particle types for RDF calculations, number of bins for RDFs, and group instances.
     '''
     config = ConfigParser()
-    input_file = input("Write the input file name:\n")
-
-    if not os.path.exists(input_file):
-        print("File not found")
-        exit(0)
 
     config.read(input_file)
 
@@ -60,12 +56,17 @@ def configuration():
         Rmax = np.append(Rmax, float(couple[2]))
         N = np.append(N, int(couple[3]))
     atoms = atoms.reshape(int(len(atoms)/2), 2)
+    
+    try:
+        graph_file = config['GRAPHS']['filename']
+    except:
+        graph_file = False
 
     if not os.path.exists(outdir):
             os.makedirs(outdir)
     shutil.copy2('Setup.txt', f'{outdir}')
 
-    return filename, outdir, Rmax, atoms, N, groups, filepath
+    return filename, outdir, Rmax, atoms, N, groups, filepath, graph_file
     
 
 def preamble(fin, step_obj : MDstep) -> None:
@@ -266,7 +267,7 @@ def body(fout, fin, step_obj : MDstep, graphs : graph) -> None:
             generation_switch = [True] * 5
 
 
-def xyz_gen(fout, fin, RDF_ : list, groups : list, outdir : str) -> None:
+def xyz_gen(fout, fin, RDF_ : list, groups : list, outdir : str, graph_file) -> None:
     '''
     Generate an XYZ file from a PWO file, extracting relevant information and updating the output file.
 
@@ -298,7 +299,7 @@ def xyz_gen(fout, fin, RDF_ : list, groups : list, outdir : str) -> None:
     
     # Setting of the RDF object
     graphs = graph(RDF_[0], RDF_[1], RDF_[2], RDF_[3], outdir)
-    graphs.graph_aesthetic()    
+    graphs.graph_aesthetic(graph_file)    
     
     # Generation of the configuration at each time
     body(fout, fin, MDstep_obj, graphs)
@@ -315,15 +316,21 @@ def xyz_gen(fout, fin, RDF_ : list, groups : list, outdir : str) -> None:
 
 if __name__ == "__main__":
     # Extract setup information
-    inputfile = 'Setup.txt'
-    filename, outdir, Rmax, atoms, N, groups, filepath = configuration()
+    
+    _, input_file = sys.argv
+
+    if not os.path.exists(input_file):
+        print("File not found")
+        exit(0)
+
+    filename, outdir, Rmax, atoms, N, groups, filepath, graph_file = configuration(input_file)
     RDF_ = [filename, Rmax, atoms, N]
 
     # Open output and input files
     with open(os.path.join(outdir, filename + '.xyz'), "w+") as fout:
         with open(filepath + '.pwo', 'r') as fin:
             # Generate XYZ file from PWO file
-            xyz_gen(fout, fin, RDF_, groups, outdir)
+            xyz_gen(fout, fin, RDF_, groups, outdir, graph_file)
              
 
 
