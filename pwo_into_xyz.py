@@ -12,7 +12,12 @@ from Codes.class_graph import graph
 
 def configuration(input_file):
     '''
-    Read configuration parameters from 'Setup.txt' and initialize simulation setup.
+    Read configuration parameters from the specified input file and initialize simulation setup.
+
+    Parameters
+    ----------
+    input_file : str
+        The path to the input configuration file.
 
     Returns
     -------
@@ -28,8 +33,9 @@ def configuration(input_file):
 
     Notes
     -----
-    This function reads configuration parameters from 'Setup.txt' and initializes the simulation setup.
-    It extracts information such as the filename, output directory, maximum distance for RDFs, particle types for RDF calculations, number of bins for RDFs, and group instances.
+    This function reads configuration parameters from the specified input file and initializes the simulation setup.
+    It extracts information such as the filename, output directory, maximum distance for RDFs, particle types for 
+    RDF calculations, number of bins for RDFs, and group instances.
     '''
     config = ConfigParser()
 
@@ -64,10 +70,10 @@ def configuration(input_file):
 
     if not os.path.exists(outdir):
             os.makedirs(outdir)
-    shutil.copy2('Setup.txt', f'{outdir}')
+    shutil.copy2(input_file, f'{outdir}')
 
     return filename, outdir, Rmax, atoms, N, groups, filepath, graph_file
-    
+
 
 def preamble(fin, step_obj : MDstep) -> None:
     '''
@@ -254,7 +260,7 @@ def body(fout, fin, step_obj : MDstep, graphs : graph) -> None:
             extract_positions(fin, step_obj, graphs, 'angstrom' in line)
             generation_switch[3] = False
         
-        elif 'temperature           =' in line:
+        elif 'temperature    ' in line:
             graphs.T = np.append(graphs.T, float(line.split()[2]))
             generation_switch[4] = False
         
@@ -332,6 +338,3 @@ if __name__ == "__main__":
             # Generate XYZ file from PWO file
             xyz_gen(fout, fin, RDF_, groups, outdir, graph_file)
              
-
-
-            
