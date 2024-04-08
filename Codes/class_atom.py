@@ -3,7 +3,8 @@ import numpy as np
 class atom:
     """
     This class represents an atomic species used in molecular dynamics simulations.
-    This class sets up an 'Atom' object with the specified attributes, including the atom's name, mass, and the identification number of its group.
+    This class sets up an 'Atom' object with the specified attributes, including the atom's name, mass, and the 
+    identification number of its group.
 
     Parameters
     ----------
@@ -39,11 +40,13 @@ class atom:
     """
 
 
-    def __init__(self, name: str, mass: float, id_group: int):
+    def __init__(self, name: str, mass: float, id_group: str):
         
         '''
-        This constructor sets up an 'Atom' object with the specified attributes, including the atom's name, mass, and the identification number of its group.
-        Additionally, it initializes other attributes like 'DOF', 'N', 'id', 'position_past_past', 'position_past', 'position', 'velocity', and 'force' with default values.
+        This constructor sets up an 'Atom' object with the specified attributes, including the atom's name, mass, 
+        and the identification number of its group.
+        Additionally, it initializes other attributes like 'DOF', 'N', 'id', 'position_past_past', 'position_past',
+        'position', 'velocity', and 'force' with default values.
 
         Parameters
         ----------
@@ -51,8 +54,8 @@ class atom:
             Atomic species.
         mass : float
             Mass of the atomic species.
-        id_group : int
-            Identification number of the group to which the atoms belong.
+        id_group : str
+            Identification name of the group to which the atoms belong.
 
         Attributes
         ----------
@@ -60,8 +63,8 @@ class atom:
             Atomic species.
         mass : float
             Mass of the atomic species.
-        id_group : int
-            Identification number of the group to which the atoms belong.
+        id_group : str
+            Identification name of the group to which the atoms belong.
         N : int
             Total count of atoms of the current atomic species.
         id : list
@@ -77,6 +80,7 @@ class atom:
         force : ndarray
             Array representing the forces acting on the atom.
         '''
+
         self.name = name
         self.mass = mass
         self.id_group = id_group
@@ -93,11 +97,13 @@ class atom:
     def generate_velocity(self, dt: float) -> None:
         '''
         Generate the bidimensional array representing the velocity of each atom.
-        Velocities are calculated as the difference between the current positions and the positions from the second-to-last time step, divided by the time interval.
+        Velocities are calculated as the difference between the current positions and the positions from the 
+        second-to-last time step, divided by the time interval.
 
         Parameters
         ----------
         dt : float
             Time interval.
         '''
+        
         self.velocity = (np.array(self.position, dtype=float) - np.array(self.position_past_past, dtype=float)) / (2 * dt)
