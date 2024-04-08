@@ -12,8 +12,8 @@ class atom:
         Atomic species.
     mass : float
         Mass of the atomic species.
-    id_group : int
-        Identification number of the group to which the atoms belong.
+    id_group : str
+        Identification name of the group to which the atoms belong.
 
     Attributes
     ----------
@@ -21,8 +21,8 @@ class atom:
         Atomic species.
     mass : float
         Mass of the atomic species.
-    id_group : int
-        Identification number of the group to which the atoms belong.
+    id_group : str
+        Identification name of the group to which the atoms belong.
     N : int
         Total count of atoms of the current atomic species.
     id : list
@@ -37,11 +37,17 @@ class atom:
         Array representing the velocity of the atom.
     force : ndarray
         Array representing the forces acting on the atom.
+    
+    Methods
+    -------
+    __init__(type, name, mass, id_group)
+        Initialize an Atom instance.
+    generate_velocity(dt)
+        Generate the bidimensional array representing the velocity of each atom.
     """
 
 
     def __init__(self, name: str, mass: float, id_group: str):
-        
         '''
         This constructor sets up an 'Atom' object with the specified attributes, including the atom's name, mass, 
         and the identification number of its group.
@@ -92,7 +98,6 @@ class atom:
         self.position = np.array([], dtype=float).reshape(0, 3)
         self.velocity = np.array([], dtype=float).reshape(0, 3)
         self.force = np.array([], dtype=float).reshape(0, 3)
-        
         
     def generate_velocity(self, dt: float) -> None:
         '''

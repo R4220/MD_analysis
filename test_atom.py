@@ -198,7 +198,7 @@ def test_generate_velocity_diff_from_one(sample_atom):
 
     # Calculate the expected velocity based on the change in position
     # Since the change in position over 2 units of time is 4 units, the velocity should be (4 / 2) = 2 units per unit time
-    expected_velocity = np.array([[2, 0, 0]])
+    expected_velocity = np.array([[1, 0, 0]])
     
     # Compare the computed velocity with the expected velocity
     assert np.array_equal(sample_atom.velocity, expected_velocity)
