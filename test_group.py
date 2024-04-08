@@ -19,12 +19,11 @@ def sample_group():
     return group(type=['H', 'C', 'P', 'O'], id_group=1)
 
 
-# initialization test ---------------------------------------------------------------------------------------------
+# initialization test --------------------------------------------------------------------------------------------
 
 def test_initialization(sample_group):
     '''
     Test case for the initialization of the 'group' class.
-
     This test checks if the 'group' class is initialized correctly with the provided attributes.
 
     Parameters
@@ -37,28 +36,59 @@ def test_initialization(sample_group):
     AssertionError
         If any of the attributes of the 'group' instance do not match the expected values.
 
+    Notes
+    -----
+    This test focuses on verifying the initialization process of the 'group' class, ensuring that all attributes 
+    are set correctly. It checks attributes such as 'type', 'id_group', 'id_tot', 'DOF', 'Ek', 'T', 'Ftot', 
+    'force', 'Ftot_store', 'Vtot_store', 'Vtot', 'velocity', and 'velocity_switch' to ensure they are initialized
+    as expected.
     '''
+
+    # Ensure that the type attribute is set to ['H', 'C', 'P', 'O']
     assert sample_group.type == ['H', 'C', 'P', 'O']
+    
+    # Ensure that the id_group attribute is set to 1
     assert sample_group.id_group == 1
+    
+    # Ensure that the id_tot attribute is an empty array
     assert sample_group.id_tot.size == 0
+    
+    # Ensure that the DOF attribute is set to 0.0
     assert sample_group.DOF == 0.0
+    
+    # Ensure that the Ek attribute is set to 0.0
     assert sample_group.Ek == 0.0
+    
+    # Ensure that the T attribute is an empty list
     assert sample_group.T == []
+    
+    # Ensure that the Ftot attribute is an empty array with shape (0, 3)
     assert np.array_equal(sample_group.Ftot, np.array([], dtype=float).reshape(0, 3))
+    
+    # Ensure that the force attribute is an empty array with shape (0, 3)
     assert np.array_equal(sample_group.force, np.array([], dtype=float).reshape(0, 3))
+    
+    # Ensure that the Ftot_store attribute is an empty array with shape (0, 3)
     assert np.array_equal(sample_group.Ftot_store, np.array([], dtype=float).reshape(0, 3))
+    
+    # Ensure that the Vtot_store attribute is an empty array with shape (0, 3)
     assert np.array_equal(sample_group.Vtot_store, np.array([], dtype=float).reshape(0, 3))
+    
+    # Ensure that the Vtot attribute is an empty array with shape (0, 3)
     assert np.array_equal(sample_group.Vtot, np.array([], dtype=float).reshape(0, 3))
+    
+    # Ensure that the velocity attribute is an empty array with shape (0, 3)
     assert np.array_equal(sample_group.velocity, np.array([], dtype=float).reshape(0, 3))
+    
+    # Ensure that the velocity_switch attribute is False
     assert sample_group.velocity_switch is False
 
 
-# Kinetic_energy tests --------------------------------------------------------------------------------------------
+# Kinetic_energy tests -------------------------------------------------------------------------------------------
     
 def test_velocity_storage(sample_group):
     '''
     Test case for the 'velocity_storage' method of the 'group' class.
-
     This test checks if the 'velocity_storage' method correctly stores the velocities of the group's atoms.
 
     Parameters
@@ -73,10 +103,15 @@ def test_velocity_storage(sample_group):
 
     Notes
     -----
-    This test initializes two atoms, assigns their positions, and then stores them into the group.
-    Finally, it calculates the velocity of the group's atoms.
-
+    In this test, we assess the behavior of the 'velocity_storage' method in the 'group' class. To achieve this,
+    we initialize two atoms, representing Hydrogen (H) and Oxygen (O), respectively, with predefined attributes.
+    Subsequently, we assign specific positions to these atoms and then add them to the group under examination.
+    After setting up the atom positions, we invoke the 'Kinetic_energy' method, which internally calls the
+    'velocity_storage' method to calculate and store the velocities of the atoms within the group. Finally, we
+    compare the computed velocities against the expected values to verify the correctness of the velocity storage
+    process.
     '''
+
     # Add some atoms to the group for testing
     atom1 = atom(name="H", mass=1.008, id_group=1)
     atom2 = atom(name="O", mass=15.999, id_group=1)
@@ -99,7 +134,6 @@ def test_velocity_storage(sample_group):
 def test_group_velocity(sample_group):
     '''
     Test case for the 'group_velocity' method of the 'group' class.
-
     This test checks if the 'group_velocity' method correctly calculates the mean group's velocity.
 
     Parameters
@@ -114,10 +148,13 @@ def test_group_velocity(sample_group):
 
     Notes
     -----
-    This test initializes two atoms, assigns their positions, and then stores them into the group.
-    Finally, it calculates the mean group's velocity.
-
+    This test initializes two atoms, representing Hydrogen (H) and Oxygen (O), respectively, with predefined 
+    attributes. Subsequently, it assigns specific positions to these atoms and then adds them to the group under 
+    examination. After setting up the atom positions, the 'Kinetic_energy' method is invoked, which internally 
+    calls the 'group_velocity' method to calculate the mean velocity of the group. Finally, the computed mean 
+    group velocity is compared against the expected value to verify the correctness of the calculation.
     '''
+
     # Add some atoms to the group for testing
     atom1 = atom(name="H", mass=1.008, id_group=1)
     atom2 = atom(name="O", mass=15.999, id_group=1)
@@ -141,7 +178,6 @@ def test_group_velocity(sample_group):
 def test_group_velocity_store(sample_group):
     '''
     Test case for the 'group_velocity_store' method of the 'group' class.
-
     This test checks if the 'group_velocity_store' method correctly stores the mean group's velocity.
 
     Parameters
@@ -156,10 +192,14 @@ def test_group_velocity_store(sample_group):
 
     Notes
     -----
-    This test initializes two atoms, assigns their positions, and then stores them into the group.
-    Finally, it calculates the mean group's velocity and checks if it is correctly stored.
-
+    This test initializes two atoms, representing Hydrogen (H) and Oxygen (O), respectively, with predefined 
+    attributes. Subsequently, it assigns specific positions to these atoms and then adds them to the group under 
+    examination. After setting up the atom positions, the 'Kinetic_energy' method is invoked, which internally 
+    calls the 'group_velocity_store' method to calculate the mean velocity of the group and store it for future 
+    reference. Finally, the computed mean group velocity is compared against the expected value to verify the 
+    correctness of the storage.
     '''
+
     # Add some atoms to the group for testing
     atom1 = atom(name="H", mass=1.008, id_group=1)
     atom2 = atom(name="O", mass=15.999, id_group=1)
@@ -183,7 +223,6 @@ def test_group_velocity_store(sample_group):
 def test_kinetic_energy1(sample_group):
     '''
     Test case for the 'Kinetic_energy' method of the 'group' class.
-
     This test checks if the 'Kinetic_energy' method correctly calculates kinetic energy for a single atom.
 
     Parameters
@@ -198,9 +237,12 @@ def test_kinetic_energy1(sample_group):
 
     Notes
     -----
-    This test initializes a single atom, assigns its position, and then calculates the kinetic energy.
-
+    This test initializes a single atom, representing Hydrogen (H), with predefined attributes.
+    Subsequently, it assigns a specific position to the atom and adds it to the group under examination.
+    After setting up the atom position, the 'Kinetic_energy' method is invoked to calculate the kinetic energy.
+    Finally, the computed kinetic energy is compared against the expected value to verify its correctness.
     '''
+
     # Add some atoms to the group for testing
     atom1 = atom(name="H", mass=1.008, id_group=1)
     sample_group.atoms = [atom1]
@@ -220,7 +262,6 @@ def test_kinetic_energy1(sample_group):
 def test_kinetic_energy2(sample_group):
     '''
     Test case for the 'Kinetic_energy' method of the 'group' class.
-
     This test checks if the 'Kinetic_energy' method correctly calculates kinetic energy for two atoms with 
     different masses.
 
@@ -236,10 +277,13 @@ def test_kinetic_energy2(sample_group):
 
     Notes
     -----
-    This test initializes two atoms with different masses, assigns their positions, and then calculates the 
-    kinetic energy.
-
+    This test initializes two atoms with different masses, representing Hydrogen (H) and Oxygen (O), respectively, 
+    with predefined attributes. Subsequently, it assigns specific positions to these atoms and then adds them to 
+    the group under examination. After setting up the atom positions, the 'Kinetic_energy' method is invoked to 
+    calculate the kinetic energy, considering the masses of the atoms. Finally, the computed kinetic energy is 
+    compared against the expected value to verify its correctness.
     '''
+
     # Add some atoms to the group for testing
     atom1 = atom(name="H", mass=1.008, id_group=1)
     atom2 = atom(name="O", mass=15.999, id_group=1)
@@ -263,7 +307,6 @@ def test_kinetic_energy2(sample_group):
 def test_kinetic_energy3(sample_group):
     '''
     Test case for the 'Kinetic_energy' method of the 'group' class.
-
     This test checks if the 'Kinetic_energy' method correctly calculates kinetic energy for multiple atoms (3) 
     with different masses.
 
@@ -279,10 +322,13 @@ def test_kinetic_energy3(sample_group):
 
     Notes
     -----
-    This test initializes multiple atoms with different masses, assigns their positions, and then calculates 
-    the kinetic energy.
-
+    This test initializes multiple atoms with different masses, representing Hydrogen (H), Oxygen (O), and Carbon 
+    (C), respectively, with predefined attributes. Subsequently, it assigns specific positions to these atoms and 
+    then adds them to the group under examination. After setting up the atom positions, the 'Kinetic_energy' 
+    method is invoked to calculate the kinetic energy, considering the masses of the atoms. Finally, the computed 
+    kinetic energy is compared against the expected value to verify its correctness.
     '''
+
     # Add some atoms to the group for testing
     atom1 = atom(name="H", mass=1.008, id_group=1)
     atom2 = atom(name="O", mass=15.999, id_group=1)
@@ -308,12 +354,11 @@ def test_kinetic_energy3(sample_group):
     assert np.isclose(sample_group.Ek, expected_ek, atol=1e-4)
 
 
-# Extract_z tests -------------------------------------------------------------------------------------------------
+# Extract_z tests ------------------------------------------------------------------------------------------------
     
 def test_extract_from_just_one(sample_group):
     '''
     Test case for the 'Extract_z' method of the 'group' class.
-
     This test checks if the 'Extract_z' method correctly calculates the mean z coordinates of the group considering just one particle of one single type of atom in the group.
 
     Parameters
@@ -328,8 +373,11 @@ def test_extract_from_just_one(sample_group):
 
     Notes
     -----
-    This test adds a single atom of a specific type to the group and assigns its position. Then, it calls the 'Extract_z' method to calculate the mean z coordinate of the group and asserts that it matches the expected value.
+    This test adds a single atom of a specific type, representing Hydrogen (H), to the group and assigns its 
+    position. Then, it calls the 'Extract_z' method to calculate the mean z coordinate of the group and asserts 
+    that it matches the expected value.
     '''
+    
     # Add an atom to the group for testing
     atom_ = atom(name="H", mass=1.008, id_group=1)
     sample_group.atoms = [atom_]
@@ -345,7 +393,6 @@ def test_extract_from_just_one(sample_group):
 def test_extract_from_one(sample_group):
     '''
     Test case for the 'Extract_z' method of the 'group' class.
-
     This test checks if the 'Extract_z' method correctly calculates the mean z coordinate of the group considering 
     two particles of one single type of atom in the group.
 
@@ -361,10 +408,11 @@ def test_extract_from_one(sample_group):
     
     Notes
     -----
-    This test adds a single atom of a specific type to the group and assigns its position. Then, it calls the 
-    'Extract_z' method to calculate the mean z coordinate of the group and asserts that it matches the expected 
-    value.
+    This test adds two atoms of a specific type, representing Hydrogen (H), to the group and assigns their 
+    positions. Then, it calls the 'Extract_z' method to calculate the mean z coordinate of the group and asserts 
+    that it matches the expected value.
     '''
+
     # Add an atom to the group for testing
     atom_ = atom(name="H", mass=1.008, id_group=1)
     sample_group.atoms = [atom_]
@@ -380,7 +428,6 @@ def test_extract_from_one(sample_group):
 def test_extract_from_two(sample_group):
     '''
     Test case for the 'Extract_z' method of the 'group' class.
-
     This test checks if the 'Extract_z' method correctly calculates the mean z coordinate of the group considering 
     two particles of two different types of atoms in the group.
 
@@ -400,6 +447,7 @@ def test_extract_from_two(sample_group):
     'Extract_z' method to calculate the mean z coordinate of the group and asserts that it matches the expected 
     value.
     '''
+
     # Add an atom to the group for testing
     atom1 = atom(name="H", mass=1.008, id_group=1)
     atom2 = atom(name="O", mass=15.999, id_group=1)
@@ -417,7 +465,6 @@ def test_extract_from_two(sample_group):
 def test_extract_from_zero(sample_group):
     '''
     Test case for the 'Extract_z' method of the 'group' class.
-
     This test checks if the 'Extract_z' method correctly calculates the mean z coordinates of the group considering 
     two particles of two types of atoms in the group but with z=0.
 
@@ -437,6 +484,7 @@ def test_extract_from_zero(sample_group):
     the 'Extract_z' method to calculate the mean z coordinate of the group and asserts that it matches the expected 
     value.
     '''
+
     # Add atoms to the group for testing
     atom1 = atom(name="H", mass=1.008, id_group=1)
     atom2 = atom(name="O", mass=15.999, id_group=1)
@@ -453,7 +501,6 @@ def test_extract_from_zero(sample_group):
 def test_extract_from_negative(sample_group):
     '''
     Test case for the 'Extract_z' method of the 'group' class.
-
     This test checks if the 'Extract_z' method correctly calculates the mean z coordinates of the group considering 
     two particles of two types of atoms in the group but with negative z.
 
@@ -473,6 +520,7 @@ def test_extract_from_negative(sample_group):
     negative ones. Then, it calls the 'Extract_z' method to calculate the mean z coordinate of the group and asserts 
     that it matches the expected value.
     '''
+
     # Add atoms to the group for testing
     atom1 = atom(name="H", mass=1.008, id_group=1)
     atom2 = atom(name="O", mass=15.999, id_group=1)
@@ -488,12 +536,11 @@ def test_extract_from_negative(sample_group):
     assert sample_group.Extract_z() == expected_z
 
 
-# Generate tests --------------------------------------------------------------------------------------------------
+# Generate tests -------------------------------------------------------------------------------------------------
 
 def test_generation_Ek(sample_group):
     '''
     Test case for the 'Generate' method of the 'group' class.
-
     This test checks if the 'Generate' method correctly calculates kinetic energy at different timesteps.
 
     Parameters
@@ -594,6 +641,7 @@ def test_generation_T(sample_group):
     - \( DOF \) is the number of degrees of freedom.
     - \( K_B \) is the Boltzmann constant in eV/K.
     '''
+
     # Add atoms to the group for testing
     atom1 = atom(name="H", mass=1.008, id_group=1)
     atom2 = atom(name="O", mass=15.999, id_group=1)
@@ -663,8 +711,8 @@ def test_forces(sample_group):
     different timesteps.
     The total force at each timestep must be the sum of the forces acting on each atom. The calculated total force 
     vector and the stored total force vector are then compared with the expected values.
-
     '''
+
     # Add atoms to the group for testing
     atom1 = atom(name="H", mass=1.008, id_group=1)
     atom2 = atom(name="O", mass=15.999, id_group=1)
@@ -721,6 +769,7 @@ def test_body(sample_group):
     timesteps. Then, it calls the 'Generate' method to define the line of the xyz output file.
     The expected body lines are compared with the calculated body lines to ensure that they match.
     '''
+
     # Add an atom to the group for testing
     atom1 = atom(name="H", mass=1.008, id_group=1)
     atom1.N = 2
@@ -778,6 +827,7 @@ def test_array_reset(sample_group):
     The test checks if the position_past_past, position_past, position, and force attributes of the atom, as well 
     as the force attribute of the group, are reset or updated correctly after calling the 'Generate' method.
     '''
+
     # Add an atom to the group for testing
     atom1 = atom(name="H", mass=1.008, id_group=1)
     sample_group.atoms = [atom1]

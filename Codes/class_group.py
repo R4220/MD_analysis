@@ -8,8 +8,8 @@ class group:
     ----------
     type : str
         Atomic type in the group.
-    id_group : int
-        Identification number of the group.
+    id_group : str
+        Identification name of the group.
 
     Attributes
     ----------
@@ -17,8 +17,8 @@ class group:
         List of Atom instances in the group.
     type : str
         Atomic types in the group.
-    id_group : int
-        Identification number of the group.
+    id_group : str
+        Identification name of the group.
     id_tot : ndarray
         Array containing the identification numbers of the atoms inside the group.
     DOF : float
@@ -32,9 +32,9 @@ class group:
     force : ndarray
         Bidimensional array representing the forces against the atoms in the group.
     Ftot_store : ndarray
-        Bidimensional array representig the total force against the atoms of the group, for each time step
+        Bidimensional array representig the total force against the atopms of the group, for each time step
     Vtot_store : ndarray
-        Bidimensional array representig the bulk velocity of the atoms in the group, for each time step
+        Bidimensional array representig the bulk velocity of the atoms in the group , for each time step
     Vtot : ndarray
         Bidimensional array representing the group velocity of the atoms in the group.
     velocity : ndarray
@@ -57,7 +57,8 @@ class group:
 
     Notes
     -----
-    This class provides functionality to simulate molecular dynamics at the group level, including methods to add atoms, calculate kinetic energy, and generate output data.
+    This class provides functionality to simulate molecular dynamics at the group level, including methods to add 
+    atoms, calculate kinetic energy, and generate output data.
     '''
 
     def __init__(self, type: str, id_group: str):
@@ -68,8 +69,8 @@ class group:
         ----------
         type : str
             Atomic type in the group.
-        id_group : int
-            Identification number of the group.
+        id_group : str
+            Identification name of the group.
 
         Attributes
         ----------
@@ -77,8 +78,8 @@ class group:
             List of Atom instances in the group.
         type : str
             Atomic types in the group.
-        id_group : int
-            Identification number of the group.
+        id_group : str
+            Identification name of the group.
         id_tot : ndarray
             Array containing the identification numbers of the atoms inside the group.
         DOF : float
@@ -106,9 +107,12 @@ class group:
 
         Notes
         -----
-        This constructor sets up a 'Group' object with the specified attributes, including the group's type and the identification number of the group.
-        Additionally, it initializes other attributes like 'atoms', 'id_tot', 'DOF', 'Ek', 'Ftot', 'force', 'Vtot', and 'velocity' with default values.
+        This constructor sets up a 'Group' object with the specified attributes, including the group's type and 
+        the identification number of the group.
+        Additionally, it initializes other attributes like 'atoms', 'id_tot', 'DOF', 'Ek', 'Ftot', 'force', 
+        'Vtot', and 'velocity' with default values.
         '''
+
         self.atoms = []
         self.type = type
         self.id_group = id_group
@@ -125,8 +129,8 @@ class group:
         self.Vtot = np.array([], dtype=float).reshape(0, 3)
         self.velocity = np.array([], dtype=float).reshape(0, 3)
         self.velocity_switch = False
-        self.distance_switch = False
 
+        self.distance_switch = False
 
     def Kinetic_energy(self, dt: float) -> None:
         '''
@@ -139,7 +143,10 @@ class group:
 
         Notes
         -----
-        This method calculates the kinetic energy of the group based on the velocities of its atoms. It iterates over each atom in the group, generates the velocity array for each atom type, and computes the total velocity ('Vtot') of the atoms in the group. Then, it removes the mean velocity and calculates the thermal kinetic energy ('Ek') using the formula:
+        This method calculates the kinetic energy of the group based on the velocities of its atoms. It iterates 
+        over each atom in the group, generates the velocity array for each atom type, and computes the total 
+        velocity ('Vtot') of the atoms in the group. Then, it removes the mean velocity and calculates the thermal
+        kinetic energy ('Ek') using the formula:
 
         .. math::
 
@@ -152,6 +159,7 @@ class group:
 
         The calculated kinetic energy is stored in the 'Ek' attribute.
         '''
+
         self.velocity = np.array([], dtype=float).reshape(0, 3)
 
         # Generate the velocity array for each atom type
@@ -179,14 +187,13 @@ class group:
 
         Notes
         -----
-        This method calculates the mean z-coordinate by extracting all the z-coordinates from the atoms inside the group and then averaging the values.
+        This method calculates the mean z-coordinate by extracting all the z-coordinates from the atoms inside the
+        group and then averaging the values.
         '''
 
         z = []
-
         for at in self.atoms:
             z = np.append(z, at.position[:, 2])
-            
         return np.mean(z)
         
     def Generate(self, dt: float, matrix: np.ndarray) -> np.ndarray:
@@ -207,7 +214,9 @@ class group:
 
         Notes
         -----
-        This method calculates the kinetic energy, temperature, and total force of the group. It generates an output line for each atom in the group, including information such as the atom's name, position, velocity, force, and group identification number.
+        This method calculates the kinetic energy, temperature, and total force of the group. It generates an 
+        output line for each atom in the group, including information such as the atom's name, position, velocity, 
+        force, and group identification number.
         It also calculates the difference between two previously defined groups.
         To calculate the temperature the method uses the formula:
 
@@ -220,6 +229,7 @@ class group:
         - \( DOF \) is the number of degrees of freedom.
         - \( K_B \) is the Boltzmann constant in eV/K.
         '''
+
         # Calculate the kinetic energy
         if self.velocity_switch :
             self.Kinetic_energy(dt)
