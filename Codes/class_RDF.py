@@ -4,51 +4,49 @@ import matplotlib.pyplot as plt
 
 class RDF:
     """
-    Radial Distribution Function (RDF) calculator.
-
-    Parameters:
-    -----------
-    filename : str
-        The filename for saving the plot.
+    Parameters
+    ----------
     Rmax : float
-        Maximum distance for RDF calculation.
-    atoms : list of str
-        Atom types for which RDF is calculated.
-    N : int
+        Maximum value for R.
+    atoms : list
+        List of atoms.
+    N_bin : int
         Number of bins for histogram.
-    outdir: str
-        The directory where the output files will be saved.
-
-    Attributes:
-    -----------
     filename : str
-        The filename for saving the plot.
+        Name of the file.
+    outdir : str
+        Directory where the output files will be saved.
+
+    Attributes
+    ----------
+    filename : str
+        Name of the file.
     outdir : str
         Directory where the output files will be saved.
     Rmax : float
-        Maximum distance for RDF calculation.
-    type : list of str
-        Atom types for which RDF is calculated.
-    N : int
-        Number of bins for histogram.
-    count : ndarray
-        Histogram counts for RDF.
-    R : ndarray
-        Radial distance array.
+        Maximum value for R.
+    type : list
+        List of atoms.
+    N_bin : int
+        Number of bins.
+    count : numpy.ndarray
+        Array of zeros with size N.
+    R : numpy.ndarray
+        Array containing values from 0 to Rmax with N elements.
     dR : float
-        Bin size for histogram.
-    norm : ndarray
-        Normalization array for RDF calculation.
+        Value of the second element in R.
+    norm : numpy.ndarray
+        Normalized array based on R values.
     equal : bool
-        True if RDF is calculated for the same type of atoms, False otherwise.
-    at1 : ndarray
-        Array to store positions of atoms of type 1.
+        Condition based on the equality of the two elements in atoms.
+    at1 : numpy.ndarray
+        Bidimensional array for atoms type 1.
     N1 : int
-        Number of atoms of type 1.
-    at2 : ndarray
-        Array to store positions of atoms of type 2.
+        Number of elements in at1.
+    at2 : numpy.ndarray
+        Bidimensional array for atoms type 2.
     N2 : int
-        Number of atoms of type 2.
+        Number of elements in at2.
 
     Methods:
     --------
@@ -59,7 +57,6 @@ class RDF:
     plot_RDF():
         Plot the Radial Distribution Function.
     """
-
 
     def __init__(self, Rmax : float, atoms : list, N_bin : int, filename : str, outdir : str):
         """
@@ -109,6 +106,7 @@ class RDF:
         N2 : int
             Number of elements in at2.
         """
+
         self.filename = filename
         self.outdir = outdir
         self.Rmax = Rmax
@@ -126,7 +124,6 @@ class RDF:
 
         self.RDF_color = 'black'
 
-
     def RDF(self, MDstep_obj) -> None:
         """
         Calculate the radial distribution function (RDF) for the group.
@@ -138,10 +135,13 @@ class RDF:
 
         Notes
         -----
-        This method calculates the distances between the two defined atomic species and adds them to the counting list 'count'.
-        The periodic conditions are used to account for the minimum image criterion. In order to do so, reducted coordinates are also used.
-        If the atomic species are the same, the method considers the distances between atoms of the same type, and if they are different, it calculates the distances between atoms of different types.
+        This method calculates the distances between the two defined atomic species and adds them to the counting 
+        list 'count'. The periodic conditions are used to account for the minimum image criterion. In order to do 
+        so, reducted coordinates are also used. If the atomic species are the same, the method considers the 
+        distances between atoms of the same type, and if they are different, it calculates the distances between 
+        atoms of different types.
         """
+
         dist = []
 
         # Equal atomic species
@@ -193,7 +193,6 @@ class RDF:
         self.at1 = np.array([], dtype=float).reshape(0, 3)
         self.at2 = np.array([], dtype=float).reshape(0, 3)
 
-
     def normalization(self, MDstep_obj) -> None:
         """
         Normalize the radial distribution function (RDF).
@@ -205,8 +204,10 @@ class RDF:
 
         Notes
         -----
-        This method calculates the volume 'V' and uses it to normalize the radial distribution function 'count' by dividing it by the appropriate density ('rho_1').
+        This method calculates the volume 'V' and uses it to normalize the radial distribution function 'count' by 
+        dividing it by the appropriate density ('rho_1').
         """
+        
         V = 8 * self.Rmax **3
 
         if self.equal :
@@ -216,18 +217,20 @@ class RDF:
 
         self.count = np.divide(self.count, self.norm) * rho_1
         
-
     def plot_RDF(self) -> None:
         """
         Plot the radial distribution function (RDF).
 
-        Generates a plot of the RDF based on calculated radial distances and counts and saves it as 'RDF_{element1}_{element2}_{filename}.pdf'.
+        Generates a plot of the RDF based on calculated radial distances and counts and saves it as 
+        'RDF_{element1}_{element2}_{filename}.pdf'.
 
         Notes
         -----
-        This method uses Matplotlib to create an RDF plot. The radial distribution function is plotted against radial distances ('r') in angstroms.
-        The plot is saved in PDF format. The plot includes information about the elements used in the RDF calculation.
+        This method uses Matplotlib to create an RDF plot. The radial distribution function is plotted against 
+        radial distances ('r') in angstroms. The plot is saved in PDF format. The plot includes information about 
+        the elements used in the RDF calculation.
         """
+
         fig = plt.figure(figsize=(10, 6.18033988769))
         ax = fig.add_subplot(1, 1, 1)
         ax.plot(self.R, self.count, color = self.RDF_color, label=f'{self.type[0]}-{self.type[1]}')

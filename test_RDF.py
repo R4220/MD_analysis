@@ -26,6 +26,7 @@ def sample_RDF_equal():
 
     This fixture is useful for testing RDF calculations with identical atom types.
     """
+
     return RDF(Rmax=10.0, atoms=['H', 'H'], N_bin=10, filename='test', outdir='output')
 
 @pytest.fixture
@@ -49,12 +50,14 @@ def sample_RDF_different():
 
     This fixture is useful for testing RDF calculations with different atom types.
     """
+
     return RDF(Rmax=10.0, atoms=['H', 'O'], N_bin=10, filename='test', outdir='output')
 
 @pytest.fixture
 def sample_RDF_equal_b():
     """
-    Fixture for generating a sample RDF (Radial Distribution Function) object with equal atom types and a different number of bins.
+    Fixture for generating a sample RDF (Radial Distribution Function) object with equal atom types and a different 
+    number of bins.
 
     Returns
     -------
@@ -72,12 +75,14 @@ def sample_RDF_equal_b():
 
     This fixture is useful for testing RDF calculations with identical atom types but varying parameters.
     """
+
     return RDF(Rmax=10.0, atoms=['H', 'H'], N_bin=100, filename='test', outdir='output')
 
 @pytest.fixture
 def sample_RDF_different_b():
     """
-    Fixture for generating a sample RDF (Radial Distribution Function) object with different atom types and a different number of bins.
+    Fixture for generating a sample RDF (Radial Distribution Function) object with different atom types and a 
+    different number of bins.
 
     Returns
     -------
@@ -95,12 +100,14 @@ def sample_RDF_different_b():
 
     This fixture is useful for testing RDF calculations with different atom types and varying parameters.
     """
+
     return RDF(Rmax=10.0, atoms=['H', 'O'], N_bin=100, filename='test', outdir='output')
 
 @pytest.fixture
 def sample_RDF_equal_lowRmax():
     """
-    Fixture for generating a sample RDF (Radial Distribution Function) object with equal atom types and a low Rmax value.
+    Fixture for generating a sample RDF (Radial Distribution Function) object with equal atom types and a low Rmax 
+    value.
 
     Returns
     -------
@@ -116,14 +123,17 @@ def sample_RDF_equal_lowRmax():
     - filename: Name of the RDF output file.
     - outdir: Directory path for storing the RDF output file.
 
-    This fixture is useful for testing RDF calculations with equal atom types and a low Rmax value, which can be helpful for scenarios where the RDF needs to be calculated within a confined region.
+    This fixture is useful for testing RDF calculations with equal atom types and a low Rmax value, which can be 
+    helpful for scenarios where the RDF needs to be calculated within a confined region.
     """
+
     return RDF(Rmax=2.0, atoms=['H', 'H'], N_bin=100, filename='test', outdir='output')
 
 @pytest.fixture
 def sample_RDF_different_lowRmax():
     """
-    Fixture for generating a sample RDF (Radial Distribution Function) object with different atom types and a low Rmax value.
+    Fixture for generating a sample RDF (Radial Distribution Function) object with different atom types and a low 
+    Rmax value.
 
     Returns
     -------
@@ -139,8 +149,10 @@ def sample_RDF_different_lowRmax():
     - filename: Name of the RDF output file.
     - outdir: Directory path for storing the RDF output file.
 
-    This fixture is useful for testing RDF calculations with different atom types and a low Rmax value, which can be helpful for scenarios where the RDF needs to be calculated within a confined region.
+    This fixture is useful for testing RDF calculations with different atom types and a low Rmax value, which can 
+    be helpful for scenarios where the RDF needs to be calculated within a confined region.
     """
+
     return RDF(Rmax=2.0, atoms=['H', 'O'], N_bin=100, filename='test', outdir='output')
 
 @pytest.fixture
@@ -162,6 +174,7 @@ def sample_MDstep():
     
     This fixture is useful for testing MDstep-related functionalities and methods.
     """
+
     step = MDstep(groups=[])
     step.N_iteration = 1
     step.matrix = [[2, 0, 0], [0, 4, 0], [0, 0, 1]]
@@ -195,6 +208,7 @@ def test_initialization_equal(sample_RDF_equal):
     outdir, Rmax, type, N_bin, count, R, dR, norm, equal, at1, N1, at2, N2, and RDF_color. 
     It compares these attributes against expected values to ensure proper initialization.
     """
+
     # Check if the attributes are initialized correctly
     assert sample_RDF_equal.filename == 'test'
     assert sample_RDF_equal.outdir == 'output'
@@ -238,6 +252,7 @@ def test_initialization_different(sample_RDF_different):
     outdir, Rmax, type, N_bin, count, R, dR, norm, equal, at1, N1, at2, N2, and RDF_color. 
     It compares these attributes against expected values to ensure proper initialization.
     """
+
     # Check if the attributes are initialized correctly
     assert sample_RDF_different.filename == 'test'
     assert sample_RDF_different.outdir == 'output'
@@ -293,6 +308,7 @@ def test_RDF_equal1(sample_RDF_equal_b, sample_MDstep):
     if the number of atoms is updated correctly, and ensures that the arrays `at1` and `at2` are reset to empty 
     arrays after the RDF calculation.
     """
+
     # Set initial positions of atoms
     sample_RDF_equal_b.at1 = np.array([[0, 0, 0], [2, 0, 0]])
     
@@ -339,6 +355,7 @@ def test_RDF_equal2(sample_RDF_equal_b, sample_MDstep):
     number of atoms is updated correctly. Finally, it ensures that the arrays `at1` and `at2` are reset to empty 
     arrays after the RDF calculation.
     """
+
     # Set initial positions of atoms
     sample_RDF_equal_b.at1 = np.array([[0.5, -2, 4], [1, 3, -0.4]])
     
@@ -384,6 +401,7 @@ def test_RDF_equal3(sample_RDF_equal_b, sample_MDstep):
     calculated RDF values against the expected count, checks if the number of atoms is updated correctly, and 
     ensures that the arrays `at1` and `at2` are reset to empty arrays after the RDF calculation.
     """
+
     # Set initial positions of atoms
     sample_RDF_equal_b.at1 = np.array([[0, 0, 0],[0.5, -2, 4], [1, 3, -0.4]])
     
@@ -429,6 +447,7 @@ def test_RDF_different1(sample_RDF_different_b, sample_MDstep):
     checks if the number of atoms is updated correctly and ensures that the arrays `at1` and `at2` are reset to 
     empty arrays after the RDF calculation.
     """
+
     # Set initial positions of atoms
     sample_RDF_different_b.at1 = np.array([[0, 0, 0]])
     sample_RDF_different_b.at2 = np.array([[2, 0, 0]])
@@ -476,6 +495,7 @@ def test_RDF_different2(sample_RDF_different_b, sample_MDstep):
     checks if the number of atoms is updated correctly and ensures that the arrays `at1` and `at2` are reset to 
     empty arrays after the RDF calculation.
     """
+
     # Set initial positions of atoms
     sample_RDF_different_b.at1 = np.array([[0.5, -2, 4]])
     sample_RDF_different_b.at2 = np.array([[1, 3, -0.4]])
@@ -523,6 +543,7 @@ def test_RDF_different3(sample_RDF_different_b, sample_MDstep):
     checks if the number of atoms is updated correctly and ensures that the arrays `at1` and `at2` are reset to 
     empty arrays after the RDF calculation.
     """
+
     # Set initial positions of atoms
     sample_RDF_different_b.at1 = np.array([[0, 0, 0]])
     sample_RDF_different_b.at2 = np.array([[0.5, -2, 4], [1, 3, -0.4]])
@@ -569,6 +590,7 @@ def test_RDF_equal_lowRmax(sample_RDF_equal_lowRmax, sample_MDstep):
     against the expected counts.
     The RDF calculation is performed for a system with lower Rmax, and the RDF counts are validated accordingly.
     """
+
     # Set initial positions of atoms
     sample_RDF_equal_lowRmax.at1 = np.array([[0, 0, 0],[0.5, -2, 4], [1, 3, -0.4]])
     
@@ -613,6 +635,7 @@ def test_RDF_different_lowRmax(sample_RDF_different_lowRmax, sample_MDstep):
     against the expected counts.
     The RDF calculation is performed for a system with lower Rmax, and the RDF counts are validated accordingly.
     """
+
     # Set initial positions of atoms
     sample_RDF_different_lowRmax.at1 = np.array([[0, 0, 0]])
     sample_RDF_different_lowRmax.at2 = np.array([[0.5, -2, 4], [1, 3, -0.4]])
@@ -659,6 +682,7 @@ def test_normalization_equal(sample_RDF_equal_b, sample_MDstep):
     the number of atoms of type 1. The normalized count is obtained by dividing the RDF counts by the product of 
     the RDF norm and the atomic density of type 1 atoms in the system.
     """
+
     # Set initial positions of atoms and calculate RDF
     sample_RDF_equal_b.at1 = np.array([[0, 0, 0],[0.5, -2, 4], [1, 3, -0.4]])
     sample_RDF_equal_b.RDF(sample_MDstep)
@@ -703,6 +727,7 @@ def test_normalization_different(sample_RDF_different_b, sample_MDstep):
     the number of atoms of type 1. The normalized count is obtained by dividing the RDF counts by the product of 
     the RDF norm and the atomic density of type 1 atoms in the system.
     """
+
     # Set initial positions of atoms and calculate RDF
     sample_RDF_different_b.at1 = np.array([[0, 0, 0]])
     sample_RDF_different_b.at2 = np.array([[0.5, -2, 4], [1, 3, -0.4]])
