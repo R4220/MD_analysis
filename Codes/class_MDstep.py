@@ -49,7 +49,6 @@ class MDstep:
         Extract and store the positions of atoms at a determined time.
     single_frame()
         Generate a list where each element is a line in the output file, representing the current time step.
-
     '''
 
     def __init__(self, groups : list):
@@ -84,17 +83,23 @@ class MDstep:
         N_iteration : int
             Number of iterations.
         alat_to_angstrom : float
-            Conversion factor from alat unit to angstrom.
+            Conversion factor from lattice constant (alat) unit to angstrom.
+            For example, if alat_to_angstrom = 1.88973, then 1 alat equals approximately 1.88973 angstroms.
         Ryau_to_pN : float
-            Conversion factor from Rydberg units to piconewtons.
+            Conversion factor from Rydberg atomic units (Ryau) to piconewtons (pN).
+            For example, if Ryau_to_pN = 41193.647367103644, then 1 Ryau equals approximately 41193.647367103644 pN.
         matrix : numpy.ndarray
             3x3 transformation matrix for periodic boundary conditions.
 
         Notes
         -----
-        This constructor sets up a 'MolecularDynamicsStep' object with the specified attributes, including the list of group instances in the system, the number of atoms, the number of different atom types, lattice vectors ('ax', 'ay', 'az'), time interval, and conversion factors.
-        The elements of the list 'group' will be updated at each cycle, together with the potential energy and the number of iterations.
+        This constructor sets up a 'MolecularDynamicsStep' object with the specified attributes, including the list 
+        of group instances in the system, the number of atoms, the number of different atom types, lattice vectors 
+        ('ax', 'ay', 'az'), time interval, and conversion factors.
+        The elements of the list 'group' will be updated at each cycle, together with the potential energy and 
+        the number of iterations.
         '''
+    
         self.groups = groups
         self.dist = 0
         self.n_atoms = 0
@@ -105,10 +110,9 @@ class MDstep:
         self.U_pot = 0.0
         self.dt = 0.0
         self.N_iteration = 0
-        self.alat_to_angstrom = 0.0
-        self.Ryau_to_pN = 41193.647367103644
+        self.alat_to_angstrom = 0.0  # Conversion factor from alat unit to angstrom
+        self.Ryau_to_pN = 41193.647367103644  # Conversion factor from Rydberg units to piconewtons
         self.matrix = []
-
 
     def set_mass(self, type : str, mass : float) -> None:
         '''
@@ -125,14 +129,14 @@ class MDstep:
         -----
         This method iterates over the groups in the system and adds atoms with the specified name and mass.
         '''
+        
         for gr in self.groups:
             if type in gr.type:
                 gr.atoms = np.append(gr.atoms, atom(type, mass, gr.id_group))
 
-
     def count_group(self, line : list) -> None:
         '''
-        Count the number of atoms for each group and extract the initial position.
+        Count the number of atoms for each group and read the initial position.
 
         Parameters
         ----------
@@ -141,23 +145,28 @@ class MDstep:
 
         Notes
         -----
-        This method iterates over the groups in the system, counts the number of atoms for each group, and extracts the initial position of the atoms.
+        This method iterates over the groups in the system, counts the number of atoms for each group, and reads 
+        the initial position of the atoms. It also converts the positions from lattice constant units to angstroms.
         '''
+
         atom_type = line[1] 
+
         # Check on the groups
         for gr in self.groups:
             if atom_type in gr.type:
                 gr.id_tot = np.append(gr.id_tot, int(line[0]))
+
                 # Check on the group's elements
                 for at in gr.atoms:
                     if atom_type == at.name:
                         at.N += 1
                         at.id = np.append(at.id, int(line[0]))
+
+                        # Convert positions from lattice constant units to angstroms
                         pos = np.multiply([float(line[-4]), float(line[-3]), float(line[-2])], self.alat_to_angstrom)
                         at.position_past = np.vstack([at.position_past, pos])
                         break
                 break
-
 
     def set_DOF(self) -> None:
         '''
@@ -165,13 +174,14 @@ class MDstep:
 
         Notes
         -----
-        This method iterates over the groups in the system, calculates the degrees of freedom based on the total number of atoms in the group, and adjusts it if the group's `id_group` is not equal to 0.
+        This method iterates over the groups in the system, calculates the degrees of freedom based on the total 
+        number of atoms in the group, and adjusts it if the group's `id_group` is not equal to 0.
         '''
+    
         for gr in self.groups:
             gr.DOF = 3 * len(gr.id_tot)
             if not gr.id_group == 0:
                 gr.DOF = gr.DOF - 3
-
 
     def forces(self, line : list) -> None:
         '''
@@ -184,21 +194,21 @@ class MDstep:
 
         Notes
         -----
-        This method iterates over the groups in the system, finds the corresponding atom, and adds the force to the atom and group.
+        This method iterates over the groups in the system, finds the corresponding atom, and adds the force to the 
+        atom and group.
         '''
         atom_type = int(line[1])
         # Check on the groups
         for gr in self.groups:
             if atom_type in gr.id_tot:
                 gr.force = np.vstack([gr.force, np.multiply([float(line[6]), float(line[7]), float(line[8])], self.Ryau_to_pN)])
-                
+            
                 # Check on the group's elements
                 for at in gr.atoms:
                     if atom_type in at.id:
                         at.force = np.vstack([at.force, np.multiply([float(line[6]), float(line[7]), float(line[8])], self.Ryau_to_pN)])
                         break
                 break
-
 
     def positions(self, line : list, graphs, conversion : float) -> None:
         '''
@@ -215,8 +225,9 @@ class MDstep:
 
         Notes
         -----
-        This method iterates over the groups in the system, finds the corresponding atom, and adds the position to the atom.
-        Additionally, it checks the atom type and adds positions to the RDF element into the graph istance 'graphs' (if applicable).
+        This method iterates over the groups in the system, finds the corresponding atom, and adds the position to 
+        the atom. Additionally, it checks the atom type and adds positions to the RDF element into the graph istance 
+        'graphs' (if applicable).
         '''
         atom_type = line[0] 
 
@@ -240,10 +251,10 @@ class MDstep:
                         break
                 break
         
-
     def single_frame(self) -> list:
         '''
-        Generate a list where each element represents a line in the output file, indicating the current time step and the calculated distance between two previously defined groups.
+        Generate a list where each element represents a line in the output file, indicating the current time step 
+        and the calculated distance between two previously defined groups.
 
         Returns
         -------
@@ -252,14 +263,16 @@ class MDstep:
 
         Notes
         -----
-        This method prints information about the lattice, time step, number of iterations, and potential energy in the second line of the xyz file.
-        It iterates over the groups in the system, adding information about kinetic energy, degrees of freedom, temperature, and total force.
-        At the end, it adds the coordinates, velocity, and forces of each atom using the 'generate' method of the group.
+        This method prints information about the lattice, time step, number of iterations, and potential energy in 
+        the second line of the xyz file.
+        It iterates over the groups in the system, adding information about kinetic energy, degrees of freedom, 
+        temperature, and total force.
+        At the end, it adds the coordinates, velocity, and forces of each atom using the 'generate' method of the 
+        group.
         It also calculates the distance along the z-direction of the two previously defined groups.
         '''    
         # Generate the general information of the time step
         text = [f'{self.n_atoms}', f'Lattice(Ang)=\"{self.ax[0]:.3f}, {self.ax[1]:.3f}, {self.ax[2]:.3f}, {self.ay[0]:.3f}, {self.ay[1]:.3f}, {self.ay[2]:.3f}, {self.az[0]:.3f}, {self.az[1]:.3f}, {self.az[2]:.3f}\" dt(ps)={self.dt:.6f} N={self.N_iteration} Epot(eV)={(self.U_pot / 13.60570398):.3f}']
-
 
         # Generate the information for each group  of the time step
         z_list = []
@@ -275,4 +288,3 @@ class MDstep:
         self.dist = abs(z_list[0] - z_list[1])
 
         return text
-    

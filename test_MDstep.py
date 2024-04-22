@@ -18,6 +18,7 @@ def sample_MDstep1():
     MDstep
         A fixture providing a sample instance of MDstep for testing.
     """
+
     # Create an instance of group with sample data.
     group1 = group(type=['H', 'C'], id_group=0)
     
@@ -38,6 +39,7 @@ def sample_MDstep2():
     MDstep
         A fixture providing a sample instance of MDstep for testing.
     """
+
     # Create sample instances of group with sample data.
     group1 = group(type=['H', 'C'], id_group=0)
     group2 = group(type=['Fe'], id_group=1)
@@ -64,6 +66,7 @@ def test_initialization1(sample_MDstep1):
     AssertionError
         If any of the attributes of the sample MDstep instance do not match the expected values.
     """
+
     # Verify attribute values of the sample MDstep instance.
     assert np.array_equal(sample_MDstep1.groups[0].type, ['H', 'C'])
     assert sample_MDstep1.groups[0].id_group == 0
@@ -96,6 +99,7 @@ def test_initialization2(sample_MDstep2):
     AssertionError
         If any of the attributes of the sample MDstep instance do not match the expected values.
     """
+
     # Verify attribute values of the sample MDstep instance.
     assert np.array_equal(sample_MDstep2.groups[0].type, ['H', 'C'])
     assert np.array_equal(sample_MDstep2.groups[1].type, ['Fe'])
@@ -132,7 +136,13 @@ def test_set_mass1(sample_MDstep1):
     ------
     AssertionError
         If the mass is not set correctly in the group.
+    
+    Notes
+    -----
+    This test sets the mass for atoms of specific types in the group using the 'set_mass' method. 
+    It then asserts that the mass has been set correctly in the group.
     """
+    
     # Set mass for atoms of specific types in the group.
     sample_MDstep1.set_mass('H', 1.008)
     sample_MDstep1.set_mass('C', 12.011)
@@ -157,7 +167,13 @@ def test_set_mass2(sample_MDstep2):
     ------
     AssertionError
         If the mass is not set correctly in any of the groups.
+    
+    Notes
+    -----
+    This test sets the mass for atoms of specific types in the groups using the 'set_mass' method. 
+    It then asserts that the mass has been set correctly in each group.
     """
+
     # Set mass for atoms of specific types in the groups.
     sample_MDstep2.set_mass('H', 1.008)
     sample_MDstep2.set_mass('C', 12.011)
@@ -196,6 +212,7 @@ def test_count_group1_1(sample_MDstep2):
     Then, it calls the 'count_group' method to update the storing array in the group instance.
     The test checks if the number of atoms in the group and the initial positions are set correctly.
     """
+
     # Set the mass of hydrogen and the conversion factor.
     sample_MDstep2.set_mass('H', 1.008)
     sample_MDstep2.alat_to_angstrom = 1
@@ -237,6 +254,7 @@ def test_count_group1_2(sample_MDstep2):
     Then, it calls the 'count_group' method twice to update the storing arrays in the group instance.
     The test checks if the number of atoms in the group and the initial positions are set correctly.
     """
+
     # Set the mass of hydrogen and the conversion factor.
     sample_MDstep2.set_mass('H', 1.008)
     sample_MDstep2.alat_to_angstrom = 1
@@ -280,6 +298,7 @@ def test_count_group1_2b(sample_MDstep2):
     Then, it calls the 'count_group' method twice to update the storing arrays in the group instance.
     The test checks if the number of atoms in each atom type of the group is set correctly.
     """
+
     # Set the mass of hydrogen and carbon and the conversion factor.
     sample_MDstep2.set_mass('H', 1.008)
     sample_MDstep2.set_mass('C', 12.011)
@@ -330,6 +349,7 @@ def test_count_group2_2(sample_MDstep2):
     Then, it calls the 'count_group' method twice to update the storing arrays in the group instance.
     The test checks if the number of atoms in each group and the initial positions are set correctly.
     """
+
     # Set the mass of hydrogen and iron and the conversion factor.
     sample_MDstep2.set_mass('H', 1.008)
     sample_MDstep2.set_mass('Fe', 55.845)
@@ -381,6 +401,7 @@ def test_set_DOF(sample_MDstep2):
     Then, it calls the 'set_DOF' method to calculate the degrees of freedom for each group.
     The test checks if the calculated degrees of freedom match the expected values for each group.
     """
+
     # Set mass for atoms of specific types in the groups.
     sample_MDstep2.set_mass('H', 1.008)
     sample_MDstep2.set_mass('Fe', 55.845)
@@ -437,6 +458,7 @@ def test_forces1_1(sample_MDstep2):
     After calling the 'forces' method, the test verifies if the force has been correctly added to the group
     and the corresponding atom.
     """
+
     # Set mass for atoms of specific types in the groups.
     sample_MDstep2.set_mass('H', 1.008)
 
@@ -477,6 +499,7 @@ def test_forces1_2(sample_MDstep2):
     After calling the 'forces' method, the test verifies if the force has been correctly added to the group
     and the corresponding atoms.
     """
+
     # Set mass for atoms of specific types in the groups.
     sample_MDstep2.set_mass('H', 1.008)
 
@@ -520,6 +543,7 @@ def test_forces1_2b(sample_MDstep2):
     Then, it calls the 'forces' method twice to store the forces for each atom.
     The test checks if the forces are correctly added to the group and each atom.
     """
+
     # Set mass for atoms of specific types in the groups.
     sample_MDstep2.set_mass('H', 1.008)
     sample_MDstep2.set_mass('C', 12.011)
@@ -567,6 +591,7 @@ def test_count_group2_2(sample_MDstep2):
     Then, it calls the 'forces' method twice to update the storing arrays in the group instance.
     The test checks if the force is correctly added to each group and atom.
     """
+
     # Set mass for atoms of specific types in the groups.
     sample_MDstep2.set_mass('H', 1.008)
     sample_MDstep2.set_mass('Fe', 55.845)
@@ -617,6 +642,7 @@ def test_positions_RDF_store1(sample_MDstep2):
     This test simulates the reading of a line from a file and calls the 'positions' method to store the position
     both in the atom and the RDF object. It then verifies that the position has been correctly added.
     """
+
     # Set mass for atoms of specific types in the groups.
     sample_MDstep2.set_mass('H', 1.008)
 
@@ -662,6 +688,7 @@ def test_positions_RDF_store2(sample_MDstep2):
     'positions' method to store the positions in both the atom and RDF object. Finally, it verifies that the 
     positions are correctly stored in both the atom and RDF object by comparing them with the expected positions.
     """
+
     # Set the mass for atom type 'H'
     sample_MDstep2.set_mass('H', 1.008)
 
@@ -709,6 +736,7 @@ def test_positions_RDF_store2b(sample_MDstep2):
     'positions' method to store the positions in both the atom and RDF object. Finally, it verifies that the 
     positions are correctly stored in both the atom and RDF object by comparing them with the expected positions.
     """
+
     # Set the mass for atom types 'H' and 'C'
     sample_MDstep2.set_mass('H', 1.008)
     sample_MDstep2.set_mass('C', 12.011)
@@ -762,6 +790,7 @@ def test_positions_RDF_store2_2(sample_MDstep2):
     calls the 'positions' method to store the positions in both the atom and RDF object. Finally, it verifies that 
     the positions are correctly stored in both the atom and RDF object by comparing them with the expected positions.
     """
+
     # Set the mass for atom types 'H' and 'Fe'
     sample_MDstep2.set_mass('H', 1.008)
     sample_MDstep2.set_mass('Fe', 55.845)
@@ -816,6 +845,7 @@ def test_positions_RDF_alat_store1(sample_MDstep2):
     store the position in both the atom and RDF object. Finally, it verifies that the position is correctly stored 
     in both the atom and RDF object by comparing it with the expected position.
     """
+    
     # Set the mass for the 'H' atom type
     sample_MDstep2.set_mass('H', 1.008)
     
@@ -860,6 +890,7 @@ def test_positions_RDF_alat_store2(sample_MDstep2):
     method to store the positions in both the atom and RDF object. Finally, it verifies that the positions are 
     correctly stored in both the atom and RDF object by comparing them with the expected positions.
     """
+    
     # Set the mass for the 'H' atom type
     sample_MDstep2.set_mass('H', 1.008)
     
@@ -906,6 +937,7 @@ def test_positions_RDF_alat_store2b(sample_MDstep2):
     'positions' method to store the positions in both the atom and RDF object. Finally, it verifies that the 
     positions are correctly stored in both the atom and RDF object by comparing them with the expected positions.
     """
+    
     # Set the mass for the 'H' and 'C' atom types
     sample_MDstep2.set_mass('H', 1.008)
     sample_MDstep2.set_mass('C', 12.011)
@@ -956,6 +988,7 @@ def test_positions_RDF_alat_store2_2(sample_MDstep2):
     'positions' method to store the positions in both the atom and RDF object. Finally, it verifies that the 
     positions are correctly stored in both the atom and RDF object by comparing them with the expected positions.
     """
+    
     # Set the mass for the 'H' and 'Fe' atom types
     sample_MDstep2.set_mass('H', 1.008)
     sample_MDstep2.set_mass('Fe', 55.845)
@@ -1006,6 +1039,7 @@ def test_single_frame(sample_MDstep2, monkeypatch):
     The test then calls the 'single_frame' method of the MDstep object to generate a single output frame and 
     verifies the correctness of the generated frame.
     """
+    
     # Set up attributes and groups for testing
     sample_MDstep2.n_atoms = 4
     sample_MDstep2.ax = [2, 0, 0]
