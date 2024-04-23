@@ -49,7 +49,7 @@ class graph:
         Plot the forces acting on the system in function of time.
     plot_velocity(iteration_obj):
         Plot the velocity in function of time.
-    plot_temperature():
+    plot_temperature(iteration_obj):
         Plot the temperature in function of time.
     plot_distance():
         Plot the distance between two groups in function of time.
@@ -68,7 +68,7 @@ class graph:
             Maximum value for R for the RDFs.
         atoms : list
             List of couples of atoms.
-        N : list
+        N_bin : list
             Number of bins for the RDFs.
         outdir : str
             Directory where the output files will be saved.
@@ -104,8 +104,10 @@ class graph:
 
         Notes
         -----
-        This class is designed to represent a certain type of object, providing various attributes for configuration and calculations.
+        This class is designed to represent a certain type of object, providing various attributes for 
+        configuration and calculations.
         """
+
         self.filename = filename
         self.outdir = outdir
         if not os.path.exists(self.outdir):
@@ -128,19 +130,23 @@ class graph:
         self.energy_color = ['red', 'blue', 'black']
         self.group_color = ['red', 'blue', 'green', 'yellow', 'black', 'purple']
 
-
     def graph_aesthetic(self, filename) -> None:
         '''
         Set aesthetic parameters for Matplotlib plots based on a configuration file.
+        This method reads parameters from a configuration file using the fileme in input and updates Matplotlib's 
+        default parameters accordingly. The configuration file should include specifications for graph parameters 
+        such as label sizes, tick sizes, legend font size, and colors.
 
-        This method reads parameters from a configuration file using the fileme in input and updates Matplotlib's default parameters accordingly.
-        The configuration file should include specifications for graph parameters such as label sizes, tick sizes, legend font size, and colors.
+        Parameters
+        ----------
+        filename : str
+            Name of the file.
 
         Notes:
         ------
-        This method reads the configuration file and extracts information regarding graph aesthetics, including label sizes, tick sizes, legend font size, and colors.
-        It then updates Matplotlib's default parameters to reflect the specified aesthetics.
-
+        This method reads the configuration file and extracts information regarding graph aesthetics, including 
+        label sizes, tick sizes, legend font size, and colors. It then updates Matplotlib's default parameters to 
+        reflect the specified aesthetics.
         The configuration file should contain lines specifying the following:
         - axes.labelsize: Label size for axes.
         - xtick.labelsize: Label size for x-axis ticks.
@@ -153,8 +159,10 @@ class graph:
         - Tot_energy_color: Color for total energy plot.
         - Group_color: Colors for different groups in force and temperature plots
         '''
+
         param = [16, 14, 14, 14] # Default values for label sizes and legend font size
         config = ConfigParser()
+
         if filename == False:
             config.read('Codes/Setup_graph.ini')
         else:
@@ -223,7 +231,6 @@ class graph:
         parameters = {'axes.labelsize': param[0], 'xtick.labelsize': param[1], 'ytick.labelsize': param[2], 'legend.fontsize': param[3]}
         plt.rcParams.update(parameters)
 
-
     def extracting_values(self, step_obj) -> None:
         """
         Extract and store relevant values from the iteration object.
@@ -236,30 +243,45 @@ class graph:
         Notes
         -----
         This method extracts and stores forces (`Ftot`), kinetic energy (`Ek`), potential energy (`Up`),
-        total force (`F`), distances between the groups defined in the setup (`distances`) and simulation time (`time`) from the provided `step_obj` for each group in the system.
+        total force (`F`), distances between the groups defined in the setup (`distances`) and simulation time 
+        (`time`) from the provided `step_obj` for each group in the system.
         """
+
         F = np.array([], dtype=float).reshape(0, 3)
         self.Ek = np.append(self.Ek, 0)
+
+        # Loop through each group in the step_obj
         for gr in step_obj.groups:
+            # Append the total force (Ftot) for the current group to the F array
             F = np.append(F, gr.Ftot.reshape(1,3), axis=0)
+        
+            # Increment the kinetic energy (Ek) for this iteration by the kinetic energy of the current group
             self.Ek[-1] += gr.Ek
-                        
+                    
+        # Append the potential energy (Up) for this iteration to the Up array
         self.Up = np.append(self.Up, step_obj.U_pot)
+    
+        # Append the distance between the specified groups for this iteration to the distances array
         self.distances = np.append(self.distances, step_obj.dist)
+        
+        # Append the total force (F) for this iteration to the F array
         self.F = np.append(self.F, np.sum(F, axis=0).reshape(1, 3), axis=0)
+        
+        # Append the simulation time (time) for this iteration to the time array
         self.time = np.append(self.time, step_obj.dt * step_obj.N_iteration)
         
-
     def plot_energy(self) -> None:
         """
         Plot the graph of kinetic energy and potential energy in function of time.
-
-        Generates a plot of the kinetic energy and potential energy as a function of time and saves it as an image file named 'E_{filename}.pdf'.
+        Generates a plot of the kinetic energy and potential energy as a function of time and saves it as an image 
+        file named 'E_{filename}.pdf'.
 
         Notes
         -----
-        This method uses Matplotlib to create a plot of the kinetic energy and potential energy over time. The plot is saved as an image file in PDF format.
+        This method uses Matplotlib to create a plot of the kinetic energy and potential energy over time. The 
+        plot is saved as an image file in PDF format.
         """
+
         fig = plt.figure(figsize=(10, 6.18033988769))
         axE = fig.add_subplot(1, 1, 1)
         axU = axE.twinx()
@@ -291,7 +313,6 @@ class graph:
         filepath = os.path.join(self.outdir, f'E_{self.filename}.pdf')
         plt.savefig(filepath, bbox_inches='tight', dpi=150)
 
-
     def plot_forces(self, step_obj) -> None:
         """
         Plot the forces acting on the system in function of time.
@@ -303,8 +324,10 @@ class graph:
 
         Notes
         -----
-        This method generates a plot of the forces (components along x, y, and z acting on the system over time) and saves it as an image file named 'F_{filename}.pdf'.
+        This method generates a plot of the forces (components along x, y, and z acting on the system over time) 
+        and saves it as an image file named 'F_{filename}.pdf'.
         """
+
         fig = plt.figure(figsize=(10, 3*6.18033988769 +2))
         
         #ax = fig.add_subplot(1, 1, 1)
@@ -382,7 +405,6 @@ class graph:
         filepath = os.path.join(self.outdir, f'F_{self.filename}.pdf')
         plt.savefig(filepath, bbox_inches='tight', dpi=150)
 
-
     def plot_velocity(self, step_obj) -> None:
         """
         Plot the bulk velocity of the groups in function of time.
@@ -394,8 +416,10 @@ class graph:
 
         Notes
         -----
-        This method generates a plot of the bulk velocity (components along x, y, and z acting on the system over time) and saves it as an image file named 'F_{filename}.pdf'.
+        This method generates a plot of the bulk velocity (components along x, y, and z acting on the system over 
+        time) and saves it as an image file named 'F_{filename}.pdf'.
         """
+
         fig = plt.figure(figsize=(10, 3*6.18033988769 +2))
         axX = fig.add_subplot(3, 1, 1)
         axZ = fig.add_subplot(3, 1, 3)
@@ -458,7 +482,6 @@ class graph:
         filepath = os.path.join(self.outdir, f'V_{self.filename}.png')
         plt.savefig(filepath, bbox_inches='tight', dpi=150)
 
-
     def plot_temperature(self, step_obj) -> None:
         """
         Plot the temperature of the system in function of time.
@@ -470,9 +493,10 @@ class graph:
 
         Notes
         -----
-        This method generates a plot of the temperature acting on the system over time
-        and saves it as an image file named 'T_{filename}.pdf'.
+        This method generates a plot of the temperature acting on the system over time and saves it as an image 
+        file named 'T_{filename}.pdf'.
         """
+
         fig = plt.figure(figsize=(10, 6.18033988769))
         
         ax = fig.add_subplot(1, 1, 1)
@@ -497,7 +521,6 @@ class graph:
         filepath = os.path.join(self.outdir, f'T_{self.filename}.pdf')
         plt.savefig(filepath, bbox_inches='tight', dpi=150)
 
-
     def plot_distance(self) -> None:
         """
         Plot the distance between the two defined groups in function of time.
@@ -509,8 +532,8 @@ class graph:
 
         Notes
         -----
-        This method generates a plot of the distance between the two defined groups over time
-        and saves it as an image file named 'Dist_{filename}.pdf'.
+        This method generates a plot of the distance between the two defined groups over time and saves it as an 
+        image file named 'Dist_{filename}.pdf'.
         """
         fig = plt.figure(figsize=(10, 6.18033988769))
         

@@ -27,6 +27,7 @@ def sample_graph():
         - N_bin: [100, 120]
         - outdir: "output"
     """
+
     filename = "test_file"
     Rmax = [5.0, 6.0]
     atoms = [['A', 'B'], ['C', 'D']]
@@ -103,6 +104,7 @@ def test_graph_aesthetic(sample_graph):
     -----
     This test checks if the 'graph_aesthetic' method correctly reads and updates the default parameters based on the configuration file.
     """
+
     sample_graph.graph_aesthetic('Test/files/graph_aesthetic.ini')
 
     assert plt.rcParams['axes.labelsize'] == 20.0
@@ -134,6 +136,7 @@ def test_graph_aesthetic_default(sample_graph):
     -----
     This test checks if the 'graph_aesthetic' method correctly reads and updates the default parameters based on the default configuration file.
     """
+
     sample_graph.graph_aesthetic(False)
 
     assert plt.rcParams['axes.labelsize'] == 16.0
@@ -192,6 +195,7 @@ def test_extracting_values_Force1():
     with a mock instance of 'MDstep' containing these groups. Finally, the test verifies that the total force 
     values calculated and stored by the 'extracting_values' method match the expected values.
     """
+
     # Create instances of 'group' class
     group1 = group(type=['H', 'C'], id_group=0)
     group2 = group(type=['Fe'], id_group=1)
@@ -231,6 +235,7 @@ def test_extracting_values_Force2():
     these groups. Finally, the test verifies that the total force values calculated and stored by the 
     'extracting_values' method match the expected values.
     """
+
     group1 = group(type=['H', 'C'], id_group=0)
     group2 = group(type=['Fe'], id_group=1)
     
@@ -267,6 +272,7 @@ def test_extracting_values_Ek():
     with a mock instance of 'MDstep' containing these groups. Finally, the test verifies that the total kinetic energy 
     value calculated and stored by the 'extracting_values' method matches the expected value.
     """
+
     group1 = group(type=['H', 'C'], id_group=0)
     group2 = group(type=['Fe'], id_group=1)
     
@@ -305,6 +311,7 @@ def test_extracting_values_Upot():
     these groups, along with a simulated potential energy value. Finally, the test verifies that the potential energy
     value calculated and stored by the 'extracting_values' method matches the expected value.
     """
+
     group1 = group(type=['H', 'C'], id_group=0)
     group2 = group(type=['Fe'], id_group=1)
     
@@ -341,6 +348,7 @@ def test_extracting_values_time():
     these groups, along with simulated time-related values. Finally, the test verifies that the time value
     calculated and stored by the 'extracting_values' method matches the expected value.
     """
+    
     group1 = group(type=['H', 'C'], id_group=0)
     group2 = group(type=['Fe'], id_group=1)
     
