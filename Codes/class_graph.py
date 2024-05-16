@@ -55,7 +55,6 @@ class graph:
         Plot the distance between two groups in function of time.
     """
 
-
     def __init__(self, filename : str, Rmax : list, atoms : list, N_bin : list, outdir : str): 
         """
         Initialize an instance of the 'Class_Name' class.
@@ -106,6 +105,8 @@ class graph:
         -----
         This class is designed to represent a certain type of object, providing various attributes for 
         configuration and calculations.
+        During initialization, several parameters are assigned. Additionally, the 'type' list is filled 
+        with instances of RDF class.
         """
 
         self.filename = filename
@@ -120,8 +121,8 @@ class graph:
         self.Ek = []
         self.Up = []
         self.T = []
-        self.F = np.array([], dtype=float).reshape(0, 3)
         self.distances = []
+        self.F = np.array([], dtype=float).reshape(0, 3)
 
         self.time = []
 
@@ -130,17 +131,17 @@ class graph:
         self.energy_color = ['red', 'blue', 'black']
         self.group_color = ['red', 'blue', 'green', 'yellow', 'black', 'purple']
 
-    def graph_aesthetic(self, filename) -> None:
+    def graph_aesthetic(self, filename: str) -> None:
         '''
         Set aesthetic parameters for Matplotlib plots based on a configuration file.
-        This method reads parameters from a configuration file using the fileme in input and updates Matplotlib's 
+        This method reads parameters from a configuration file using the input filename and updates Matplotlib's 
         default parameters accordingly. The configuration file should include specifications for graph parameters 
         such as label sizes, tick sizes, legend font size, and colors.
 
         Parameters
         ----------
         filename : str
-            Name of the file.
+            Name of the configuration file.
 
         Notes:
         ------
@@ -148,22 +149,24 @@ class graph:
         label sizes, tick sizes, legend font size, and colors. It then updates Matplotlib's default parameters to 
         reflect the specified aesthetics.
         The configuration file should contain lines specifying the following:
-        - axes.labelsize: Label size for axes.
-        - xtick.labelsize: Label size for x-axis ticks.
-        - ytick.labelsize: Label size for y-axis ticks.
-        - legend.fontsize: Font size for legend.
-        - RDF_color: Color for RDF plot.
-        - Energy_sum: Flag indicating whether to plot total energy.
-        - K_energy_color: Color for kinetic energy plot.
-        - U_energy_color: Color for potential energy plot.
-        - Tot_energy_color: Color for total energy plot.
-        - Group_color: Colors for different groups in force and temperature plots
+        - GRAPH VALUES: Section for graph parameter values.
+            - axes.labelsize: Label size for axes.
+            - xtick.labelsize: Label size for x-axis ticks.
+            - ytick.labelsize: Label size for y-axis ticks.
+            - legend.fontsize: Font size for legend.
+        - COLORS: Section for color specifications.
+            - RDF_color: Color for RDF plot.
+            - Energy_sum: Flag indicating whether to plot total energy.
+            - K_energy_color: Color for kinetic energy plot.
+            - U_energy_color: Color for potential energy plot.
+            - Tot_energy_color: Color for total energy plot.
+            - Group_color: Colors for different groups in force and temperature plots
         '''
 
-        param = [16, 14, 14, 14] # Default values for label sizes and legend font size
+        param = [16, 14, 14, 14]  # Default values for label sizes and legend font size
         config = ConfigParser()
 
-        if filename == False:
+        if not filename:
             config.read('Codes/Setup_graph.ini')
         else:
             if os.path.exists(filename):
@@ -173,28 +176,28 @@ class graph:
                 # Print an error message and exit if the file doesn't exist
                 print("File not found")
                 exit(0)
-        
-        #Setup graph values
+
+        # Setup graph values
         try:
-             param[0] = config['GRAPH VALUES']['axes.labelsize']
+            param[0] = config.getint('GRAPH VALUES', 'axes.labelsize')
         except:
-             pass
-        
+            pass
+
         try:
-             param[1] = config['GRAPH VALUES']['xtick.labelsize']
+            param[1] = config.getint('GRAPH VALUES', 'xtick.labelsize')
         except:
-             pass
-        
+            pass
+
         try:
-             param[2] = config['GRAPH VALUES']['ytick.labelsize']
+            param[2] = config.getint('GRAPH VALUES', 'ytick.labelsize')
         except:
-             pass
-        
+            pass
+
         try:
-             param[3] = config['GRAPH VALUES']['legend.fontsize']
+            param[3] = config.getint('GRAPH VALUES', 'legend.fontsize')
         except:
-             pass
-        
+            pass
+
         # Define colors
         try:
             for rdf in self.type:
@@ -226,7 +229,7 @@ class graph:
             self.group_color = config['COLORS']['Group_color'].split()
         except:
             pass
-        
+
         # Update Matplotlib's default parameters
         parameters = {'axes.labelsize': param[0], 'xtick.labelsize': param[1], 'ytick.labelsize': param[2], 'legend.fontsize': param[3]}
         plt.rcParams.update(parameters)
@@ -282,17 +285,25 @@ class graph:
         plot is saved as an image file in PDF format.
         """
 
+        # Create a figure with a specified size
         fig = plt.figure(figsize=(10, 6.18033988769))
+        # Add a subplot to the figure
         axE = fig.add_subplot(1, 1, 1)
+        # Create a twin axes sharing the x-axis with axE
         axU = axE.twinx()
         
-        axU.plot(self.time[1:], self.Up[1:] * 0.001, color = self.energy_color[1], label='Potential energy')
-        axE.plot(self.time[1:], self.Ek[1:], color = self.energy_color[0],  label='Kinetic energy')
+        # Plot potential energy against time on axU
+        axU.plot(self.time[1:], self.Up[1:] * 0.001, color=self.energy_color[1], label='Potential energy')
+        # Plot kinetic energy against time on axE
+        axE.plot(self.time[1:], self.Ek[1:], color=self.energy_color[0], label='Kinetic energy')
+        # Plot total energy if specified
         if self.all_energy:
-            axU.plot(self.time[1:], (self.Up[1:] + self.Ek[1:]) * 0.001, color = self.energy_color[2], label='Total energy')
+            axU.plot(self.time[1:], (self.Up[1:] + self.Ek[1:]) * 0.001, color=self.energy_color[2], label='Total energy')
+        
+        # Set labels and legends for axE
         axE.set_xlabel('t (ps)')
         axE.set_ylabel('E$_k$ (eV)')
-        axE.legend(loc = 'upper left')
+        axE.legend(loc='upper left')
         xticks = axE.get_xticks()
         axE.set_xticks(xticks)
         axE.set_xticklabels([str(int(tick)) for tick in xticks])
@@ -303,19 +314,21 @@ class graph:
         axE.set_yticklabels([str(int(tick)) for tick in yticks])
         axE.yaxis.set_major_formatter(ticker.FormatStrFormatter('%.2f'))
 
+        # Set labels and legends for axU
         axU.set_ylabel('U (keV)')
-        axU.legend(loc = 'lower right')
+        axU.legend(loc='lower right')
         yticks = axU.get_yticks()
         axU.set_yticks(yticks)
         axU.set_yticklabels([str(int(tick)) for tick in yticks])
         axU.yaxis.set_major_formatter(ticker.FormatStrFormatter('%.4f'))
 
+        # Save the plot as a PDF file
         filepath = os.path.join(self.outdir, f'E_{self.filename}.pdf')
         plt.savefig(filepath, bbox_inches='tight', dpi=150)
 
     def plot_forces(self, step_obj) -> None:
         """
-        Plot the forces acting on the system in function of time.
+        Plot the forces acting on the system over time.
 
         Parameters
         ----------
@@ -324,90 +337,70 @@ class graph:
 
         Notes
         -----
-        This method generates a plot of the forces (components along x, y, and z acting on the system over time) 
+        This method generates a plot of the forces (components along x, y, and z) acting on the system over time 
         and saves it as an image file named 'F_{filename}.pdf'.
         """
 
-        fig = plt.figure(figsize=(10, 3*6.18033988769 +2))
-        
-        #ax = fig.add_subplot(1, 1, 1)
-        Fx = []
-        Fy = []
-        Fz = []
-        for f in self.F:
-                Fx = np.append(Fx, f[0])
-                Fy = np.append(Fy, f[1])
-                Fz = np.append(Fz, f[2])
+        # Create a figure with a specified size
+        fig = plt.figure(figsize=(10, 3*6.18033988769 + 2))
 
+        # Add subplots for forces along x, y, and z directions
         axX = fig.add_subplot(3, 1, 1)
-        axX.plot(self.time, Fx * 0.001, color = self.group_color[0], label='F$^{tot}_x$')
-        
-        axZ = fig.add_subplot(3, 1, 3)
-        axZ.plot(self.time, Fz * 0.001, color = self.group_color[0],  label='F$^{tot}_z$')
-
         axY = fig.add_subplot(3, 1, 2)
-        axY.plot(self.time, Fy * 0.001, color = self.group_color[0],  label='F$^{tot}_y$')
+        axZ = fig.add_subplot(3, 1, 3)
 
+        # Plot forces for each group separately with transparency
         for i, gr in enumerate(step_obj.groups):
-            Fx = []
-            Fy = []
-            Fz = []
-            for f in gr.Ftot_store:
-                Fx = np.append(Fx, f[0])
-                Fy = np.append(Fy, f[1])
-                Fz = np.append(Fz, f[2])
-            axX.plot(self.time, Fx * 0.001, color = self.group_color[i+1], alpha = 0.5, label=f'{gr.id_group}$_x$')
-            axY.plot(self.time, Fy * 0.001, color = self.group_color[i+1], alpha = 0.5, label=f'{gr.id_group}$_y$')
-            axZ.plot(self.time, Fz * 0.001, color = self.group_color[i+1], alpha = 0.5, label=f'{gr.id_group}$_z$')
+            #Fx = []
+            # Extract forces for the current group and store them in separate lists
+            print(gr.Ftot_store[:, 0])
+            Fy = gr.Ftot_store[:, 1]
+            Fz = gr.Ftot_store[:, 2]
 
-        axX.set_xlabel('t (ps)')
+            # Plot forces for the current group along x, y, and z directions with transparency
+            axX.plot(self.time, gr.Ftot_store[:, 0] * 0.001, color=self.group_color[i+1], alpha=0.5, label=f'{gr.id_group}$_x$')
+            axY.plot(self.time, gr.Ftot_store[:, 1] * 0.001, color=self.group_color[i+1], alpha=0.5, label=f'{gr.id_group}$_y$')
+            axZ.plot(self.time, gr.Ftot_store[:, 2] * 0.001, color=self.group_color[i+1], alpha=0.5, label=f'{gr.id_group}$_z$')
+
+        # Extract forces from self.F and store them in separate lists
+        print(self.F[:, 0])
+        Fy = self.F[:, 1]
+        Fz = self.F[:, 2]
+
+        # Plot total forces along x, y, and z directions
+        axX.plot(self.time, self.F[:, 0] * 0.001, color=self.group_color[0], label='F$^{tot}_x$')
+        axY.plot(self.time, self.F[:, 1] * 0.001, color=self.group_color[0], label='F$^{tot}_y$')
+        axZ.plot(self.time, self.F[:, 2] * 0.001, color=self.group_color[0], label='F$^{tot}_z$')
+
+        # Set common x-axis label and grid for all subplots
+        for ax in [axX, axY, axZ]:
+            ax.set_xlabel('t (ps)')
+            ax.grid()
+            ax.legend()
+            # Set x-axis ticks and their format
+            xticks = ax.get_xticks()
+            ax.set_xticks(xticks)
+            ax.set_xticklabels([str(int(tick)) for tick in xticks])
+            ax.xaxis.set_major_formatter(ticker.FormatStrFormatter('%.2f'))
+            # Set the limits and format for y-axis ticks
+            ax.set_xlim(min(self.time)-0.04, max(self.time)+0.04)
+            yticks = ax.get_yticks()
+            ax.set_yticks(yticks)
+            ax.set_yticklabels([str(int(tick)) for tick in yticks])
+            ax.yaxis.set_major_formatter(ticker.FormatStrFormatter('%.2f'))
+
+        # Set y-axis labels for each subplot
         axX.set_ylabel('F$_x$ (nN)')
-        axX.grid()
-        axX.legend()
-        xticks = axX.get_xticks()
-        axX.set_xticks(xticks)
-        axX.set_xticklabels([str(int(tick)) for tick in xticks])
-        axX.xaxis.set_major_formatter(ticker.FormatStrFormatter('%.2f'))
-        axX.set_xlim(min(self.time)-0.04, max(self.time)+0.04)
-        yticks = axX.get_yticks()
-        axX.set_yticks(yticks)
-        axX.set_yticklabels([str(int(tick)) for tick in yticks])
-        axX.yaxis.set_major_formatter(ticker.FormatStrFormatter('%.2f'))
-
-        axY.set_xlabel('t (ps)')
         axY.set_ylabel('F$_y$ (nN)')
-        axY.grid()
-        axY.legend()
-        xticks = axY.get_xticks()
-        axY.set_xticks(xticks)
-        axY.set_xticklabels([str(int(tick)) for tick in xticks])
-        axY.xaxis.set_major_formatter(ticker.FormatStrFormatter('%.2f'))
-        axY.set_xlim(min(self.time)-0.04, max(self.time)+0.04)
-        yticks = axY.get_yticks()
-        axY.set_yticks(yticks)
-        axY.set_yticklabels([str(int(tick)) for tick in yticks])
-        axY.yaxis.set_major_formatter(ticker.FormatStrFormatter('%.2f'))
-
-        axZ.set_xlabel('t (ps)')
         axZ.set_ylabel('F$_z$ (nN)')
-        axZ.grid()
-        axZ.legend()
-        xticks = axZ.get_xticks()
-        axZ.set_xticks(xticks)
-        axZ.set_xticklabels([str(int(tick)) for tick in xticks])
-        axZ.xaxis.set_major_formatter(ticker.FormatStrFormatter('%.2f'))
-        axZ.set_xlim(min(self.time)-0.04, max(self.time)+0.04)
-        yticks = axZ.get_yticks()
-        axZ.set_yticks(yticks)
-        axZ.set_yticklabels([str(int(tick)) for tick in yticks])
-        axZ.yaxis.set_major_formatter(ticker.FormatStrFormatter('%.2f'))
-        
+
+        # Save the plot as a PDF file
         filepath = os.path.join(self.outdir, f'F_{self.filename}.pdf')
         plt.savefig(filepath, bbox_inches='tight', dpi=150)
 
     def plot_velocity(self, step_obj) -> None:
         """
-        Plot the bulk velocity of the groups in function of time.
+        Plot the bulk velocity of the groups over time.
 
         Parameters
         ----------
@@ -416,75 +409,53 @@ class graph:
 
         Notes
         -----
-        This method generates a plot of the bulk velocity (components along x, y, and z acting on the system over 
-        time) and saves it as an image file named 'F_{filename}.pdf'.
+        This method generates a plot of the bulk velocity (components along x, y, and z) of the groups over time 
+        and saves it as an image file named 'V_{filename}.pdf'.
         """
 
-        fig = plt.figure(figsize=(10, 3*6.18033988769 +2))
-        axX = fig.add_subplot(3, 1, 1)
-        axZ = fig.add_subplot(3, 1, 3)
-        axY = fig.add_subplot(3, 1, 2)
-
-        for i, gr in enumerate(step_obj.groups):
-            Vx = []
-            Vy = []
-            Vz = []
-            for v in gr.Vtot_store:
-                Vx = np.append(Vx, v[0])
-                Vy = np.append(Vy, v[1])
-                Vz = np.append(Vz, v[2])
-            axX.plot(self.time[1:], Vx, color = self.group_color[i+1], alpha = 0.5, label=f'{gr.id_group}$_x$')
-            axY.plot(self.time[1:], Vy, color = self.group_color[i+1], alpha = 0.5, label=f'{gr.id_group}$_y$')
-            axZ.plot(self.time[1:], Vz, color = self.group_color[i+1], alpha = 0.5, label=f'{gr.id_group}$_z$')
-
-        axX.set_xlabel('t (ps)')
-        axX.set_ylabel(r'V$_x$ ($\AA$/ps)')
-        axX.grid()
-        axX.legend()
-        xticks = axX.get_xticks()
-        axX.set_xticks(xticks)
-        axX.set_xticklabels([str(int(tick)) for tick in xticks])
-        axX.xaxis.set_major_formatter(ticker.FormatStrFormatter('%.2f'))
-        axX.set_xlim(min(self.time)-0.04, max(self.time)+0.04)
-        yticks = axX.get_yticks()
-        axX.set_yticks(yticks)
-        axX.set_yticklabels([str(int(tick)) for tick in yticks])
-        axX.yaxis.set_major_formatter(ticker.FormatStrFormatter('%.2f'))
-
-        axY.set_xlabel('t (ps)')
-        axY.set_ylabel(r'V$_y$ ($\AA$/ps)')
-        axY.grid()
-        axY.legend()
-        xticks = axY.get_xticks()
-        axY.set_xticks(xticks)
-        axY.set_xticklabels([str(int(tick)) for tick in xticks])
-        axY.xaxis.set_major_formatter(ticker.FormatStrFormatter('%.2f'))
-        axY.set_xlim(min(self.time)-0.04, max(self.time)+0.04)
-        yticks = axY.get_yticks()
-        axY.set_yticks(yticks)
-        axY.set_yticklabels([str(int(tick)) for tick in yticks])
-        axY.yaxis.set_major_formatter(ticker.FormatStrFormatter('%.2f'))
-
-        axZ.set_xlabel('t (ps)')
-        axZ.set_ylabel(r'V$_z$ ($\AA$/ps)')
-        axZ.grid()
-        axZ.legend()
-        xticks = axZ.get_xticks()
-        axZ.set_xticks(xticks)
-        axZ.set_xticklabels([str(int(tick)) for tick in xticks])
-        axZ.xaxis.set_major_formatter(ticker.FormatStrFormatter('%.2f'))
-        axZ.set_xlim(min(self.time)-0.04, max(self.time)+0.04)
-        yticks = axZ.get_yticks()
-        axZ.set_yticks(yticks)
-        axZ.set_yticklabels([str(int(tick)) for tick in yticks])
-        axZ.yaxis.set_major_formatter(ticker.FormatStrFormatter('%.2f'))
+        # Create a figure with a specified size
+        fig = plt.figure(figsize=(10, 3*6.18033988769 + 2))
         
-        filepath = os.path.join(self.outdir, f'V_{self.filename}.png')
+        # Add subplots for velocities along x, y, and z directions
+        axX = fig.add_subplot(3, 1, 1)
+        axY = fig.add_subplot(3, 1, 2)
+        axZ = fig.add_subplot(3, 1, 3)
+
+        # Plot velocities for each group separately with transparency
+        for i, gr in enumerate(step_obj.groups):
+            axX.plot(self.time[1:], gr.Vtot_store[:, 0], color=self.group_color[i+1], alpha=0.5, label=f'{gr.id_group}$_x$')
+            axY.plot(self.time[1:], gr.Vtot_store[:, 1], color=self.group_color[i+1], alpha=0.5, label=f'{gr.id_group}$_y$')
+            axZ.plot(self.time[1:], gr.Vtot_store[:, 2], color=self.group_color[i+1], alpha=0.5, label=f'{gr.id_group}$_z$')
+
+        # Set common x-axis label and grid for all subplots
+        for ax in [axX, axY, axZ]:
+            ax.set_xlabel('t (ps)')
+            ax.grid()
+            ax.legend()
+            # Set x-axis ticks and their format
+            xticks = ax.get_xticks()
+            ax.set_xticks(xticks)
+            ax.set_xticklabels([str(int(tick)) for tick in xticks])
+            ax.xaxis.set_major_formatter(ticker.FormatStrFormatter('%.2f'))
+            # Set the limits and format for y-axis ticks
+            ax.set_xlim(min(self.time)-0.04, max(self.time)+0.04)
+            yticks = ax.get_yticks()
+            ax.set_yticks(yticks)
+            ax.set_yticklabels([str(int(tick)) for tick in yticks])
+            ax.yaxis.set_major_formatter(ticker.FormatStrFormatter('%.2f'))
+
+        # Set y-axis labels for each subplot
+        axX.set_ylabel(r'V$_x$ ($\AA$/ps)')
+        axY.set_ylabel(r'V$_y$ ($\AA$/ps)')
+        axZ.set_ylabel(r'V$_z$ ($\AA$/ps)')
+
+        # Save the plot as a PDF file
+        filepath = os.path.join(self.outdir, f'V_{self.filename}.pdf')
         plt.savefig(filepath, bbox_inches='tight', dpi=150)
 
     def plot_temperature(self, step_obj) -> None:
         """
-        Plot the temperature of the system in function of time.
+        Plot the temperature of the system over time.
 
         Parameters
         ----------
@@ -493,66 +464,83 @@ class graph:
 
         Notes
         -----
-        This method generates a plot of the temperature acting on the system over time and saves it as an image 
-        file named 'T_{filename}.pdf'.
+        This method generates a plot of the temperature over time for the system and saves it as an image file named 
+        'T_{filename}.pdf'.
         """
 
+        # Create a figure with a specified size
         fig = plt.figure(figsize=(10, 6.18033988769))
         
+        # Add a subplot for temperature
         ax = fig.add_subplot(1, 1, 1)
-        ax.plot(self.time[1:], self.T[1:], color = self.group_color[0], label='T$^{tot}$')
+                
+        # Plot temperature for each group separately with transparency
         for i, gr in enumerate(step_obj.groups):
-            ax.plot(self.time[1:], gr.T[1:], color = self.group_color[i+1], alpha = 0.5, label=f'G. {gr.id_group}')
+            ax.plot(self.time[1:], gr.T[1:], color=self.group_color[i+1], alpha=0.5, label=f'G. {gr.id_group}')
+        
+        # Plot total temperature over time
+        ax.plot(self.time[1:], self.T[1:], color=self.group_color[0], label='T$^{tot}$')
 
+        # Set labels, legend, and grid for the plot
         ax.set_xlabel('t (ps)')
         ax.set_ylabel('T (K)')
         ax.grid()
-        ax.legend(loc = 'upper left')
+        ax.legend(loc='upper left')
+        
+        # Set x-axis ticks and format
         xticks = ax.get_xticks()
         ax.set_xticks(xticks)
         ax.set_xticklabels([str(int(tick)) for tick in xticks])
         ax.xaxis.set_major_formatter(ticker.FormatStrFormatter('%.2f'))
         ax.set_xlim(min(self.time)-0.04, max(self.time)+0.04)
+        
+        # Set y-axis ticks and format
         yticks = ax.get_yticks()
         ax.set_yticks(yticks)
         ax.set_yticklabels([str(int(tick)) for tick in yticks])
         ax.yaxis.set_major_formatter(ticker.FormatStrFormatter('%.2f'))
         
+        # Save the plot as a PDF file
         filepath = os.path.join(self.outdir, f'T_{self.filename}.pdf')
         plt.savefig(filepath, bbox_inches='tight', dpi=150)
 
     def plot_distance(self) -> None:
         """
-        Plot the distance between the two defined groups in function of time.
-
-        Parameters
-        ----------
-        step_obj : MDstep
-            An instance of the `MDstep` class containing simulation data.
+        Plot the distance between the two defined groups over time.
 
         Notes
         -----
         This method generates a plot of the distance between the two defined groups over time and saves it as an 
         image file named 'Dist_{filename}.pdf'.
         """
+
+        # Create a figure with a specified size
         fig = plt.figure(figsize=(10, 6.18033988769))
         
+        # Add a subplot for distance
         ax = fig.add_subplot(1, 1, 1)
-        ax.plot(self.time, self.distances, color = self.RDF_color)
+        
+        # Plot distance over time
+        ax.plot(self.time, self.distances, color=self.RDF_color)
 
+        # Set labels, grid, and formatting for the plot
         ax.set_xlabel('t (ps)')
         ax.set_ylabel(r'd ($\AA$)')
-
         ax.grid()
+        
+        # Set x-axis ticks and format
         xticks = ax.get_xticks()
         ax.set_xticks(xticks)
         ax.set_xticklabels([str(int(tick)) for tick in xticks])
         ax.xaxis.set_major_formatter(ticker.FormatStrFormatter('%.2f'))
         ax.set_xlim(min(self.time)-0.04, max(self.time)+0.04)
+        
+        # Set y-axis ticks and format
         yticks = ax.get_yticks()
         ax.set_yticks(yticks)
         ax.set_yticklabels([str(int(tick)) for tick in yticks])
         ax.yaxis.set_major_formatter(ticker.FormatStrFormatter('%.2f'))
         
+        # Save the plot as a PDF file
         filepath = os.path.join(self.outdir, f'Dist_{self.filename}.pdf')
         plt.savefig(filepath, bbox_inches='tight', dpi=150)
