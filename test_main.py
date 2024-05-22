@@ -20,12 +20,11 @@ def sample_MDstep():
 
 
 # test config -----------------------------------------------------------------------------------------------------
-    
+
 def test_configuration():
     """
-    Test case for the 'setup' function.
-
-    This test checks if the 'setup' function correctly updates values from the setup file.
+    Test case for the 'configuration' function.
+    This test checks if the 'configuration' function correctly updates values from the setup file.
 
     Raises
     ------
@@ -34,7 +33,7 @@ def test_configuration():
 
     Notes
     -----
-    This test case verifies the behavior of the 'setup' function by testing its ability to correctly
+    This test case verifies the behavior of the 'configuration' function by testing its ability to correctly
     read values from the setup file. It uses the 'mocked_input' fixture to simulate user input
     for reading the setup file. The test checks various aspects including filename, output directory,
     file paths, atom groups, distance switches, and parameters for radial distribution functions (RDF).
@@ -48,7 +47,7 @@ def test_configuration():
     assert outdir == 'Test/output'
     assert filepath == 'Test/file/test_file'
 
-    # Testing the groups
+    # Testing the atom groups
     assert groups[0].id_group == '0'
     assert groups[0].type == ['H', 'C', 'P', 'O']
     assert groups[1].id_group == '1'
@@ -69,14 +68,13 @@ def test_configuration():
     assert np.array_equal(Rmax, [7, 6])
     assert np.array_equal(N, [500, 400])
 
-    #Testing the reading of the aesthetic configuration file
+    # Testing the reading of the aesthetic configuration file
     assert aesthetic_file == 'Setup_graph.txt'
 
 def test_configuration_default():
     """
-    Test case for the 'setup' function.
-
-    This test checks if the 'setup' function correctly updates values from the setup file.
+    Test case for the 'configuration' function with default setup file.
+    This test checks if the 'configuration' function correctly updates values from the default setup file.
 
     Raises
     ------
@@ -85,13 +83,12 @@ def test_configuration_default():
 
     Notes
     -----
-    This test case verifies the behavior of the 'setup' function by testing its ability to correctly
-    read values from the setup file. It uses the 'mocked_input' fixture to simulate user input
-    for reading the setup file. The test checks various aspects including filename, output directory,
+    This test case verifies the behavior of the 'configuration' function by testing its ability to correctly
+    read values from the default setup file. It checks various aspects including filename, output directory,
     file paths, atom groups, distance switches, and parameters for radial distribution functions (RDF).
     """
 
-    # Calling the 'configuration' function to read setup values
+    # Calling the 'configuration' function to read setup values from the default setup file
     filename, outdir, Rmax, atoms, N, groups, filepath, aesthetic_file = configuration('Test/files/Setup_default.ini')
 
     # Asserting filename, output directory, and file paths
@@ -99,7 +96,7 @@ def test_configuration_default():
     assert outdir == 'Test/output'
     assert filepath == 'Test/file/test_file'
 
-    # Testing the groups
+    # Testing the atom groups
     assert groups[0].id_group == '0'
     assert groups[0].type == ['H', 'C', 'P', 'O']
     assert groups[1].id_group == '1'
@@ -120,7 +117,7 @@ def test_configuration_default():
     assert np.array_equal(Rmax, [7, 6])
     assert np.array_equal(N, [500, 400])
 
-    #Testing the reading of the aesthetic configuration file
+    # Testing the reading of the aesthetic configuration file
     assert aesthetic_file == False
 
 
@@ -156,38 +153,38 @@ def test_preamble(sample_MDstep):
         preamble(file, sample_MDstep)
 
     # Verify updated attributes
-    assert sample_MDstep.n_atoms == 6
-    assert sample_MDstep.n_type == 3
-    assert sample_MDstep.alat_to_angstrom == 0.529177249
-    assert np.array_equal(sample_MDstep.ax, [2 * 0.529177249, 1 * 0.529177249, 0])
-    assert np.array_equal(sample_MDstep.ay, [2 * 0.529177249, -1 * 0.529177249, 0])
-    assert np.array_equal(sample_MDstep.az, [0, 0, 6 * 0.529177249])
+    assert sample_MDstep.n_atoms == 6  # Verifying the number of atoms
+    assert sample_MDstep.n_type == 3  # Verifying the number of atom types
+    assert sample_MDstep.alat_to_angstrom == 0.529177249  # Verifying lattice conversion factor
+    assert np.array_equal(sample_MDstep.ax, [2 * 0.529177249, 1 * 0.529177249, 0])  # Verifying lattice vectors
+    assert np.array_equal(sample_MDstep.ay, [2 * 0.529177249, -1 * 0.529177249, 0])  # Verifying lattice vectors
+    assert np.array_equal(sample_MDstep.az, [0, 0, 6 * 0.529177249])  # Verifying lattice vectors
     
-    assert sample_MDstep.groups[0].atoms[0].name == 'H'
-    assert sample_MDstep.groups[0].atoms[1].name == 'C'
-    assert sample_MDstep.groups[1].atoms[0].name == 'Fe' 
+    # Verifying group attributes
+    assert sample_MDstep.groups[0].atoms[0].name == 'H'  # Verifying atom names
+    assert sample_MDstep.groups[0].atoms[1].name == 'C'  # Verifying atom names
+    assert sample_MDstep.groups[1].atoms[0].name == 'Fe'  # Verifying atom names
 
-    assert np.array_equal(sample_MDstep.groups[0].id_tot, [4, 5, 6])
-    assert np.array_equal(sample_MDstep.groups[0].atoms[0].id, [5, 6])
-    assert np.allclose(sample_MDstep.groups[0].atoms[0].position_past, np.array([[-0.52917725, 0., 0.52917725], [0.52917725, 0., -0.52917725]]).reshape(2, 3), atol=0.01)
+    assert np.array_equal(sample_MDstep.groups[0].id_tot, [4, 5, 6])  # Verifying atom IDs
+    assert np.array_equal(sample_MDstep.groups[0].atoms[0].id, [5, 6])  # Verifying atom IDs
+    assert np.allclose(sample_MDstep.groups[0].atoms[0].position_past, np.array([[-0.52917725, 0., 0.52917725], [0.52917725, 0., -0.52917725]]).reshape(2, 3), atol=0.01)  # Verifying atom positions
 
-    assert np.array_equal(sample_MDstep.groups[0].atoms[1].id, [4])
-    assert np.allclose(sample_MDstep.groups[0].atoms[1].position_past, np.array([[0., 0., 0.]]).reshape(1, 3), atol=0.01)
+    assert np.array_equal(sample_MDstep.groups[0].atoms[1].id, [4])  # Verifying atom IDs
+    assert np.allclose(sample_MDstep.groups[0].atoms[1].position_past, np.array([[0., 0., 0.]]).reshape(1, 3), atol=0.01)  # Verifying atom positions
 
-    assert np.array_equal(sample_MDstep.groups[1].id_tot, [1, 2, 3])
-    assert np.array_equal(sample_MDstep.groups[1].atoms[0].id, [1, 2, 3])
-    assert np.allclose(sample_MDstep.groups[1].atoms[0].position_past, np.array([[0., 0., 0.], [0., 0., 0.], [0., 0., 0.]]).reshape(3, 3), atol=0.01)
+    assert np.array_equal(sample_MDstep.groups[1].id_tot, [1, 2, 3])  # Verifying atom IDs
+    assert np.array_equal(sample_MDstep.groups[1].atoms[0].id, [1, 2, 3])  # Verifying atom IDs
+    assert np.allclose(sample_MDstep.groups[1].atoms[0].position_past, np.array([[0., 0., 0.], [0., 0., 0.], [0., 0., 0.]]).reshape(3, 3), atol=0.01)  # Verifying atom positions
 
     expected_matrix = np.array([[2 * 0.529177249, 2 * 0.529177249, 0], [1 * 0.529177249, -1 * 0.529177249, 0], [0, 0, 6 * 0.529177249]])
-    assert np.array_equal(sample_MDstep.matrix, expected_matrix)
+    assert np.array_equal(sample_MDstep.matrix, expected_matrix)  # Verifying lattice matrix
 
-    
-# extract_forces test
+
+# extract_forces test ---------------------------------------------------------------------------------------------
     
 def test_extract_forces(sample_MDstep):
     """
     Test case for the 'extract_force' function.
-
     This test verifies whether the 'extract_force' function correctly updates the force values from the 'pwo' file.
 
     Parameters
@@ -225,7 +222,7 @@ def test_extract_forces(sample_MDstep):
             assert not 'force =' in line
 
 
-# estract_positions test
+# estract_positions test ------------------------------------------------------------------------------------------
     
 def test_extract_positions(sample_MDstep):
     """
@@ -263,12 +260,11 @@ def test_extract_positions(sample_MDstep):
                 assert 'stop' in fin.readline()
 
 
-# body test
+# body test -------------------------------------------------------------------------------------------------------
     
 def test_body(sample_MDstep):
     """
     Test case for the 'body' method of the 'MDstep' class.
-
     This test verifies whether the 'body' method correctly extracts values and writes to the 'pwo' file.
 
     Parameters
@@ -317,9 +313,11 @@ def test_body(sample_MDstep):
     # Open the test 'pwo' file for extraction and create a new output file
     with open('Test/files/test_body.pwo_', 'r') as fin:
         with open('Test/output/test_output.xyz', 'w') as fout:
+            # Call the 'body' method to extract values and write to the output file
             body(fout, fin, sample_MDstep, graphs)
 
-    assert np.isclose(sample_MDstep.U_pot, -13.605703976, atol=1e-5)
-    assert sample_MDstep.dt == 4.8378e-5
-    assert sample_MDstep.N_iteration == 2
-    assert graphs.T == 300
+    # Check the updated attributes in the sample_MDstep instance
+    assert np.isclose(sample_MDstep.U_pot, -13.605703976, atol=1e-5)  # Verify potential energy
+    assert sample_MDstep.dt == 4.8378e-5  # Verify time step
+    assert sample_MDstep.N_iteration == 2  # Verify iteration count
+    assert graphs.T == 300  # Verify temperature from the graph instance

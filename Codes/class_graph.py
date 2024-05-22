@@ -351,21 +351,10 @@ class graph:
 
         # Plot forces for each group separately with transparency
         for i, gr in enumerate(step_obj.groups):
-            #Fx = []
-            # Extract forces for the current group and store them in separate lists
-            print(gr.Ftot_store[:, 0])
-            Fy = gr.Ftot_store[:, 1]
-            Fz = gr.Ftot_store[:, 2]
-
             # Plot forces for the current group along x, y, and z directions with transparency
             axX.plot(self.time, gr.Ftot_store[:, 0] * 0.001, color=self.group_color[i+1], alpha=0.5, label=f'{gr.id_group}$_x$')
             axY.plot(self.time, gr.Ftot_store[:, 1] * 0.001, color=self.group_color[i+1], alpha=0.5, label=f'{gr.id_group}$_y$')
             axZ.plot(self.time, gr.Ftot_store[:, 2] * 0.001, color=self.group_color[i+1], alpha=0.5, label=f'{gr.id_group}$_z$')
-
-        # Extract forces from self.F and store them in separate lists
-        print(self.F[:, 0])
-        Fy = self.F[:, 1]
-        Fz = self.F[:, 2]
 
         # Plot total forces along x, y, and z directions
         axX.plot(self.time, self.F[:, 0] * 0.001, color=self.group_color[0], label='F$^{tot}_x$')
